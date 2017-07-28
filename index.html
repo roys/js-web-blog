@@ -51,44 +51,118 @@
             niceUrl: '/2017/07/building-a-real-spa-blog',
             category:
             {
-              title: 'Programming',
-              url: '/programming'
-            }
+              title: 'Software development',
+              url: '/software-development'
+            },
+            tags: [
+              {
+                title: 'JavaScript',
+                url: '/javascript'
+              }
+            ]
           },
           {
             title: 'Chromecast on the go',
-            niceUrl: '/chromecast-on-the-go'
+            niceUrl: '/chromecast-on-the-go',
+            category:
+            {
+              title: 'Tech',
+              url: '/tech'
+            },
+            tags: [
+              {
+                title: 'Chromecast',
+                url: '/chromecast'
+              }
+            ]
           },
           {
             title: 'The pain of releasing an app in 2017',
-            niceUrl: '/the-pain-of-releasing-an-app-in-2017'
+            niceUrl: '/the-pain-of-releasing-an-app-in-2017',
+            category:
+            {
+              title: 'Software development',
+              url: '/software-development'
+            },
+            tags: [
+              {
+                title: 'App',
+                url: '/app'
+              },
+              {
+                title: 'eSports',
+                url: '/esports'
+              }
+            ]
+          },
+          {
+            title: 'Information leak using customer\'s e-mail address',
+            niceUrl: '/the-pain-of-releasing-an-app-in-2017',
+            category:
+            {
+              title: 'Security',
+              url: '/security'
+            },
+            tags: [
+              {
+                title: 'App',
+                url: '/app'
+              },
+              {
+                title: 'Chromecast',
+                url: '/chromecast'
+              }
+            ]
           }
         ];
-      var categories = [
-        {
-          title: 'Programming',
-          url: '/programming'
-        },
-        {
-          title: 'Smart home',
-          url: '/smart-home'
-        },
-        {
-          title: 'Tech',
-          url: '/tech'
-        },
-        {
-          title: 'Security',
-          url: '/security'
+      var categories = [];
+      var tags = [];
+      posts.forEach(function (post) {
+        if (post.category) {
+          categories.forEach(function (category, index) {
+            if (post.category.title === category.title) {
+              categories.splice(index, 1);
+            }
+          });
+          categories.push(post.category);
         }
-      ];
+        if (post.tags) {
+          post.tags.forEach(function (postTag, index) {
+            var foundTag = false;
+            tags.forEach(function (existingTag, index) {
+              if (!foundTag && postTag.title === existingTag.text) {
+                existingTag.weight = existingTag.weight + 1;
+                foundTag = true;
+              }
+            });
+            if (!foundTag) {
+              tags.push({ text: postTag.title, link: postTag.url, weight: 1 });
+            }
+          });
+        }
+      }, this);
+      categories.sort(function (a, b) {
+        if (a.title < b.title)
+          return -1;
+        if (a.title > b.title)
+          return 1;
+        return 0;
+      });
+
       var contentViewModel = {
         posts: posts,
         categories: categories
       };
       ko.applyBindings(contentViewModel);
-      console.log('ok');
+
+      $('#tag-cloud').jQCloud(tags, {
+        autoResize: true,
+        delay: 300
+      });
     });
+    function goToFrontpage() {
+      goToUrl(null, 'My blog', '/');
+    }
     function goToPost(post) {
       goToUrl(null, post.title, post.niceUrl);
     }
@@ -115,23 +189,6 @@
         }
       }
     }
-
-    $(function () {
-      var words = [
-        { text: "SQL injection", weight: 13, link: '/blog/tag/sql-injection' },
-        { text: "REST", weight: 10.5, link: '/blog/tag/rest' },
-        { text: "Information leak", weight: 9.4, link: '/blog/tag/information-leak' },
-        { text: "Sit", weight: 8 },
-        { text: "Amet", weight: 6.2 },
-        { text: "Consectetur", weight: 5 },
-        { text: "Adipiscing", weight: 5 },
-        /* ... */
-      ];
-      $('#tag-cloud').jQCloud(words, {
-        autoResize: true,
-        delay: 300
-      });
-    });
   </script>
 </head>
 
@@ -150,11 +207,9 @@
   <nav>
     <div class="nav-wrapper">
       <div class="container">
-        <!--a href="#" class="brand-logo">Logo</a-->
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-          <li><a href="sass.html">Sass</a></li>
-          <li><a href="badges.html">Components</a></li>
-          <li><a href="collapsible.html">JavaScript</a></li>
+        <a href="/blog/" class="brand-logo left" data-bind="click: function(){goToFrontpage()}">My blog</a>
+        <ul id="nav-mobile" class="right">
+          <li><a href="http://roysolberg.com">roysolberg.com</a></li>
         </ul>
       </div>
     </div>
@@ -189,7 +244,7 @@
     <h4>Tags</h4>
     <div class="row">
     </div>
-    <div id="tag-cloud" style="width:100%;height:300px;"></div>
+    <div id="tag-cloud" style="width:100%;height:200px;"></div>
     <div id="disqus_thread"></div>
   </div>
   <script>
