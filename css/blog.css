@@ -1,0 +1,22 @@
+body {
+    background-color: #fafafa;
+}
+
+nav,
+.page-footer {
+    background-color: #673AB7;
+}
+
+h2,
+h3,
+h4 {
+    color: #673AB7;
+}
+
+.card.waves-effect,
+.card .waves-effect {
+    display: block;
+}
+.page-footer {
+    padding-top: 0px;
+}
