@@ -5,13 +5,19 @@
   <!--Import Google Icon Font-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="/blog/css/materialize.min.css" media="screen,projection" />
+  <link type="text/css" rel="stylesheet" href="/blog/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+  <link type="text/css" rel="stylesheet" href="css/jqcloud.min.css" />
 
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/blog/js/materialize.min.js"></script>
+  <script type="text/javascript" src="/blog/js/jqcloud.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/jqcloud.min.js"></script>
   <style>
     body {
       background-color: #fafafa;
@@ -26,11 +32,15 @@
     h4 {
       color: #673AB7;
     }
-    .card.waves-effect, .card .waves-effect{
+
+    .card.waves-effect,
+    .card .waves-effect {
       display: block;
     }
   </style>
   <script>
+    // TODO: Fix the whole /blog in css  +js + redirects
+    // TODO: Implement 404 page in this page
     $(function () {
       var posts =
         [
@@ -66,6 +76,10 @@
         {
           title: 'Tech',
           url: '/tech'
+        },
+        {
+          title: 'Security',
+          url: '/security'
         }
       ];
       var contentViewModel = {
@@ -82,9 +96,16 @@
       goToUrl(null, category.title, '/category' + category.url);
     }
     function goToUrl(state, title, url) {
+      url = '/blog' + url;
       console.log('goToUrl()', url);
       try {
         history.pushState(state, title, url)
+        // If push state throws an exception the page view will automatically be logged on next page load
+        ga('set', {
+          page: url,
+          title: title
+        });
+        ga('send', 'pageview');
       } catch (e) {
         console.error(e);
         if (location.protocol !== 'file:') {
@@ -94,10 +115,38 @@
         }
       }
     }
+
+    $(function () {
+      var words = [
+        { text: "SQL injection", weight: 13, link: '/blog/tag/sql-injection' },
+        { text: "REST", weight: 10.5, link: '/blog/tag/rest' },
+        { text: "Information leak", weight: 9.4, link: '/blog/tag/information-leak' },
+        { text: "Sit", weight: 8 },
+        { text: "Amet", weight: 6.2 },
+        { text: "Consectetur", weight: 5 },
+        { text: "Adipiscing", weight: 5 },
+        /* ... */
+      ];
+      $('#tag-cloud').jQCloud(words, {
+        autoResize: true,
+        delay: 300
+      });
+    });
   </script>
 </head>
 
 <body>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-392774-1', 'auto');
+    ga('send', 'pageview');
+  </script>
   <nav>
     <div class="nav-wrapper">
       <div class="container">
@@ -137,6 +186,10 @@
         <a href="#" data-bind="attr: { href: category.url}"></a>
       </div>
     </div>
+    <h4>Tags</h4>
+    <div class="row">
+    </div>
+    <div id="tag-cloud" style="width:100%;height:300px;"></div>
     <div id="disqus_thread"></div>
   </div>
   <script>
@@ -152,7 +205,7 @@
       var d = document, s = d.createElement('script');
       s.src = 'https://roysolberg.disqus.com/embed.js';
       s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
+      //(d.head || d.body).appendChild(s);
     })();
   </script>
 </body>
