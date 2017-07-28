@@ -10,6 +10,7 @@
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/f327aec8/css/blog.css" />
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/e42b2720/contents.js"></script>
+  <script type="text/javascript" src="contents.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/materialize.min.js"></script>
@@ -87,9 +88,14 @@
         this.posts = posts;
         this.categories = categories;
         this.post = ko.observable();
+        this.isTransitioning = ko.observable(false);
         this.shouldDisplayFrontpage = ko.computed(function () {
           console.log('shouldDisplayFrontpage: return ' + !this.post());
-          return !this.post();
+          return !this.isTransitioning() && !this.post();
+        }, this);
+        this.shouldDisplayArticle = ko.computed(function () {
+          console.log('shouldDisplayArticle()');
+          return !this.isTransitioning() && this.post();
         }, this);
       };
       window.contentViewModel = new AppViewModel();
@@ -106,20 +112,25 @@
       });
     });
     function goToFrontpage() {
-      if(changeUrl(null, 'My blog', '/')){
+      if (changeUrl(null, 'My blog', '/')) {
         window.contentViewModel.post(null);
       }
     }
     function goToPost(post) {
       if (changeUrl(null, post.title, post.niceUrl)) {
-        window.contentViewModel.post(null);
-        window.contentViewModel.post(post);
+        window.contentViewModel.isTransitioning(true);
+        setTimeout(function () {
+          window.contentViewModel.post(post);
+          window.contentViewModel.isTransitioning(false);
+        }, 350);
       }
     }
     function goToCategory(category) {
+      console.log(category);
       changeUrl(null, category.title, '/category' + category.url);
     }
     function goToTag(tag) {
+      console.log(tag);
       changeUrl(null, tag.title, '/tag' + tag.url);
     }
     function changeUrl(state, title, url) {
@@ -170,11 +181,11 @@
       </div>
     </div>
   </nav>
-  <div id="article" style="display: none" class="container" data-bind="template: { name: 'article-template', if: $data.post}, fadeVisible: $data.post">
+  <div id="article" style="display: none" class="container" data-bind="template: { name: 'article-template', if: $data.post}, fadeVisible: $data.shouldDisplayArticle">
   </div>
-  <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: $data.shouldDisplayFrontpage}, fadeVisible: $data.shouldDisplayFrontpage">
+  <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: !$data.post()}, fadeVisible: $data.shouldDisplayFrontpage">
   </div>
-  <footer id="footer" style="display: none" class="page-footer" data-bind="visible: true">
+  <footer id="footer" style="display: none" class="page-footer" data-bind="visible: true, fadeVisible: !$data.isTransitioning()">
     <div class="footer-copyright">
       <div class="container">
         <a class="grey-text text-lighten-4" href="http://roysolberg.com/">© 2017 Roy Solberg</a>
@@ -233,36 +244,43 @@
   </script>
 
   <script type="text/html" id="article-template">
-    <h4 data-bind="text: post().title">Article</h4>
-    <div class="row" data-bind="foreach: {data: posts, as: 'post'}">
-      <div class="col s12 m4">
-        <div class="card">
-          <div class="card-content waves-effect" data-bind="click: function(){goToPost(post)}">
-            <span class="card-title" data-bind="text: post.title"></span>
-            <p data-bind="text: post.summary"></p>
-          </div>
-          <div class="card-action">
-            <a href="#" data-bind="attr: { href: post.niceUrl}, click: function(){goToPost(post)}">Read more</a>
-          </div>
-        </div>
-        <a href="#" data-bind="attr: { href: post.niceUrl}"></a>
+    <div style="margin-bottom:0px;" class="row">
+      <div class="col s12">
+        <h3 data-bind="text: post().title">Article</h3>
       </div>
     </div>
-    <h4>Categories</h4>
-    <div class="row" data-bind="foreach: {data: categories, as: 'category'}">
-      <div class="col s12 m4">
-        <div class="card">
-          <div class="card-content waves-effect" data-bind="click: function(){goToCategory(category)}">
-            <span class="card-title" data-bind="text: category.title"></span>
-          </div>
-        </div>
-        <a href="#" data-bind="attr: { href: category.url}"></a>
-      </div>
-    </div>
-    <h4>Tags</h4>
     <div class="row">
+      <div class="col s12">
+        <p class="flow-text" data-bind="html: post().summary"></p>
+      </div>
     </div>
-    <div id="tag-cloud" style="width:100%;height:200px;"></div>
+    <!-- ko with: post().category -->
+    <div style="margin-bottom:0px;" class="row">
+      <div class="col s12">
+        Category:
+        <a href="#" data-bind="attr: { href: url}, click: function(){goToCategory($data)}">
+          <div class="chip" data-bind="text: title"></div>
+        </a>
+      </div>
+    </div>
+    <!-- /ko -->
+    <!-- ko with: post().tags -->
+    <div class="row">
+      <div class="col s12">
+        Tags:
+        <!-- ko foreach: {data: $data, as: 'tag'} -->
+        <a href="#" data-bind="attr: { href: tag.url }, click: function(){goToTag(tag)}">
+          <div class="chip" data-bind="text: tag.title"></div>
+        </a>
+        <!-- /ko -->
+      </div>
+    </div>
+    <!-- /ko -->
+    <div class="row">
+      <div class="col s12">
+        <p style="white-space: pre-wrap;" class="flow-text" data-bind="html: post().text"></p>
+      </div>
+    </div>
     <div id="disqus_thread"></div>
   </script>
 </body>
