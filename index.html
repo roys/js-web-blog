@@ -2,119 +2,44 @@
 <html>
 
 <head>
-  <!--Import Google Icon Font-->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!--Import materialize.css-->
-  <link type="text/css" rel="stylesheet" href="/blog/css/materialize.min.css" media="screen,projection" />
-  <link type="text/css" rel="stylesheet" href="/blog/css/jqcloud.min.css" />
-  <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
-  <link type="text/css" rel="stylesheet" href="css/jqcloud.min.css" />
-
-  <!--Let browser know website is optimized for mobile-->
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My blog - blog.roysolberg.com</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/f327aec8/css/blog.css" />
+  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/e42b2720/contents.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script type="text/javascript" src="/blog/js/materialize.min.js"></script>
-  <script type="text/javascript" src="/blog/js/jqcloud.min.js"></script>
-  <script type="text/javascript" src="js/materialize.min.js"></script>
-  <script type="text/javascript" src="js/jqcloud.min.js"></script>
-  <style>
-    body {
-      background-color: #fafafa;
-    }
-
-    nav {
-      background-color: #673AB7;
-    }
-
-    h2,
-    h3,
-    h4 {
-      color: #673AB7;
-    }
-
-    .card.waves-effect,
-    .card .waves-effect {
-      display: block;
-    }
-  </style>
+  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/materialize.min.js"></script>
+  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/jqcloud.min.js"></script>
+  <script type="text/javascript" src="js/viewmodels.js"></script>
   <script>
-    // TODO: Fix the whole /blog in css  +js + redirects
+    // ## Primary: #673AB7
     // TODO: Implement 404 page in this page
+    window.SpaBlog = window.SpaBlog || {}; // Our namespace
+    window.SpaBlog.config = {
+      trackerId: 'UA-392774-21',
+      blogUrlPrefix: '/blog'
+    }
+
     $(function () {
-      var posts =
-        [
-          {
-            title: 'Bulding a real SPA blog',
-            date: '2017-07-27 22:00',
-            summary: 'This blog is a real SPA with no backend code.',
-            niceUrl: '/2017/07/building-a-real-spa-blog',
-            category:
-            {
-              title: 'Software development',
-              url: '/software-development'
-            },
-            tags: [
-              {
-                title: 'JavaScript',
-                url: '/javascript'
-              }
-            ]
-          },
-          {
-            title: 'Chromecast on the go',
-            niceUrl: '/chromecast-on-the-go',
-            category:
-            {
-              title: 'Tech',
-              url: '/tech'
-            },
-            tags: [
-              {
-                title: 'Chromecast',
-                url: '/chromecast'
-              }
-            ]
-          },
-          {
-            title: 'The pain of releasing an app in 2017',
-            niceUrl: '/the-pain-of-releasing-an-app-in-2017',
-            category:
-            {
-              title: 'Software development',
-              url: '/software-development'
-            },
-            tags: [
-              {
-                title: 'App',
-                url: '/app'
-              },
-              {
-                title: 'eSports',
-                url: '/esports'
-              }
-            ]
-          },
-          {
-            title: 'Information leak using customer\'s e-mail address',
-            niceUrl: '/the-pain-of-releasing-an-app-in-2017',
-            category:
-            {
-              title: 'Security',
-              url: '/security'
-            },
-            tags: [
-              {
-                title: 'App',
-                url: '/app'
-              },
-              {
-                title: 'Chromecast',
-                url: '/chromecast'
-              }
-            ]
-          }
-        ];
+      ko.bindingHandlers.fadeVisible = {
+        init: function (element, valueAccessor) {
+          console.log('init()');
+          // Initially set the element to be instantly visible/hidden depending on the value
+          var value = valueAccessor();
+          $(element).toggle(ko.unwrap(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+        },
+        update: function (element, valueAccessor) {
+          console.log('update()');
+          // Whenever the value subsequently changes, slowly fade the element in or out
+          var value = valueAccessor();
+          ko.unwrap(value) ? $(element).fadeIn() : $(element).fadeOut();
+        }
+      };
+      var posts = SpaBlog.posts;
       var categories = [];
       var tags = [];
       posts.forEach(function (post) {
@@ -136,7 +61,14 @@
               }
             });
             if (!foundTag) {
-              tags.push({ text: postTag.title, link: postTag.url, weight: 1 });
+              tags.push({
+                text: postTag.title, handlers: {
+                  click: function () {
+                    goToTag(postTag);
+                    return false;
+                  }
+                }, weight: 1, link: postTag.url
+              });
             }
           });
         }
@@ -149,29 +81,50 @@
         return 0;
       });
 
-      var contentViewModel = {
-        posts: posts,
-        categories: categories
+      //alert(location.pathname);
+      function AppViewModel() {
+        console.log('AppViewModel()');
+        this.posts = posts;
+        this.categories = categories;
+        this.post = ko.observable();
+        this.shouldDisplayFrontpage = ko.computed(function () {
+          console.log('shouldDisplayFrontpage: return ' + !this.post());
+          return !this.post();
+        }, this);
       };
-      ko.applyBindings(contentViewModel);
+      window.contentViewModel = new AppViewModel();
+      ko.applyBindings(window.contentViewModel);
 
       $('#tag-cloud').jQCloud(tags, {
         autoResize: true,
-        delay: 300
+        delay: 350,
+        colors: ['#311B92', '#4527A01', '#512DA8', '#5E35B1', '#673AB7', '#7E57C2', '#9575CD', '#B39DDB', '#D1C4E9'],//, '#EDE7F6'],
+        fontSize: {
+          from: 0.035,
+          to: 0.0125
+        }
       });
     });
     function goToFrontpage() {
-      goToUrl(null, 'My blog', '/');
+      if(changeUrl(null, 'My blog', '/')){
+        window.contentViewModel.post(null);
+      }
     }
     function goToPost(post) {
-      goToUrl(null, post.title, post.niceUrl);
+      if (changeUrl(null, post.title, post.niceUrl)) {
+        window.contentViewModel.post(null);
+        window.contentViewModel.post(post);
+      }
     }
     function goToCategory(category) {
-      goToUrl(null, category.title, '/category' + category.url);
+      changeUrl(null, category.title, '/category' + category.url);
     }
-    function goToUrl(state, title, url) {
-      url = '/blog' + url;
-      console.log('goToUrl()', url);
+    function goToTag(tag) {
+      changeUrl(null, tag.title, '/tag' + tag.url);
+    }
+    function changeUrl(state, title, url) {
+      url = window.SpaBlog.config.blogUrlPrefix + url;
+      console.log('changeUrl()', url);
       try {
         history.pushState(state, title, url)
         // If push state throws an exception the page view will automatically be logged on next page load
@@ -180,12 +133,15 @@
           title: title
         });
         ga('send', 'pageview');
+        return true;
       } catch (e) {
-        console.error(e);
         if (location.protocol !== 'file:') {
+          console.error(e);
           location.href = url;
+          return false;
         } else {
           location.href = '#' + url;
+          return true;
         }
       }
     }
@@ -201,7 +157,7 @@
         m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-392774-1', 'auto');
+    ga('create', window.SpaBlog.config.trackerId, 'auto');
     ga('send', 'pageview');
   </script>
   <nav>
@@ -214,7 +170,35 @@
       </div>
     </div>
   </nav>
-  <div class="container">
+  <div id="article" style="display: none" class="container" data-bind="template: { name: 'article-template', if: $data.post}, fadeVisible: $data.post">
+  </div>
+  <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: $data.shouldDisplayFrontpage}, fadeVisible: $data.shouldDisplayFrontpage">
+  </div>
+  <footer id="footer" style="display: none" class="page-footer" data-bind="visible: true">
+    <div class="footer-copyright">
+      <div class="container">
+        <a class="grey-text text-lighten-4" href="http://roysolberg.com/">© 2017 Roy Solberg</a>
+        <a class="grey-text text-lighten-4 right" href="https://github.com/roys/js-web-blog">GitHub project</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    /**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+    var disqus_config = function () {
+      this.page.url = 'http://blog.roysolberg.com';  // Replace PAGE_URL with your page's canonical URL variable
+      //this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function () { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://roysolberg.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      //(d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <script type="text/html" id="frontpage-template">
     <h4>Latest posts</h4>
     <div class="row" data-bind="foreach: {data: posts, as: 'post'}">
       <div class="col s12 m4">
@@ -246,22 +230,40 @@
     </div>
     <div id="tag-cloud" style="width:100%;height:200px;"></div>
     <div id="disqus_thread"></div>
-  </div>
-  <script>
-    /**
-*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-    var disqus_config = function () {
-      this.page.url = 'http://blog.roysolberg.com';  // Replace PAGE_URL with your page's canonical URL variable
-      //this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
+  </script>
 
-    (function () { // DON'T EDIT BELOW THIS LINE
-      var d = document, s = d.createElement('script');
-      s.src = 'https://roysolberg.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      //(d.head || d.body).appendChild(s);
-    })();
+  <script type="text/html" id="article-template">
+    <h4 data-bind="text: post().title">Article</h4>
+    <div class="row" data-bind="foreach: {data: posts, as: 'post'}">
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-content waves-effect" data-bind="click: function(){goToPost(post)}">
+            <span class="card-title" data-bind="text: post.title"></span>
+            <p data-bind="text: post.summary"></p>
+          </div>
+          <div class="card-action">
+            <a href="#" data-bind="attr: { href: post.niceUrl}, click: function(){goToPost(post)}">Read more</a>
+          </div>
+        </div>
+        <a href="#" data-bind="attr: { href: post.niceUrl}"></a>
+      </div>
+    </div>
+    <h4>Categories</h4>
+    <div class="row" data-bind="foreach: {data: categories, as: 'category'}">
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-content waves-effect" data-bind="click: function(){goToCategory(category)}">
+            <span class="card-title" data-bind="text: category.title"></span>
+          </div>
+        </div>
+        <a href="#" data-bind="attr: { href: category.url}"></a>
+      </div>
+    </div>
+    <h4>Tags</h4>
+    <div class="row">
+    </div>
+    <div id="tag-cloud" style="width:100%;height:200px;"></div>
+    <div id="disqus_thread"></div>
   </script>
 </body>
 
