@@ -8,8 +8,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
-  <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/f327aec8/css/blog.css" />
-  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/90a31c68/contents.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/master/css/blog.css" />
+  <link type="text/css" rel="stylesheet" href="css/blog.css" />
+  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/master/contents.js"></script>
   <script type="text/javascript" src="contents.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -37,7 +38,7 @@
           console.log('update()');
           // Whenever the value subsequently changes, slowly fade the element in or out
           var value = valueAccessor();
-          ko.unwrap(value) ? $(element).fadeIn() : $(element).fadeOut();
+          ko.unwrap(value) ? $(element).fadeIn('fast') : $(element).fadeOut('fast');
         }
       };
       var posts = SpaBlog.posts;
@@ -68,7 +69,7 @@
                     goToTag(postTag);
                     return false;
                   }
-                }, weight: 1, link: window.SpaBlog.config.blogUrlPrefix.url
+                }, weight: 1, link: window.SpaBlog.config.blogUrlPrefix + '/tag' + postTag.url
               });
             }
           });
@@ -82,7 +83,28 @@
         return 0;
       });
 
-      //alert(location.pathname);
+      var path = location.protocol === 'file:' ? location.hash : location.pathname
+      var index = path.indexOf(window.SpaBlog.config.blogUrlPrefix);
+      if (index !== -1) {
+        path = path.substr(index + window.SpaBlog.config.blogUrlPrefix.length);
+      }
+      if (path.startsWith('/')) {
+        path = path.substr(1);
+      }
+      if (path.endsWith('/')) {
+        path = path.substr(0, path.length - 1);
+      }
+      //alert(path);
+      var parts = path.split('/');
+      console.log(parts);
+      if(parts.length === 2){
+        if(parts[0] === 'category'){
+          
+        }else if(parts[0] === 'tag'){
+        }
+      }else if(parts.length === 3){ // Post
+
+      }
       function AppViewModel() {
         console.log('AppViewModel()');
         this.posts = posts;
@@ -105,10 +127,7 @@
         autoResize: true,
         delay: 350,
         colors: ['#311B92', '#4527A01', '#512DA8', '#5E35B1', '#673AB7', '#7E57C2', '#9575CD', '#B39DDB', '#D1C4E9'],//, '#EDE7F6'],
-        fontSize: {
-          from: 0.035,
-          to: 0.0125
-        }
+        fontSize: ['36px', '33px', '30px', '27px', '24px', '21px', '18px', '15px', '12px']
       });
     });
     function goToFrontpage() {
@@ -212,7 +231,7 @@
   <script type="text/html" id="frontpage-template">
     <h4>Latest posts</h4>
     <div class="row" data-bind="foreach: {data: posts, as: 'post'}">
-      <div class="col s12 m4">
+      <div class="col s12 m6 l4 xl3">
         <div class="card">
           <div class="card-content waves-effect" data-bind="click: function(){goToPost(post)}">
             <span class="card-title" data-bind="text: post.title"></span>
@@ -227,7 +246,7 @@
     </div>
     <h4>Categories</h4>
     <div class="row" data-bind="foreach: {data: categories, as: 'category'}">
-      <div class="col s12 m4">
+      <div class="col s12 m3 l4">
         <div class="card">
           <div class="card-content waves-effect" data-bind="click: function(){goToCategory(category)}">
             <span class="card-title" data-bind="text: category.title"></span>
@@ -239,7 +258,7 @@
     <h4>Tags</h4>
     <div class="row">
     </div>
-    <div id="tag-cloud" style="width:100%;height:200px;"></div>
+    <div id="tag-cloud" style="width:100%;height:150px;"></div>
     <div id="disqus_thread"></div>
   </script>
 
@@ -257,7 +276,7 @@
     <!-- ko with: post().publishDate -->
     <div style="margin-bottom:0px;" class="row">
       <div class="col s12">
-        <p data-bind="text: 'Published: ' + new Date($data).toLocaleString()"></p>
+        <p data-bind="text: 'Published: ' + new Date($data).toLocaleString([], {weekday: 'short', year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit'})"></p>
       </div>
     </div>
     <!-- /ko -->

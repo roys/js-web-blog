@@ -5,7 +5,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         [
             {
                 title: 'Building a real SPA blog',
-                publishDate: '2017-07-27 22:00',
+                publishDate: '2017-08-01 22:00',
                 summary: 'This blog is a real single-page application with no backend or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/07/building-a-real-spa-blog',
                 text: `I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days. And I understand why; the layout is so simple yet attractive and easy to read.
@@ -17,6 +17,8 @@ I knew I didn't want to reinvent the wheel. If this had been somewhere from 2000
 Further on I didn't want some hosting at one of the big companies offering "free" (they tend to end up costing a few bucks) backend hosting with all the hassle of setting up a new environment and installing some SDKs that needs to be constantly updated or suddenly removes support for some version of whatever you use.
 
 I'm no designer. So I like to use UI frameworks that ensures that I can't get it completely wrong. I really like Google's <a href="https://material.io/guidelines/">Material Design</a>. To be continued...
+
+<h4>GitHub project</h4>If you're interested you can have a look at the source code for this blog at <a href="https://github.com/roys/js-web-blog">https://github.com/roys/js-web-blog</a>. The project itself is licenced under the MIT License, but for the contents (posts and images) I reserve all rights.
 `,
                 category:
                 {
@@ -42,6 +44,10 @@ I'm no designer. So I like to use UI frameworks that ensures that I can't get it
                     {
                         title: 'Chromecast',
                         url: '/chromecast'
+                    },
+                    {
+                        title: 'JavaScript',
+                        url: '/javascript'
                     }
                 ]
             },
@@ -80,6 +86,10 @@ I'm no designer. So I like to use UI frameworks that ensures that I can't get it
                     {
                         title: 'Chromecast',
                         url: '/chromecast'
+                    },
+                    {
+                        title: 'JavaScript',
+                        url: '/javascript'
                     }
                 ]
             }
