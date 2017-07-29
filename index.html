@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#673AB7">
   <title>My blog - blog.roysolberg.com</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
@@ -97,12 +98,12 @@
       //alert(path);
       var parts = path.split('/');
       console.log(parts);
-      if(parts.length === 2){
-        if(parts[0] === 'category'){
-          
-        }else if(parts[0] === 'tag'){
+      if (parts.length === 2) {
+        if (parts[0] === 'category') {
+
+        } else if (parts[0] === 'tag') {
         }
-      }else if(parts.length === 3){ // Post
+      } else if (parts.length === 3) { // Post
 
       }
       function AppViewModel() {
@@ -270,38 +271,34 @@
     </div>
     <div class="row">
       <div class="col s12">
-        <p class="flow-text" data-bind="html: post().summary"></p>
+        <p class="flow-text"><b data-bind="html: post().summary"></b></p>
       </div>
     </div>
-    <!-- ko with: post().publishDate -->
-    <div style="margin-bottom:0px;" class="row">
-      <div class="col s12">
-        <p data-bind="text: 'Published: ' + new Date($data).toLocaleString([], {weekday: 'short', year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit'})"></p>
-      </div>
-    </div>
-    <!-- /ko -->
-    <!-- ko with: post().category -->
-    <div style="margin-bottom:0px;" class="row">
-      <div class="col s12">
-        Category:
-        <a href="#" data-bind="attr: { href: url}, click: function(){goToCategory($data)}">
-          <div class="chip" data-bind="text: title"></div>
-        </a>
-      </div>
-    </div>
-    <!-- /ko -->
-    <!-- ko with: post().tags -->
-    <div class="row">
-      <div class="col s12">
-        Tags:
-        <!-- ko foreach: {data: $data, as: 'tag'} -->
-        <a href="#" data-bind="attr: { href: tag.url }, click: function(){goToTag(tag)}">
-          <div class="chip" data-bind="text: tag.title"></div>
-        </a>
-        <!-- /ko -->
-      </div>
-    </div>
-    <!-- /ko -->
+    <table class="article grey-text">
+      <tr data-bind="with: post().publishDate">
+        <td style="width:5%;" class="">Published:</td>
+        <td data-bind="text: new Date($data).toLocaleString([], {weekday: 'short', year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit'})">
+        </td>
+      </tr>
+      <tr data-bind="with: post().category">
+        <td style="width:5%">Category:</td>
+        <td>
+          <a href="#" data-bind="attr: { href: url}, click: function(){goToCategory($data)}">
+            <div class="chip" data-bind="text: title"></div>
+          </a>
+        </td>
+      </tr>
+      <tr data-bind="with: post().tags">
+        <td style="width:5%">Tags:</td>
+        <td>
+          <!-- ko foreach: {data: $data, as: 'tag'} -->
+          <a href="#" data-bind="attr: { href: tag.url }, click: function(){goToTag(tag)}">
+            <div class="chip" data-bind="text: tag.title"></div>
+          </a>
+          <!-- /ko -->
+        </td>
+      </tr>
+    </table>
     <div class="row">
       <div class="col s12">
         <p style="white-space: pre-wrap;" class="flow-text" data-bind="html: post().text"></p>
