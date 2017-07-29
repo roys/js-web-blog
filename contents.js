@@ -5,7 +5,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         [
             {
                 title: 'Building a real SPA blog',
-                date: '2017-07-27 22:00',
+                publishDate: '2017-07-27 22:00',
                 summary: 'This blog is a real single-page application with no backend or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/07/building-a-real-spa-blog',
                 text: `I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days. And I understand why; the layout is so simple yet attractive and easy to read.

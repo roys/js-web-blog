@@ -9,7 +9,7 @@
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/f327aec8/css/blog.css" />
-  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/8b276e7c/contents.js"></script>
+  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/90a31c68/contents.js"></script>
   <script type="text/javascript" src="contents.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -68,7 +68,7 @@
                     goToTag(postTag);
                     return false;
                   }
-                }, weight: 1, link: postTag.url
+                }, weight: 1, link: window.SpaBlog.config.blogUrlPrefix.url
               });
             }
           });
@@ -254,6 +254,13 @@
         <p class="flow-text" data-bind="html: post().summary"></p>
       </div>
     </div>
+    <!-- ko with: post().publishDate -->
+    <div style="margin-bottom:0px;" class="row">
+      <div class="col s12">
+        <p data-bind="text: 'Published: ' + new Date($data).toLocaleString()"></p>
+      </div>
+    </div>
+    <!-- /ko -->
     <!-- ko with: post().category -->
     <div style="margin-bottom:0px;" class="row">
       <div class="col s12">
