@@ -19,8 +19,6 @@
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/jqcloud.min.js"></script>
   <script type="text/javascript" src="js/viewmodels.js"></script>
   <script>
-    // ## Primary: #673AB7
-    // TODO: Implement 404 page in this page
     window.SpaBlog = window.SpaBlog || {}; // Our namespace
     window.SpaBlog.config = {
       trackerId: 'UA-392774-21',
@@ -92,9 +90,10 @@
         this.category = ko.observable();
         this.tag = ko.observable();
         this.isTransitioning = ko.observable(true);
+        this.pageNotFound = ko.observable(false);
         this.shouldDisplayFrontpage = ko.computed(function () {
           console.log('shouldDisplayFrontpage: return ' + !this.post());
-          return !this.isTransitioning() && !this.post() && !this.category() && !this.tag();
+          return !this.isTransitioning() && !this.post() && !this.category() && !this.tag() && !this.pageNotFound();
         }, this);
         this.shouldDisplayArticle = ko.computed(function () {
           console.log('shouldDisplayArticle()');
@@ -107,6 +106,10 @@
         this.shouldDisplayTag = ko.computed(function () {
           console.log('shouldDisplayTag()');
           return !this.isTransitioning() && this.tag();
+        }, this);
+        this.shouldDisplayPageNotFound = ko.computed(function () {
+          console.log('shouldDisplayPageNotFound()');
+          return !this.isTransitioning() && this.pageNotFound();
         }, this);
       };
       window.contentViewModel = new AppViewModel();
@@ -127,7 +130,9 @@
       //alert(path);
       var parts = path.split('/');
       console.log(parts);
-      if (parts.length === 2) {
+      if (path.length === 0) {
+        goToFrontpage();
+      } else if (parts.length === 2) {
         if (parts[0] === 'category') {
           var categoryUrl = '/' + parts[1];
           var foundCategory = false;
@@ -139,7 +144,7 @@
             }
           });
           if (!foundCategory) {
-            // TODO: 404
+            goToNotFoundPage();
           }
         } else if (parts[0] === 'tag') {
           var tagUrl = window.SpaBlog.config.blogUrlPrefix + '/tag/' + parts[1];
@@ -153,8 +158,10 @@
             }
           });
           if (!foundTag) {
-            // TODO: 404
+            goToNotFoundPage();
           }
+        } else {
+          goToNotFoundPage();
         }
       } else if (parts.length === 3) { // Post
         var niceUrl = '/' + path;
@@ -167,10 +174,10 @@
           }
         });
         if (!foundPost) {
-          // TODO: 404
+          goToNotFoundPage();
         }
       } else {
-        // TODO: 404
+        goToNotFoundPage();
       }
     });
     function goToFrontpage() {
@@ -178,6 +185,7 @@
         window.contentViewModel.post(null);
         window.contentViewModel.tag(null);
         window.contentViewModel.category(null);
+        window.contentViewModel.pageNotFound(false);
         window.contentViewModel.isTransitioning(false);
         console.log($('#tag-cloud'));
         $('#tag-cloud').jQCloud(window.contentViewModel.tags, {
@@ -195,6 +203,7 @@
           window.contentViewModel.post(post);
           window.contentViewModel.tag(null);
           window.contentViewModel.category(null);
+          window.contentViewModel.pageNotFound(false);
           window.contentViewModel.isTransitioning(false);
         }, 250);
       }
@@ -206,6 +215,7 @@
           window.contentViewModel.post(null);
           window.contentViewModel.tag(null);
           window.contentViewModel.category(category);
+          window.contentViewModel.pageNotFound(false);
           window.contentViewModel.isTransitioning(false);
         }, 250);
       }
@@ -218,9 +228,18 @@
           window.contentViewModel.post(null);
           window.contentViewModel.tag(tag);
           window.contentViewModel.category(null);
+          window.contentViewModel.pageNotFound(false);
           window.contentViewModel.isTransitioning(false);
         }, 250);
       }
+    }
+    function goToNotFoundPage() {
+      console.log('goToNotFoundPage()');
+      window.contentViewModel.pageNotFound(true);
+      window.contentViewModel.post(null);
+      window.contentViewModel.tag(null);
+      window.contentViewModel.category(null);
+      window.contentViewModel.isTransitioning(false);
     }
     function changeUrl(state, title, url) {
       url = window.SpaBlog.config.blogUrlPrefix + url;
@@ -276,13 +295,15 @@
       </div>
     </div>
   </nav>
-  <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: !$data.post()}, fadeVisible: $data.shouldDisplayFrontpage">
+  <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: function(){ !$data.post() && !$data.category() && !$data.tag() }}, fadeVisible: $data.shouldDisplayFrontpage">
   </div>
   <div id="article" style="display: none" class="container" data-bind="template: { name: 'article-template', if: $data.post}, fadeVisible: $data.shouldDisplayArticle">
   </div>
   <div id="category" style="display: none" class="container" data-bind="template: { name: 'category-template', if: $data.category}, fadeVisible: $data.shouldDisplayCategory">
   </div>
   <div id="tag" style="display: none" class="container" data-bind="template: { name: 'tag-template', if: $data.tag}, fadeVisible: $data.shouldDisplayTag">
+  </div>
+  <div id="notfound" style="display: none" class="container" data-bind="template: { name: 'notfound-template', if: $data.shouldDisplayPageNotFound}, fadeVisible: $data.shouldDisplayPageNotFound">
   </div>
   <footer id="footer" style="display: none" class="page-footer" data-bind="visible: true, fadeVisible: !$data.isTransitioning()">
     <div class="footer-copyright">
@@ -443,6 +464,16 @@
       </div>
       <!-- /ko -->
       <!-- /ko -->
+  </script>
+
+  <script type="text/html" id="notfound-template">
+    <div style="margin-bottom:0px;" class="row">
+      <div class="col s12">
+        <h3>Page not found :(</h3>
+        <p class="flow-text">Sorry, could not locate the page you were looking for.</p>
+        <p class="flow-text">You can try to <a href="#" onclick="window.history.back();return false;">go back</a> or go to <a href="#" data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){goToFrontpage()}">the frontpage</a> to find the page you were looking for.</p>
+      </div>
+    </div>
   </script>
 </body>
 

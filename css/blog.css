@@ -10,6 +10,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #673AB7;
 }
 
+ul {
+    margin-top: 0px;
+}
+
 .card.waves-effect,
 .card .waves-effect {
     display: block;

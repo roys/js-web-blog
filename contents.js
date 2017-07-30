@@ -5,20 +5,33 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         [
             {
                 title: 'Building a real SPA blog',
+                published: true,
                 publishDate: '2017-08-01 22:00',
-                summary: 'This blog is a real single-page application with no backend or database. It\'s refreshingly easy to work with.',
+                summary: 'This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/08/building-a-real-spa-blog',
-                text: `<h4>Medium</h4>I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days. And I understand why; the layout is so simple yet attractive and easy to read.
+                text: `<h4>tldr;</h4>This blog is created with Backbone.js, Materialize, and have all blog posts in a single JavaScript array. All static.
+                
+<h4>Medium</h4>I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days. And I understand why; the layout is so simple yet attractive and easy to read.
                 
 I expected to settle with a medium.com blog. However, it isn't possible to have ads in the blog posts. And I wanted that.
 
-<h4>Wordpress</h4>Wordpress TODO
+<h4>Wordpress</h4>Wordpress has of course ruled the world for quite a long time. <a href="https://wordpress.com">wordpress.com</a> of course costs money if you want to make any money using ads. I don't expect many dollars in income, so I'd like to avoid any fixed costs. Then there is <a href="https://wordpress.org">wordpress.org</a>, but I don't really want to host it myself and stay up to date with <a href="https://www.cvedetails.com/product/4096/Wordpress-Wordpress.html">security issues</a> and all.
 
 <h4>Blogger</h4>I looked at Google's <a href="https://blogger.com">blogger.com</a>. Customizing the layout and templates I thought I was getting there. They have some really nice features. But I couldn't make it look and feel exactly right. And it felt cumbersome to do all the adjustments to get where I wanted.
 
 <h4>Good old days</h4>I knew I didn't want to reinvent the wheel. If this had been somewhere from 2000 to 2007 I probably would have mashed something together using PHP and MySQL. But the thought of doing that in 2017 repelled me. I didn't want any database setup, SQLs or stuff that takes time from creating the actual product.
 
-Further on I didn't want some hosting at one of the big companies offering "free" (they tend to end up costing a few bucks) backend hosting with all the hassle of setting up a new environment and installing some SDKs that needs to be constantly updated or suddenly removes support for some version of whatever you use.
+<h4>Cloud hosting</h4>Further on I didn't want some hosting at one of the big companies offering "free" (they tend to end up costing a few bucks) backend hosting with all the hassle of setting up a new environment and installing some SDKs that needs to be constantly updated or suddenly removes support for some version of whatever you use.
+
+<h4>Requirements</h4>Basically I had the following requirements.
+<ul><li> - High readability and ok design</li><li> - Ad support</li><li> - Simple hosting (no SQL)</li><li> - Easy, but advanced customization</li><li> - Quick to set up with no hassle</li><li> - SEO friendly</li></ul>
+
+<h4>Solution</h4>
+I was wondering about using just static HTML files. That would indeed answer most of my requirements. But then I thought about having a simple JavaScript SPA.
+
+I suppose <a href="https://angular.io/">Angular 2</a> or <a href="https://facebook.github.io/react/">React</a> would be the most logical choices of JavaScript frameworks in 2017. But I wanted productivity and not use a lot of time to learn yet a new framework, so I went for good old <a href="http://backbonejs.org">backbonejs.org</a> which I have used quite a lot as earlier on as an IT consultant.
+
+<img class="materialboxed" width="650" src="images/sample-1.jpg">
 
 I'm no designer. So I like to use UI frameworks that ensures that I can't get it completely wrong. I really like Google's <a href="https://material.io/guidelines/">Material Design</a>. To be continued...
 
@@ -38,6 +51,7 @@ I'm no designer. So I like to use UI frameworks that ensures that I can't get it
             },
             {
                 title: 'Chromecast on the go',
+                published: true,
                 publishDate: '2017-08-01 22:00',
                 niceUrl: '/2017/08/chromecast-on-the-go',
                 category:
@@ -58,6 +72,7 @@ I'm no designer. So I like to use UI frameworks that ensures that I can't get it
             },
             {
                 title: 'The pain of releasing an app in 2017',
+                published: true,
                 publishDate: '2017-08-01 22:00',
                 niceUrl: '/2017/08/the-pain-of-releasing-an-app-in-2017',
                 category:
@@ -78,6 +93,7 @@ I'm no designer. So I like to use UI frameworks that ensures that I can't get it
             },
             {
                 title: 'Information leak using customer\'s e-mail address',
+                published: true,
                 publishDate: '2017-08-01 22:00',
                 niceUrl: '/2017/08/the-pain-of-releasing-an-app-in-2017',
                 category:
