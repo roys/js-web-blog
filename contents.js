@@ -9,7 +9,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 publishDate: '2017-08-01 22:00',
                 summary: 'This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/08/building-a-real-spa-blog',
-                text: `<h4>tldr;</h4>This blog is created with Backbone.js, Materialize, and have all blog posts in a single JavaScript array. All static.
+                text: `<h4>tldr;</h4>This blog is created with Knockout and Materialize, and have all blog posts in a single JavaScript array. All static.
                 
 <h4>Medium</h4>I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days. And I understand why; the layout is so simple yet attractive and easy to read.
                 
@@ -24,14 +24,12 @@ I expected to settle with a medium.com blog. However, it isn't possible to have 
 <h4>Cloud hosting</h4>Further on I didn't want some hosting at one of the big companies offering "free" (they tend to end up costing a few bucks) backend hosting with all the hassle of setting up a new environment and installing some SDKs that needs to be constantly updated or suddenly removes support for some version of whatever you use.
 
 <h4>Requirements</h4>Basically I had the following requirements.
-<ul><li> - High readability and ok design</li><li> - Ad support</li><li> - Simple hosting (no SQL)</li><li> - Easy, but advanced customization</li><li> - Quick to set up with no hassle</li><li> - SEO friendly</li></ul>
+<ul><li> - High readability and ok design</li><li> - Ad support</li><li> - Simple hosting</li><li> - Easy, but advanced customization</li><li> - Quick to set up with no hassle (no database setup, easy development, no unecessary heavy build systems)</li><li> - SEO friendly</li></ul>
+<h4>Solution</h4>I was wondering about using just static HTML files. That would indeed answer most of my requirements. But then I thought about having a simple JavaScript SPA.
 
-<h4>Solution</h4>
-I was wondering about using just static HTML files. That would indeed answer most of my requirements. But then I thought about having a simple JavaScript SPA.
+<h5>JavaScript framework</h5>I suppose <a href="https://angular.io/">Angular 2</a> or <a href="https://facebook.github.io/react/">React</a> would be the most logical choices of JavaScript frameworks in 2017. But I wanted productivity and not use a lot of time to learn yet a new framework, so I went for good old <a href="http://knockoutjs.com/">Knockout</a> which I have used quite a lot as earlier on as an IT consultant.
 
-I suppose <a href="https://angular.io/">Angular 2</a> or <a href="https://facebook.github.io/react/">React</a> would be the most logical choices of JavaScript frameworks in 2017. But I wanted productivity and not use a lot of time to learn yet a new framework, so I went for good old <a href="http://backbonejs.org">backbonejs.org</a> which I have used quite a lot as earlier on as an IT consultant.
-
-<img class="materialboxed" width="650" src="images/sample-1.jpg">
+<img class="materialboxed" width="650" src="../">
 
 I'm no designer. So I like to use UI frameworks that ensures that I can't get it completely wrong. I really like Google's <a href="https://material.io/guidelines/">Material Design</a>. To be continued...
 
