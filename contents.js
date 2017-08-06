@@ -6,7 +6,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             {
                 title: 'Building a real SPA blog',
                 published: true,
-                publishDate: '2017-08-01 22:00',
+                publishDate: '2017-08-07 08:00',
                 summary: 'This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/08/building-a-real-spa-blog',
                 text: `<h4>tldr;</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.
@@ -46,73 +46,10 @@ While one might argue that Knockout is beyond its prime time, it sure works grea
                     {
                         title: 'JavaScript',
                         url: '/javascript'
-                    }
-                ]
-            },
-            {
-                title: 'Chromecast on the go',
-                published: true,
-                publishDate: '2017-08-01 22:00',
-                niceUrl: '/2017/08/chromecast-on-the-go',
-                category:
-                {
-                    title: 'Tech',
-                    url: '/tech'
-                },
-                tags: [
-                    {
-                        title: 'Chromecast',
-                        url: '/chromecast'
                     },
                     {
-                        title: 'JavaScript',
-                        url: '/javascript'
-                    }
-                ]
-            },
-            {
-                title: 'The pain of releasing an app in 2017',
-                published: true,
-                publishDate: '2017-08-01 22:00',
-                niceUrl: '/2017/08/the-pain-of-releasing-an-app-in-2017',
-                category:
-                {
-                    title: 'Software development',
-                    url: '/software-development'
-                },
-                tags: [
-                    {
-                        title: 'App',
-                        url: '/app'
-                    },
-                    {
-                        title: 'eSports',
-                        url: '/esports'
-                    }
-                ]
-            },
-            {
-                title: 'Information leak using customer\'s e-mail address',
-                published: true,
-                publishDate: '2017-08-01 22:00',
-                niceUrl: '/2017/08/the-pain-of-releasing-an-app-in-2017',
-                category:
-                {
-                    title: 'Security',
-                    url: '/security'
-                },
-                tags: [
-                    {
-                        title: 'App',
-                        url: '/app'
-                    },
-                    {
-                        title: 'Chromecast',
-                        url: '/chromecast'
-                    },
-                    {
-                        title: 'JavaScript',
-                        url: '/javascript'
+                        title: 'SPA',
+                        url: '/spa'
                     }
                 ]
             }
