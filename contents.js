@@ -9,7 +9,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 publishDate: '2017-08-01 22:00',
                 summary: 'This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/08/building-a-real-spa-blog',
-                text: `<h4>tldr;</h4>This blog is created with Knockout and Materialize, and have all blog posts in a single JavaScript array. All static.
+                text: `<h4>tldr;</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.
                 
 <h4>Medium</h4>I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days. And I understand why; the layout is so simple yet attractive and easy to read.
                 
