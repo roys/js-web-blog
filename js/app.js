@@ -53,7 +53,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             var posts = self.posts;
             var tags = self.tags;
             var categories = self.categories;
-            var path = location.protocol === 'file:' ? location.hash : location.pathname
+            var path = location.protocol === 'file:' ? location.hash.substr(1) : location.pathname
             var index = path.indexOf(window.SpaBlog.config.blogUrlPrefix);
             if (index !== -1) {
                 path = path.substr(index + window.SpaBlog.config.blogUrlPrefix.length);
