@@ -47,7 +47,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         this.language = 'en';
                     }
                 });
-            }, 250);
+            }, 200);
         }
         self.shouldDisplayFrontpage = ko.computed(function () {
             console.log('shouldDisplayFrontpage: return ' + !this.post());
@@ -211,12 +211,14 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             if (!url.startsWith(window.SpaBlog.config.blogUrlPrefix)) {
                 url = window.SpaBlog.config.blogUrlPrefix + url;
             }
-            console.log('changeUrl()', url);
+            console.log('changeUrl()', url, title);
+            var documentTitle = title + ' - ' + location.host
+            document.title = documentTitle;;
             if (url === location.pathname) {
                 return true;
             }
             try {
-                history.pushState(state, title, url)
+                history.pushState(state, documentTitle, url);
                 // If push state throws an exception the page view will automatically be logged on next page load
                 ga('set', {
                     page: url,
