@@ -14,6 +14,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         self.isTransitioning = ko.observable(true);
         self.pageNotFound = ko.observable(false);
         self.changingUrl = false;
+        self.commentsTimer;
         processCategoriesAndTags();
 
         window.onpopstate = function (event) {
@@ -31,6 +32,21 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         self.loadAds = function () {
             setTimeout(function () {
                 (adsbygoogle = window.adsbygoogle || []).push({});
+            }, 250);
+        }
+        self.loadComments = function (title, url) {
+            if (self.commentsTimer) {
+                clearTimeout(self.commentsTimer);
+            }
+            self.commentsTimer = setTimeout(function () {
+                DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                        this.page.url = window.location.href;
+                        this.page.title = title;
+                        this.language = 'en';
+                    }
+                });
             }, 250);
         }
         self.shouldDisplayFrontpage = ko.computed(function () {
@@ -152,6 +168,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         $('.materialboxed').materialbox();
                     }, 250);
                     self.loadAds();
+                    self.loadComments(post.title, post.niceUrl);
                 }, 250);
             }
         }
