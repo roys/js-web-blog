@@ -28,6 +28,11 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             }
         };
 
+        self.loadAds = function () {
+            setTimeout(function () {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }, 250);
+        }
         self.shouldDisplayFrontpage = ko.computed(function () {
             console.log('shouldDisplayFrontpage: return ' + !this.post());
             return !this.isTransitioning() && !this.post() && !this.category() && !this.tag() && !this.pageNotFound();
@@ -129,7 +134,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 $('#tag-cloud').jQCloud(self.tags, {
                     autoResize: true,
                     delay: 350,
-                    colors: ['#311B92', '#4527A01', '#512DA8', '#5E35B1', '#673AB7', '#7E57C2', '#9575CD', '#B39DDB', '#D1C4E9'],//, '#EDE7F6'],
+                    colors: ['#01579B', '#0277BD', '#0288D1', '#039BE5', '#03A9F4', '#29B6F6', '#4FC3F7', '#81D4FA', '#B3E5FC'],//, '#E1F5FE'],
                     fontSize: ['36px', '33px', '30px', '27px', '24px', '21px', '18px', '15px', '12px']
                 });
             }
@@ -143,7 +148,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.category(null);
                     self.pageNotFound(false);
                     self.isTransitioning(false);
-                    $('.materialboxed').materialbox();
+                    setTimeout(function () {
+                        $('.materialboxed').materialbox();
+                    }, 250);
+                    self.loadAds();
                 }, 250);
             }
         }
@@ -156,6 +164,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.category(category);
                     self.pageNotFound(false);
                     self.isTransitioning(false);
+                    self.loadAds();
                 }, 250);
             }
         }
@@ -169,6 +178,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.category(null);
                     self.pageNotFound(false);
                     self.isTransitioning(false);
+                    self.loadAds();
                 }, 250);
             }
         }
