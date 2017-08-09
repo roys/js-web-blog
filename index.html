@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#673AB7">
-  <title>My blog - blog.roysolberg.com</title>
+  <title>Roy Solberg - blog.roysolberg.com</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
@@ -88,7 +88,7 @@
   <footer id="footer" style="display: none" class="page-footer" data-bind="visible: true, fadeVisible: !$data.isTransitioning()">
     <div class="footer-copyright">
       <div class="container">
-        <a class="grey-text text-lighten-4" href="http://roysolberg.com/">© 2017 Roy Solberg</a>
+        <a class="grey-text text-lighten-4" href="http://roysolberg.com/">© 2017 Roy Solberg</a> - <a class="grey-text text-lighten-4" href="http://www.google.com/recaptcha/mailhide/d?k=01Z_D2EadqicowX66pRky9dw==&amp;c=-v22ZSXTNUQpeb5RKgMrMG_vUW-tue2CWjehMf2S7HQ=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\x3d01Z_D2EadqicowX66pRky9dw\x3d\x3d\x26c\x3d-v22ZSXTNUQpeb5RKgMrMG_vUW-tue2CWjehMf2S7HQ\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">c...@roysolberg.com</a>
         <a class="grey-text text-lighten-4 right" href="https://github.com/roys/js-web-blog">GitHub project</a>
       </div>
     </div>
@@ -149,7 +149,7 @@
     <table class="article grey-text">
       <tr data-bind="with: post().publishDate">
         <td style="width:5%;" class="">Published:</td>
-        <td data-bind="text: new Date($data).toLocaleString([], {weekday: 'short', year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit'})">
+        <td data-bind="text: new Date($data).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false})">
         </td>
       </tr>
       <tr data-bind="with: post().category">
@@ -161,7 +161,7 @@
         </td>
       </tr>
       <tr data-bind="with: post().tags">
-        <td style="width:5%">Tags:</td>
+        <td style="width:5%" data-bind="text: $data.length > 1 ? 'Tags:' : 'Tag:'">Tags:</td>
         <td>
           <!-- ko foreach: {data: $data, as: 'tag'} -->
           <a href="#" data-bind="attr: { href: 'tag' + tag.url }, click: function(){$root.goToTag(tag)}">
@@ -171,16 +171,17 @@
         </td>
       </tr>
     </table>
+    <div class="row" style="min-height:200px;margin-top:20px;">
+      <div class="col s12">
+        <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-3386970467864670" data-ad-slot="1640511001"></ins>
+      </div>
+    </div>
     <div class="row">
       <div class="col s12">
-        <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-8422214355373910" data-ad-slot="5054848699"></ins>
+        <p style="white-space: pre-wrap;" class="flow-text" data-bind="html: post().text"></p>
       </div>
-      <div class="row">
-        <div class="col s12">
-          <p style="white-space: pre-wrap;" class="flow-text" data-bind="html: post().text"></p>
-        </div>
-      </div>
-      <div id="disqus_thread"></div>
+    </div>
+    <div id="disqus_thread"></div>
   </script>
 
   <script type="text/html" id="category-template">
@@ -209,8 +210,8 @@
       <!-- /ko -->
       <div class="col s12 m7 l6 xl5">
         <div class="card">
-          <div class="card-content">
-            <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout="text-only" data-ad-layout-key="-go-b+1q-5g+6x" data-ad-client="ca-pub-8422214355373910" data-ad-slot="5176114107"></ins>
+          <div class="card-content" style="min-height:185px;padding-top:10px;padding-bottom:0px;">
+            <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout="text-only" data-ad-layout-key="-hk-w+1i-26+5k" data-ad-client="ca-pub-3386970467864670" data-ad-slot="4289713314"></ins>
           </div>
         </div>
       </div>
@@ -223,7 +224,8 @@
         <p>Showing all articles with selected tag.</p>
       </div>
     </div>
-    <div class="row" data-bind="foreach: {data: posts, as: 'post'}">
+    <div class="row">
+      <!-- ko foreach: {data: posts, as: 'post'} -->
       <!-- ko foreach: {data: post.tags, as: 'tag'} -->
       <!-- ko if: $root.tag().title === tag.title -->
       <div class="col s12 m6 l4 xl3">
@@ -240,10 +242,11 @@
       </div>
       <!-- /ko -->
       <!-- /ko -->
+      <!-- /ko -->
       <div class="col s12 m7 l6 xl5">
         <div class="card">
-          <div class="card-content">
-            <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout="text-only" data-ad-layout-key="-go-b+1q-5g+6x" data-ad-client="ca-pub-8422214355373910" data-ad-slot="5176114107"></ins>
+          <div class="card-content" style="min-height:185px;padding-top:10px;padding-bottom:0px;">
+            <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout="text-only" data-ad-layout-key="-hk-w+1i-26+5k" data-ad-client="ca-pub-3386970467864670" data-ad-slot="4289713314"></ins>
           </div>
         </div>
       </div>

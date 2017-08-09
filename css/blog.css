@@ -39,3 +39,13 @@ table.article td{
 .collection a.collection-item{
     color: #039be5;
 }
+
+a[href^="http://"]:after, 
+a[href^="https://"]:after {
+  content: url(http://blog.roysolberg.com/images/external_link.png);
+  margin: 0 0 0 5px;
+}
+a[href*="//blog.roysolberg.com/"]:after, footer a[href*="//"]:after {
+  content: '';
+  margin: 0;
+}

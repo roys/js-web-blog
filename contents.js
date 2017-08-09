@@ -6,7 +6,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             {
                 title: 'Building a real SPA blog',
                 published: true,
-                publishDate: '2017-08-08 08:00',
+                publishDate: '2017-08-08T06:00:00.000Z',
                 summary: 'This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/08/building-a-real-spa-blog',
                 text: `<h4>tldr;</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.
@@ -50,6 +50,61 @@ While one might argue that Knockout is beyond its prime time, it sure works grea
                     {
                         title: 'SPA',
                         url: '/spa'
+                    }
+                ]
+            },
+            {
+                title: 'Security vulnerability disclosures',
+                published: true,
+                publishDate: '2017-08-09T21:00:00.000Z',
+                summary: 'I\'m preparing a series of posts where I\'m disclosing several security vulnerabilities that I discovered the spring and summer of 2017.',
+                niceUrl: '/2017/08/security-vulnerability-disclosures',
+                text: `<h4>tldr;</h4>Over the years I've discovered so many security holes and information leaks on the Internet. Earlier I've only notified the involved parties, but I think it's time to go public doing "responsible disclosure".
+                
+<h4>The purpose</h4>Working with preparing these posts I've asked myself repeatedly if I should go public with my findings or not.
+
+I'm still not entirely sure what the right answer is. What I do know is that <b>I want increased focus on web security</b> and that I feel a <a href="https://en.wikipedia.org/wiki/Social_responsibility">social responsibility</a> to do so.
+
+The purpose of posting these vulnerabilities is fivefold:
+ - Make people aware that close to all their personal information is already in the hands of anyone who wants it.
+ - I want computer security to be a (bigger) part of the IT education and training.
+ - I want computer security to be a natural part of any developer's mindset.
+ - I want businesses to know that there might be consequences of being sloppy with people's data.
+ - Make your and my own data more safe.
+
+<b>Hopefully the issues presented on this site can be a small part of getting some kind of discussion on how to deal with computer security and personal data.</b>
+
+<h4>What I have done</h4>While looking for security vulnerabilities I have followed a few simple rules.
+
+<h5>What I have done:</h5> - Only looked at webapps (frontends and APIs) and mobile apps
+ - Only looked at Norwegian services (though some are internationally available)
+ - Immediately reported any security concerns and given reasonably time to fix any problems
+ - Only spent minutes until I found some security hole or information leak
+
+<h5>What I have not done:</h5> - Not hid my identity:
+   - I have worked from my home IP
+   - When logged in I have used my own personal account
+   - I have not tried to fly under the radar in regards of staying out of logs etc.
+ - Not looked for or used security holes in operating systems, app servers, networking equipment, etc.
+ - Not interferred with the operation of the webapps or companies
+ - Not altered or deleted any data
+ - Not stored any personal data or even tried accessing anything beyond proving the weakness
+
+<h4>Information sensitivity</h4>The levels of the sensitivity in the information leaks I found vary. They go all the way from <i>"Nah, I dont really care"</i> to <i>"0hly shit, this is not cool"</i>. But I think they all represent some unique points in respect of vulnerabilities and in respect of type of personal information.
+
+<h4>Reponsible disclosure</h4>I'm all for <a href="https://en.wikipedia.org/wiki/Responsible_disclosure">responsible disclosure</a> and have immediately reported my findings. Generally I'm not publishing any details the problem has been confirmed fixed. However, sadly, in some cases there's just no interest or response from the other party.
+
+If you want more thoughts about responsible disclosure I would recommand reading <a href="https://www.troyhunt.com/kids-pass-just-reminded-us-how-hard-responsible-disclosure-is/">Troy Hunt's site</a> (and maybe especially the video in that link).
+`,
+                category:
+                {
+                    title: 'Security',
+                    url: '/security'
+                },
+                tags: [
+                    {
+                        title: 'Background article',
+                        url: '/background'
                     }
                 ]
             }
