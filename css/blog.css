@@ -36,6 +36,10 @@ table.article td{
     padding: 0px 10px 0px 0px;
     height: 32px;
 }
+table.summary td{
+    font-size:smaller;
+    padding: 0px 10px 0px 0px;
+}
 .collection a.collection-item{
     color: #039be5;
 }

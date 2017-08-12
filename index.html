@@ -95,7 +95,7 @@
   </footer>
   <script type="text/html" id="frontpage-template">
     <h4>Latest posts</h4>
-    <div class="row" data-bind="foreach: {data: posts, as: 'post'}">
+    <div class="row" data-bind="foreach: {data: posts.slice(0).reverse(), as: 'post'}">
       <div class="col s12 m6 l4 xl3">
         <div class="card">
           <div class="card-content waves-effect" data-bind="click: function(){$root.goToPost(post)}">
@@ -192,7 +192,7 @@
       </div>
     </div>
     <div class="row">
-      <!-- ko foreach: {data: posts, as: 'post'} -->
+      <!-- ko foreach: {data: posts.slice(0).reverse(), as: 'post'} -->
       <!-- ko if: post.category && $parent.category().title === post.category.title -->
       <div class="col s12 m6 l4 xl3">
         <div class="card">
@@ -225,7 +225,7 @@
       </div>
     </div>
     <div class="row">
-      <!-- ko foreach: {data: posts, as: 'post'} -->
+      <!-- ko foreach: {data: posts.slice(0).reverse(), as: 'post'} -->
       <!-- ko foreach: {data: post.tags, as: 'tag'} -->
       <!-- ko if: $root.tag().title === tag.title -->
       <div class="col s12 m6 l4 xl3">
