@@ -240,34 +240,36 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
 
         function processCategoriesAndTags() {
             self.posts.forEach(function (post) {
-                if (post.category) {
-                    self.categories.forEach(function (category, index) {
-                        if (post.category.title === category.title) {
-                            self.categories.splice(index, 1);
-                        }
-                    });
-                    self.categories.push(post.category);
-                }
-                if (post.tags) {
-                    post.tags.forEach(function (postTag, index) {
-                        var foundTag = false;
-                        self.tags.forEach(function (existingTag, index) {
-                            if (!foundTag && postTag.title === existingTag.text) {
-                                existingTag.weight = existingTag.weight + 1;
-                                foundTag = true;
+                if (post.published) {
+                    if (post.category) {
+                        self.categories.forEach(function (category, index) {
+                            if (post.category.title === category.title) {
+                                self.categories.splice(index, 1);
                             }
                         });
-                        if (!foundTag) {
-                            self.tags.push({
-                                text: postTag.title, handlers: {
-                                    click: function () {
-                                        self.goToTag(postTag);
-                                        return false;
-                                    }
-                                }, weight: 1, link: window.SpaBlog.config.blogUrlPrefix + '/tag' + postTag.url
+                        self.categories.push(post.category);
+                    }
+                    if (post.tags) {
+                        post.tags.forEach(function (postTag, index) {
+                            var foundTag = false;
+                            self.tags.forEach(function (existingTag, index) {
+                                if (!foundTag && postTag.title === existingTag.text) {
+                                    existingTag.weight = existingTag.weight + 1;
+                                    foundTag = true;
+                                }
                             });
-                        }
-                    });
+                            if (!foundTag) {
+                                self.tags.push({
+                                    text: postTag.title, handlers: {
+                                        click: function () {
+                                            self.goToTag(postTag);
+                                            return false;
+                                        }
+                                    }, weight: 1, link: window.SpaBlog.config.blogUrlPrefix + '/tag' + postTag.url
+                                });
+                            }
+                        });
+                    }
                 }
             }, this);
             self.categories.sort(function (a, b) {

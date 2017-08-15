@@ -244,6 +244,32 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                         url: '/owasp-2013-a6'
                     }
                 ]
+            },
+            {
+                title: 'Case 2: Are you excited? :)',
+                published: false,
+                publishDate: '2017-08-21T06:00:00.000Z',
+                summary: ``,
+                niceUrl: '/2017/08/',
+                text: `
+`,
+                links: [
+                    {
+                        title: `Background: Purpose of these posts`,
+                        url: '/2017/08/security-vulnerability-disclosures'
+                    }
+                ],
+                category:
+                {
+                    title: 'Security',
+                    url: '/security'
+                },
+                tags: [
+                    {
+                        title: 'Security Monday',
+                        url: '/security-monday'
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
