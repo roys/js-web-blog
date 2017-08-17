@@ -37,13 +37,16 @@ table.article td{
     height: 32px;
 }
 table.summary td{
-    font-size:smaller;
+    font-size: smaller;
     padding: 0px 10px 0px 0px;
+    vertical-align: top;
 }
 .collection a.collection-item{
     color: #039be5;
 }
-
+.prettyprint{
+    font-size: smaller;
+}
 a[href^="http://"]:after, 
 a[href^="https://"]:after {
   content: url(http://blog.roysolberg.com/images/external_link.png);

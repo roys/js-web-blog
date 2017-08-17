@@ -166,6 +166,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.isTransitioning(false);
                     setTimeout(function () {
                         $('.materialboxed').materialbox();
+                        PR.prettyPrint();
                     }, 250);
                     self.loadAds();
                     self.loadComments(post.title, post.niceUrl);
