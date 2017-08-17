@@ -18,8 +18,8 @@
   <script type="text/javascript" src="/js/app.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script async src="https://roysolberg.disqus.com/embed.js"></script>
+  <script async src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <!-- Local dev: ->
-  <script async src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>  
   <script type="text/javascript" src="js/app.js"></script>
   <link type="text/css" rel="stylesheet" href="css/blog.css" />
   <script type="text/javascript" src="contents.js"></script>
@@ -152,6 +152,11 @@
     <table class="article grey-text">
       <tr data-bind="with: post().publishDate">
         <td style="width:5%;" class="">Published:</td>
+        <td data-bind="text: new Date($data).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false})">
+        </td>
+      </tr>
+      <tr data-bind="with: post().updateDate">
+        <td style="width:5%;" class="">Updated:</td>
         <td data-bind="text: new Date($data).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false})">
         </td>
       </tr>
