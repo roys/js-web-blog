@@ -112,6 +112,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
                 title: 'Case 1: Get your Social Security numbers here!',
                 published: true,
                 publishDate: '2017-08-14T05:30:00.000Z',
+                updateDate: '2017-08-17T16:50:00.000Z',
                 summary: 'Using only the plate number of a Norwegian car you can find the name, address, Social Security number, etc. of the owners.',
                 niceUrl: '/2017/08/get-your-ssn-here',
                 text: `<h4>tldr;</h4>While <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Norway's version of the Social Security number (SSN)</a> isn't considered sensitive personal information, it can still be used for ID theft and is sometimes treated as an authenticator and not only used for indentification. Knowing (or systematically picking) a car's number plate you can get quite a bit of personal information about the owners. Also, services hosted alongside the one in question seem to have dubious security.
@@ -135,7 +136,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
     </tr>
     <tr>
         <td style="width:30%">Status:</td>
-        <td><span class="red-text">Not fixed</span></td>
+        <td><span class="red-text"><strike>Not fixed</strike></span> <span class="green-text">Fixed after this post was published</span></td>
     </tr>
     <tr>
         <td style="width:30%">Issue:</td>
@@ -190,6 +191,17 @@ I also used a web form to get in touch with Infotorg.
 When I provided more details with an example Curl command for them to try I got an automatic e-mail back telling that the person handling this was unavailable. <b>I never heard back after that</b>, so I tried again one month later and this time including a e-mail address from the automatic e-mail that was supposed to be used for urgent cases. <b>I never heard back.</b> So I tried again writing both e-mails again five days before publishing this. <b>I never heard back.</b>
 
 <h5>Day 186</h5>I'm publishing this post. So is this responsible disclosure? Yes, I tried hard to get an answer. But on the other hand, it seems to me that the involved parties don't think that this is a disclosure to begin with, and that it isn't a problem.
+
+<div style="background-color:#ffecb3;padding:10px 10px 15px 10px;" class=""><h4 id="udpate">Update</h4><h5>Day 187 - Tuesday - post publish day 1</h5>Tryg's user at Infotorg's service got closed (as far as I understand, after Tryg contacted Infotorg).
+
+<h5>Day 188 - Wednesday - post publish day 2</h5>Tryg reached out to me. They thanked for the help finding the issue, said they were sorry for it being there in the first place, and told me it had been resolved.
+
+<h5>Day 189 - Thursday - post publish day 3</h5>digi.no published the article <i><a href="https://www.digi.no/artikler/norsk-mobilapp-apnet-for-tapping-av-masse-informasjon-om-norske-bileiere/400386">Norsk mobilapp åpnet for tapping av masse informasjon om norske bileiere</a></i>.
+
+Tryg <a href="#comment-3472389318">commented on this post</a> here themselves.
+
+<b>I think Tryg has - when the information finally reached them - has handled the case very well. They reacted promptly, fixed the problem, and has been very open and honest about everything. I'm really happy with that.</b>
+</div>
 
 <h4>Some fun facts</h4><h5>Fun fact #1: The previous King of Norway had his cars registered on him personally</h5><a href="https://no.wikipedia.org/wiki/Kongelige_biler_i_Norge">His Majesty The King has got a few cars</a>. Looking up e.g. the one with licence plate <i>A-1</i> you'll see that now the car is registered with <i>The Royal Court</i>, but it used to be registered directly on our previous King - <a href="https://en.wikipedia.org/wiki/Olav_V_of_Norway">Olav V</a>. They have also trusted the insurance company <a href="https://if.no">If</a> since 1995.
 
