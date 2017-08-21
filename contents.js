@@ -127,7 +127,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
         <td><span class="green-text">Low</span> to <span class="orange-text">medium</span></td>
     </tr>
     <tr>
-        <td style="width:30%">Reported:</td>
+        <td style="widoffth:30%">Reported:</td>
         <td>February 2017</td>
     </tr>
     <tr>
@@ -258,12 +258,89 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                 ]
             },
             {
-                title: 'Case 2: Are you excited? :)',
-                published: false,
-                publishDate: '2017-08-21T06:00:00.000Z',
-                summary: ``,
-                niceUrl: '/2017/08/',
-                text: `
+                title: `Case 2: Good authentication, but lacking authorization`,
+                published: true,
+                publishDate: '2017-08-21T07:00:00.000Z',
+                summary: `That a service is heavily gated doesn't mean that your information is safe. I'm taking it down a notch this week; this is not a severe case, but an OK reminder for us developers on how we protect our resources and to never trust the client.`,
+                niceUrl: '/2017/08/auth-auth',
+                text: `<h4>tldr;</h4>The service uses the industry de facto standard for high security in Norway - <a href="https://bankid.no">BankID</a> - for authentication, but still missed authorization check on a HTTP PUT call. A classical weakness to be found in web apps of today.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td>Anonymous, let's call them <a href="https://en.wikipedia.org/wiki/Fictional_company">Acme</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="green-text">Very low</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>March 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Very good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>1 x <a href="https://www.norsk-tipping.no/flax">Flax scratch ticket</a> (≈3 USD (1:600,000 chance to win 125,000.- USD (but no, I didn't win anything)))</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Missing authorization on REST endpoint + still authenticated after browser timing out session</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div>
+<h4>Background</h4>Acme is a "service booklet" for your home. It's a place to store all of the documentation about who's done what and your proof that all is ok if you were to sell your home. Everything about my house is stored at their servers.
+
+I got a "snap" of 5 scratch tickets from a friend that he got from Acme for reporting some problem with him getting the wrong house number. I thought maybe there could be an easy way for me to get some scratch tickets as well.
+
+<h4>Approach (technical stuff)</h4>This was a quick one I did while grabbing some lunch one Saturday.
+
+<h5>Browser developer tools</h5>I logged in to Acme using BankID and having <a href="https://developers.google.com/web/tools/chrome-devtools/">Chrome DevTools</a> open. I surfed back and forth and got an impression of the webapp and got a list of URLs that was being called + headers and cookies and whatnot.
+
+As with most webapps today there were a lot of Ajax calls going on, transfering JSON. I then tried replacing some IDs in URLs. In general stuff seemed pretty good. The security seemed to be in place.
+
+Then I saw this sort of "task list" where you have these set tasks - and can create new ones - for stuff you need to do with your home. You can also share them with third parties so they can do them for your and sign of on the work done. Once finished can set the task to status <i>Done</i>.
+
+<h5>Curl</h5>Most developer tools for browsers let you copy any HTTP request as a <a href="https://curl.haxx.se/">Curl</a> command. <b>I got an ID of one of the tasks of my friend and his approval to change the status of it.</b>
+
+I've changed URLs and IDs, but otherwise it was this command used:<pre class="prettyprint">
+curl 'https://example.com/UpdateTask' \\
+    -H 'Cookie: &lt;some cookies for BankID, session and Google Analytics&gt;' \\
+    -H 'Origin: https://example.com' \\
+    -H 'Accept-Encoding: gzip, deflate, br' \\
+    -H 'Accept-Language: nb-NO,nb;q=0.8,no;q=0.6,nn;q=0.4,en-US;q=0.2,en;q=0.2' \\
+    -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36' \\
+    -H 'Content-Type: application/json;charset=UTF-8' \\
+    -H 'Accept: application/json, text/plain, */*' \\
+    -H 'Referer: https://example.com/app/index.html' \\
+    -H 'X-Requested-With: XMLHttpRequest' \\
+    -H 'Connection: keep-alive'  \\
+    --data-binary '{"taskId":&lt;some other person\’s task ID&gt;,"status":true}' \\
+    --compressed</pre>
+<b>And bingo, the server returned HTTP 200 and the task was changed.</b>
+
+<h5>Session management</h5>Returning to my computer some time after doing this, the browser told me I got logged out because of the session being timed out. I tried one of the Curl commands one more time and saw that the HTTP request went through and returned HTTP 200. <b>Appearantly I was still logged in and had a valid session even though my browser told me otherwise.</b>
+
+<h4>Classical issue</h4><b>I think this is one of the more common issues in web apps today. When authorization of GETting data is in place, one have a tendency not to check if the client is allowed to do what he's telling the server when PUTting data back.</b>
+
+<h4>Reception and handling</h4><h5>Day zero</h5>I sent an e-mail telling about the two minor issues.
+
+<h5>Day 2 - before noon</h5>I got a long and well-written reply thanking me for finding the issue and telling that the developers were looking at it. They also went on telling that they were growing and there was a new employee coming in who would have the service's security as its responsiblity.
+
+<h5>Day 2 - night</h5>I got an update. <b>They had found the authorization issue and were in the process of fixing it.</b> In regards of the session still being valid they said it was just that the sever had one hour session timeout while the JavaScript app had it set to 20 minutes.
+
+<h4>Anonymous you say?</h4><b>I contacted Acme telling them that I was posting this. Until then they were very professional and open, but suddenly they became a bit defensive.</b> And they wanted to "inform me" that I had broken their terms the moment I had checked if they had any security holes. They did not want me to mention their company name or brand. They were afraid of the media. I can fully understand that. Who doesn't want to protect their brand?
+
+<b>I think they have handled the situation so well, and the issue was so minor, that I want to encourage them to come forward.</b>
+
+<h4>Conclusion</h4>This was a minor issue, but an issue I see quite a bit. The reception and handling was good, at least until I told I was publishing this. Developers: Go and check those POST and PUT requests and double check that you verify if the client is allowed to do what it wants to.
 `,
                 links: [
                     {
@@ -280,8 +357,34 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                     {
                         title: 'Security Monday',
                         url: '/security-monday'
+                    },
+                    {
+                        title: 'Authorization',
+                        url: '/authorization'
+                    },
+                    {
+                        title: 'Session handling',
+                        url: '/session-handling'
+                    },
+                    {
+                        title: 'OWASP 2013 A2',
+                        url: '/owasp-2013-a2'
+                    },
+                    {
+                        title: 'OWASP 2013 A7',
+                        url: '/owasp-2013-a7'
                     }
                 ]
+            },
+            {
+                title: 'Case 3: Are you excited? :)',               
+                published: false,
+                publishDate: '2017-08-28T06:30:00.000Z',
+                summary: ``,
+                niceUrl: '/2017/08/case-3',
+                text: `
+`
             }
+
         ];
 }(window.SpaBlog));
