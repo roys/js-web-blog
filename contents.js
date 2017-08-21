@@ -109,7 +109,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
                 ]
             },
             {
-                title: 'Case 1: Get your Social Security numbers here!',
+                title: 'Case #1: Get your Social Security numbers here!',
                 published: true,
                 publishDate: '2017-08-14T05:30:00.000Z',
                 updateDate: '2017-08-17T16:50:00.000Z',
@@ -258,7 +258,7 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                 ]
             },
             {
-                title: `Case 2: Good authentication, but lacking authorization`,
+                title: `Case #2: Good authentication, but lacking authorization`,
                 published: true,
                 publishDate: '2017-08-21T07:00:00.000Z',
                 summary: `That a service is heavily gated doesn't mean that your information is safe. I'm taking it down a notch this week; this is not a severe case, but an OK reminder for us developers on how we protect our resources and to never trust the client.`,
@@ -377,7 +377,7 @@ curl 'https://example.com/UpdateTask' \\
                 ]
             },
             {
-                title: 'Case 3: Are you excited? :)',               
+                title: 'Case #3: Are you excited? :)',               
                 published: false,
                 publishDate: '2017-08-28T06:30:00.000Z',
                 summary: ``,
