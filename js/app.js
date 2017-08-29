@@ -290,3 +290,23 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
     SpaBlog.AppViewModel = AppViewModel;
     SpaBlog.Router = Router;
 }(window.SpaBlog));
+
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (searchString, position) {
+        position = position || 0;
+        return this.indexOf(searchString, position) === position;
+    };
+}
+
+if (!String.prototype.endsWith) {
+    String.prototype.endsWith = function (searchStr, Position) {
+        // This works much better than >= because
+        // it compensates for NaN:
+        if (!(Position < this.length))
+            Position = this.length;
+        else
+            Position |= 0; // round position
+        return this.substr(Position - searchStr.length,
+            searchStr.length) === searchStr;
+    };
+}
