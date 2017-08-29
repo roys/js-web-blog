@@ -10,7 +10,7 @@
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="/css/blog.css" />
-  <script type="text/javascript" src="/contents.js?v=6"></script>
+  <script type="text/javascript" src="/contents.js?v=7"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/materialize.min.js"></script>
@@ -31,6 +31,18 @@
       blogUrlPrefix: ''
     };
 
+    /*
+    if (location.protocol === 'file:') {
+      var scripts = ['js/app.js', 'contents.js'];
+      scripts.forEach(function (src) {
+        var scriptEl = document.createElement('script');
+        scriptEl.src = src;
+        document.head.appendChild(scriptEl);
+      });
+      initSpaBlog();
+    }
+    */
+
     $(function () {
       ko.bindingHandlers.fadeVisible = {
         init: function (element, valueAccessor) {
@@ -46,11 +58,13 @@
           ko.unwrap(value) ? $(element).fadeIn('fast') : $(element).fadeOut('fast');
         }
       };
-
+      initSpaBlog();
+    });
+    function initSpaBlog() {
       var viewModel = new SpaBlog.AppViewModel();
       ko.applyBindings(viewModel);
       viewModel.goToPageBasedOnUrl();
-    });
+    }
   </script>
 </head>
 
@@ -196,7 +210,7 @@
     <div style="margin-bottom:0px;" class="row">
       <div class="col s12">
         <h3 data-bind="text: category().title">Category</h3>
-        <p>Showing all articles in category.</p>
+        <p>Showing all posts in category.</p>
       </div>
     </div>
     <div class="row">
@@ -229,7 +243,7 @@
     <div style="margin-bottom:0px;" class="row">
       <div class="col s12">
         <h3 data-bind="text: tag().title">Tag</h3>
-        <p>Showing all articles with selected tag.</p>
+        <p>Showing all posts with selected tag.</p>
       </div>
     </div>
     <div class="row">

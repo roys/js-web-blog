@@ -377,14 +377,175 @@ curl 'https://example.com/UpdateTask' \\
                 ]
             },
             {
-                title: 'Case #3: Are you excited? :)',               
-                published: false,
-                publishDate: '2017-08-28T06:30:00.000Z',
-                summary: ``,
-                niceUrl: '/2017/08/case-3',
-                text: `
-`
-            }
+                title: `Case #3: Who's got your IP address today?`,
+                published: true,
+                publishDate: '2017-08-28T04:45:00.000Z',
+                summary: `One of the "digital mailbox" services used by more than 400 central and local Norwegian government agencies to send mail, was leaking IP addresses and full names.`,
+                niceUrl: '/2017/08/digipost-leak',
+                text: `<h4>tldr;</h4><i>Digipost</i> - one of two "digital mailboxes" in Norway where you can get mail from public authorities - leaked users' full real name, IP addresses and login timestamps.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://www.posten.no/en/">Norwegian postal service's</a> <a href="https://www.digipost.no/">Digipost</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>May 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Very good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>125 USD worth of gift certificates</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Information leak with users' name and IP address</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div>
+<h4>Background</h4>In Norway we have two official suppliers for a "digital mailbox" where Norwegian public agencies can send you letters and documents. It's considered a more secure way than regular mail for delievering important letters and documents. The mailboxes have been pushed pretty hard the last couple of years, ensuring that as many as possible will sign up for it.
 
+I've personally used Digipost for quite a few years now. I think it's a great service for receiving important documents. One day I was wondering if my information and documents were safe with them.
+
+<h4>Approach (technical stuff)</h4><h5>HATEOAS</h5>Earlier on I used to attend the very good Java conference <a href="https://javazone.no/">JavaZone</a> every year. Five years ago I was at a talk from a couple of consultants working with Digipost, called <a href="https://vimeo.com/49392437">Hypermediadrevet API i praksis</a> (Hypermedia driven API in practice). It was an inspiring talk which made me make at least the next REST API hypermedia driven.
+
+Little did I know that I would use this "Hypermedia as the Engine of Application State" (HATEOAS) to an advantage when looking for security issues at the same site years later. Simply explained, the HATEOAS makes REST APIs more self-documenting and easier to browse through using the links provided.
+
+<h5>Browser developer tools</h5><img style="width:500px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Wait a minute, those aren't my logins? Screenshot from Chrome containing JSON with login history." data-caption="Wait a minute, those aren't my logins? Screenshot from Chrome containing JSON with login history." src="/images/digipost_eventlogs.png"/>I logged in to Digipost having <a href="https://developers.google.com/web/tools/chrome-devtools/">Chrome DevTools</a> open to see what was going on. I opened one or more of the REST URLs in a different tab. Having a JSON viewer browser extension like <a href="https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa">JSON Formatter</a> (that hopefully doesn't ship everything it sees to a third party server) makes looking at JSON a pleasure. The API being hypermedia driven meant that you get instant linkification and can browse through the data quickly.
+
+Digipost seemingly uses an auto increment integer as ID for the user, making it easy to check if your data is secured against the access of others. (Remind me to write a post about the pros and cons against IDs like that (and no, security by obscurity does not make your data safe)). I changed a few IDs here and there and mostly got different kinds of error messages thrown back at me. <b>However, I quickly found two URLs that didn't seem to have a proper authorization check.</b>
+
+<h4>Security issue</h4>Two URLs without proper authorization checks was found.
+
+The first URL apparently returned the number of unpaid invoices you have. Not something you would care about if someone accessed.
+
+<b>The second one was the alarming one for me. It returned the account activities for the past 30 days.</b> The data had the following elements:
+- Date of activity
+- <b>Full name</b> of the person performing the activity
+- Type of activity (e.g. level of authorization and authentication method)
+- <b>IP address</b> of client
+- The role of the person
+
+<h4>What's the big deal about this?</h4>The information exposed isn't sensitive, so why should you care? Well, I think there are two important points here.
+
+<b>The first point is that a service like this - promoted and pushed by the government - should have zero tolerance on any kind of information leak.</b> As system developers we make mistakes all the time. Every week we go to work and create new bugs. Hopefully they aren't security related, but sometimes they are. When working with services like this it's so incredibly important to have proper methods and routines to minimize the chance that this can't happen.
+
+<b>The second point is that I think the combination of a full real name and a fresh IP address is unfortunate.</b> It doesn't really matter for me, and probably not for you, but what about public figures or persons with unlisted addresses?
+
+<h4>Reception and handling</h4><h5>Day zero</h5>At night I sent an e-mail to the customer service.
+
+<h5>Day 2</h5>Less than 48 hours afterwards I got an e-mail apologizing that I didn't receive an answer before and telling that they had fixed the issue and were going to deploy it the same day.
+
+<h5>Day X</h5>I received a reward of some gift cards which I appreciated, but what might've impressed me the most was that the chief of security actually took the time to add hand written thank you note.
+
+<b>I think the issue in question was handled very well. Digipost responded quickly, fixed it quickly, and communicated in a clear and professional way. Even when reaching out telling about this post they responded in the same manner.</b>
+
+<h4>Conclusion</h4><b>It's important to underline that I never got access to any documents, communication or any information regarded as sensitive.</b> But for me this is a type of service that should have the same level of security as a bank. There just shouldn't be any information leaks. I truly believe that the information leaked could've be used for bad purposes.
+`,
+                links: [
+                    {
+                        title: `Background: Purpose of these posts`,
+                        url: '/2017/08/security-vulnerability-disclosures'
+                    }
+                ],
+                category:
+                {
+                    title: 'Security',
+                    url: '/security'
+                },
+                tags: [
+                    {
+                        title: 'Security Monday',
+                        url: '/security-monday'
+                    },
+                    {
+                        title: 'Information leak',
+                        url: '/information-leak'
+                    },
+                    {
+                        title: 'Authorization',
+                        url: '/authorization'
+                    },
+                    {
+                        title: 'OWASP 2013 A7',
+                        url: '/owasp-2013-a7'
+                    }
+                ]
+            },
+            {
+                title: `My dumb smart home`,
+                published: false,
+                publishDate: '2017-08-31T06:30:00.000Z',
+                summary: `My smart home isn't all smart. When it comes to security it's pretty dumb.`,
+                niceUrl: '/2017/08/my-dumb-smart-home',
+                text: `<div style="background-color:#ffecb3;padding:10px 10px 10px 10px;">This post was originally <a href="https://plus.google.com/+RoySolberg/posts/gNt4paU7KEZ">published on Google+</a> September 2015.</div>
+<h4>tldr;</h4>It isn't that the home automation system HDL-BUS Pro has any security holes; it doesn't have any security. If your house, the hotel you're staying on or your business uses HDL you should definitely read on.
+                
+<h4>Intro</h4>This spring I moved into my new house. When building a house in 2014/2015 you kind of feel obligated to make it a bit smart. Being a programmer it makes it a must. I looked into quite a few systems and protocols for home automation. Since this is a new building I preferred a cabled system instead of a wireless one. The electrical contractor for the house wasn't much updated on smart homes, but luckily they had a few electricians which knew and installs HDL-BUS Pro systems. So a bit coincidentally I ended up with HDL.
+
+Long before the actual installation I went to a training for "programming" (configuring really) the system. I was very curious about the underlying protocol and how stuff worked under the hood. Luckily HDL is open about its buspro protocol - and that's a healthy sign - and I learned about and was given the specification for the internal communication between the components. This was when I first was a bit surprised about the lack of security. <b>It's a straight forward simple protocol - and that's a good thing - but it completely lacks encryption, authentication and authorization.</b>
+
+HDL has a component called IP gateway which is a gateway between ethernet and the wired HDL components. The IP gateway is necessary to configure the components through the Windows application called HDL-BUS Pro Setup Tool. It also supports remote configuration from anywhere on the Internet.
+
+<h4>Security precaution #1</h4>If you have an IP gateway connected to your ethernet you want to make that a network that isn't reachable for unauthorized parties - meaning that both wired and wireless network shouldn't be available for anyone you don't trust. My neighbour was over the other day and casually asked "What's the password for the Wi-Fi?" Of course, I run the guest Wi-Fi in my house on a separate network so I could give him access. However, I suspect that most people (or businesses) with HDL don't realize the dangers and let anyone access the same network. If you want your IP gateway to be available via your Wi-Fi you want to make sure that the encryption, password and security in general is at a high level.
+
+<h4>Security precaution #2</h4>Very much like the precaution #1 regarding Wi-Fi and cabled ethernet, you should think twice if you have your ethernet available over your powerlines. What about that power outlet you have outside your house or just inside the garage?
+
+<h4>Security precaution #3</h4>With so many "trusted" devices connected to your Wi-Fi chances are that the security in or more of them have been comprimised. A typical home Wi-Fi for a family have several phones, tablets, laptops, TVs, and a video game console connected. Also with Internet of Things on the rise more and more units are allowed on your local network. If only one of those are compromised, someone could theoretically get access to your smart home. Considering precaution #1-3 you probably shouldn't have the IP gateway connected to the ethernet at all.
+
+<h4>Security precaution #4</h4>Do you have any outdoor sensors for e.g. temperature or motion connected to your system? Well, I don't think you should. What happens if someone hooks up an IP gateway and a computer on that unit or the unit's wires? Correct, they have full access to your system.
+
+<h4>Security precaution #5</h4>Being on a ethernet with a HDL system and recent version of the IP gateway's firmware lets you enable remote access. So, have you possibly had any unwelcome guests connected to your local network at some point? Have you checked if someone has enabled remote access to your system? Or maybe they just fetched the IP address, username and password from the IP gateway. Either way someone could access your system from remote at any desired time later on. My advice is to have the remote connection disabled.
+
+<h4>Security precaution #6</h4>If you have ever accessed your HDL system from remote through the IP gateway you should consider changing the login info and/or disable the remote access. As mentioned, HDL doesn't have any encryption, meaning that nearly anyone could possibly have picked up your login info when connecting through the Internet.
+
+<h4>Security precaution #7</h4>HDL has an SMS gateway that lets you text commands to the HDL system. Typically a set of phone numbers are whitelisted for sending commands. Commands can be something like "VACATION", "ALARM OFF", "OPEN GARAGE". It is very easy to spoof a phone number when sending a text. If someone knows - or guesses - the phone number you send commands from, so can they. If someone has/had access to the SMS gateway that someone could know the commands and even set up other commands.
+
+<h4>Hacking scenario #1</h4>So, what's the problem with having anyone connected to your HDL system either remotely or locally? Well, what if someone reads the status of the motion sensors? Then it could be possible to know if there's anybody home, maybe they could even make educated guesses about who's home depending on which areas that are in use. You don't post a sign outside your home telling potenial burglars that you aren't home, so you shouldn't let your smart home do that either.
+
+<h4>Hacking scenario #2</h4>Okay, somebody knows that noone's home, but you're protected by your smart home aren't you? Motion detectors, alarm sound, blinking lights, SMS warnings on intrusion. If someone has access to your HDL system they can easily turn this off. They could even turn it off, break in, turn the alarm system back on after leaving, and you wouldn't have a clue what happened.
+
+<h4>Hacking scenario #3</h4>If you have smoke detectors connected to the system any communication with the HDL system can be disabled.
+
+<h4>Hacking scenario #4</h4>Got your garage door connected to the system? Or even your front door? Well, you've probably figured it out by now. The doors can be opened (after disabling any alarms).
+
+<h4>Hacking scenario #5</h4>Someone could connect to your system and do vandalism like turning the heat on for full or control the blinds. Some things might be considered just a prank, but what if someone pushes the dimmers, relays and heating to the edge by either turning them on and off quickly or turning them to a 100%? Would it do damage to the components? Cause a fire?
+
+<h4>Hacking scenario #6</h4>Those previous five scenarios were the ones on top of my head. I'm sure you can think of a sixth and endless more yourself.
+
+<h4>Conclusion</h4>This isn't some zero-day vulnerability disclosure of HDL-BUS pro. The system is working as intended. These are just my observations, worries and security tips when dealing with HDL. Make your local network secure, consider not having an IP gateway connected, make sure wires and components aren't accessible for anyone who shouldn't have access. <b>I wish they taught this on the HDL training.</b>
+
+For the ones of you trusting on your local network security I want to quote a great book I'm reading now - <a href="http://shop.oreilly.com/product/0636920033547.do">Abusing the Internet of Things" by Nitesh Dhanjani</a>: <i>"As we add additional IoT devices to our homes, the reliance on WiFi security becomes a hard sell. Given the impact to our physical privacy and safety, it's difficult to stand by the argument that all bets are off once a single device (computer or IoT device) is compromised. Homes in developed countries are bound to have dozens of remotely controllable IoT devices. The single point of failure can't be the WiFi password. What's more, a compromised computer or device will already have access to the network, so a remote attacker does not need the WiFi password."</i>
+`,
+                links: [
+                    {
+                        title: `Background: Purpose of these posts`,
+                        url: '/2017/08/security-vulnerability-disclosures'
+                    }
+                ],
+                category:
+                {
+                    title: 'Smart home',
+                    url: '/smart-home'
+                },
+                tags: [
+                    {
+                        title: 'HDL Buspro',
+                        url: '/hdl-buspro'
+                    }
+                ]
+            }
         ];
 }(window.SpaBlog));
