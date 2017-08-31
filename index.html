@@ -11,20 +11,21 @@
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="/css/blog.css" />
   <!--script type="text/javascript" src="/contents.js?v=7"></script-->
-  <script type="text/javascript" src="/contents_es2015.js?v=7"></script>
+  <script type="text/javascript" src="/contents_es2015.js?v=8"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/materialize.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/jqcloud.min.js"></script>
   <script type="text/javascript" src="/js/app.js?v=2"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-3386970467864670",
+      enable_page_level_ads: true
+    });
+  </script>
   <script async src="https://roysolberg.disqus.com/embed.js"></script>
   <script async src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-  <!-- Local dev: ->
-  <script type="text/javascript" src="js/app.js"></script>
-  <link type="text/css" rel="stylesheet" href="css/blog.css" />
-  <script type="text/javascript" src="contents.js"></script>
-  <!- -->
   <script>
     window.SpaBlog = window.SpaBlog || {}; // Our namespace
     window.SpaBlog.config = {
@@ -32,17 +33,54 @@
       blogUrlPrefix: ''
     };
 
-    /*
     if (location.protocol === 'file:') {
       var scripts = ['js/app.js', 'contents.js'];
-      scripts.forEach(function (src) {
-        var scriptEl = document.createElement('script');
-        scriptEl.src = src;
-        document.head.appendChild(scriptEl);
-      });
-      initSpaBlog();
+      var i = 0;
+      function loadScript(src) {
+        return new Promise(function (resolve, reject) {
+          var s;
+          s = document.createElement('script');
+          s.src = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+      function loadNextScript() {
+        if (i < scripts.length) { // More scripts to be loaded
+          loadScript(scripts[i++]).then(loadNextScript, scripLoadFailed);
+        } else { // Done loading
+          initSpaBlog();
+        }
+      }
+      function scripLoadFailed() {
+        console.log('Failed to load script #' + (i - 1) + ' ' + scripts[i - 1]);
+      }
+      loadNextScript();
+      var stylesheets = ['css/blog.css'];
+      var j = 0;
+      function loadStylesheet(src) {
+        return new Promise(function (resolve, reject) {
+          var s;
+          s = document.createElement('link');
+          s.type = 'text/css';
+          s.rel = 'stylesheet';
+          s.href = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+      function loadNextStylesheet() {
+        if (j < stylesheets.length) { // More scripts to be loaded
+          loadStylesheet(stylesheets[j++]).then(loadNextStylesheet, stylesheetLoadFailed);
+        }
+      }
+      function stylesheetLoadFailed() {
+        console.log('Failed to load stylesheet #' + j + ' ' + stylesheets[j - 1]);
+      }
+      loadNextStylesheet();
     }
-    */
 
     $(function () {
       ko.bindingHandlers.fadeVisible = {
@@ -59,7 +97,9 @@
           ko.unwrap(value) ? $(element).fadeIn('fast') : $(element).fadeOut('fast');
         }
       };
-      initSpaBlog();
+      if (location.protocol !== 'file:') {
+        initSpaBlog();
+      }
     });
     function initSpaBlog() {
       var viewModel = new SpaBlog.AppViewModel();
@@ -178,7 +218,7 @@
       <tr data-bind="with: post().category">
         <td style="width:5%">Category:</td>
         <td>
-          <a href="#" data-bind="attr: { href: 'category' + url}, click: function(){$root.goToCategory($data)}">
+          <a href="#" data-bind="attr: { href: '/category' + url}, click: function(){$root.goToCategory($data)}">
             <div class="chip" data-bind="text: title"></div>
           </a>
         </td>
@@ -187,7 +227,7 @@
         <td style="width:5%" data-bind="text: $data.length > 1 ? 'Tags:' : 'Tag:'">Tags:</td>
         <td>
           <!-- ko foreach: {data: $data, as: 'tag'} -->
-          <a href="#" data-bind="attr: { href: 'tag' + tag.url }, click: function(){$root.goToTag(tag)}">
+          <a href="#" data-bind="attr: { href: '/tag' + tag.url }, click: function(){$root.goToTag(tag)}">
             <div class="chip" data-bind="text: tag.title"></div>
           </a>
           <!-- /ko -->
@@ -205,6 +245,11 @@
       </div>
     </div>
     <div id="disqus_thread"></div>
+    <div class="row" style="min-height:200px;margin-top:20px;">
+      <div class="col s12">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3386970467864670" data-ad-slot="5601565027" data-ad-format="auto"></ins>
+      </div>
+    </div>
   </script>
 
   <script type="text/html" id="category-template">

@@ -486,12 +486,12 @@ The first URL apparently returned the number of unpaid invoices you have. Not so
             },
             {
                 title: `My dumb smart home`,
-                published: false,
-                publishDate: '2017-08-31T06:30:00.000Z',
+                published: true,
+                publishDate: '2017-08-31T05:15:00.000Z',
                 summary: `My smart home isn't all smart. When it comes to security it's pretty dumb.`,
                 niceUrl: '/2017/08/my-dumb-smart-home',
                 text: `<div style="background-color:#ffecb3;padding:10px 10px 10px 10px;">This post was originally <a href="https://plus.google.com/+RoySolberg/posts/gNt4paU7KEZ">published on Google+</a> September 2015.</div>
-<h4>tldr;</h4>It isn't that the home automation system HDL-BUS Pro has any security holes; it doesn't have any security. If your house, the hotel you're staying on or your business uses HDL you should definitely read on.
+<h4>tldr;</h4>It isn't that the home automation system <a href="http://www.hdlautomation.com/">HDL-BUS Pro</a> has any security holes; it doesn't have any security. If your house, the hotel you're staying on or your business uses HDL you should definitely read on.
                 
 <h4>Intro</h4>This spring I moved into my new house. When building a house in 2014/2015 you kind of feel obligated to make it a bit smart. Being a programmer it makes it a must. I looked into quite a few systems and protocols for home automation. Since this is a new building I preferred a cabled system instead of a wireless one. The electrical contractor for the house wasn't much updated on smart homes, but luckily they had a few electricians which knew and installs HDL-BUS Pro systems. So a bit coincidentally I ended up with HDL.
 

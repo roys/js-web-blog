@@ -214,7 +214,13 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             }
             console.log('changeUrl()', url, title);
             var documentTitle = title + ' - ' + location.host
-            document.title = documentTitle;;
+            document.title = documentTitle;
+            var ogTitleJqEl = $('meta[property="og:title"]');
+            if (ogTitleJqEl.length > 0) {
+                ogTitleJqEl.attr('content', documentTitle);
+            } else {
+                $('head').append('<meta property="og:title" content="' + documentTitle + '"/>');
+            }
             if (url === location.pathname) {
                 return true;
             }
