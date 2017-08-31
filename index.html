@@ -153,7 +153,7 @@
     <h4>Latest posts</h4>
     <div class="row" data-bind="foreach: {data: posts.slice(0).reverse(), as: 'post'}">
       <!-- ko if: post.published -->
-      <div class="col s12 m6 l4 xl3">
+      <div class="col s12 m12 l12 xl4">
         <div class="card">
           <div class="card-content waves-effect" data-bind="click: function(){$root.goToPost(post)}">
             <span class="card-title" data-bind="text: post.title"></span>
@@ -262,7 +262,7 @@
     <div class="row">
       <!-- ko foreach: {data: posts.slice(0).reverse(), as: 'post'} -->
       <!-- ko if: post.published && post.category && $parent.category().title === post.category.title -->
-      <div class="col s12 m6 l4 xl3">
+      <div class="col s12 m12 l12 xl4">
         <div class="card">
           <div class="card-content waves-effect" data-bind="click: function(){$root.goToPost(post)}">
             <span class="card-title" data-bind="text: post.title"></span>
@@ -276,7 +276,7 @@
       </div>
       <!-- /ko -->
       <!-- /ko -->
-      <div class="col s12 m7 l6 xl5">
+      <div class="col s12 m12 l12 xl4">
         <div class="card">
           <div class="card-content" style="min-height:185px;padding-top:10px;padding-bottom:0px;">
             <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout="text-only" data-ad-layout-key="-hk-w+1i-26+5k" data-ad-client="ca-pub-3386970467864670" data-ad-slot="4289713314"></ins>
@@ -297,7 +297,7 @@
       <!-- ko if: post.published -->
       <!-- ko foreach: {data: post.tags, as: 'tag'} -->
       <!-- ko if: $root.tag().title === tag.title -->
-      <div class="col s12 m6 l4 xl3">
+      <div class="col s12 m12 l12 xl4">
         <div class="card">
           <div class="card-content waves-effect" data-bind="click: function(){$root.goToPost(post)}">
             <span class="card-title" data-bind="text: post.title"></span>
@@ -313,7 +313,7 @@
       <!-- /ko -->
       <!-- /ko -->
       <!-- /ko -->
-      <div class="col s12 m7 l6 xl5">
+      <div class="col s12 m12 l12 xl4">
         <div class="card">
           <div class="card-content" style="min-height:185px;padding-top:10px;padding-bottom:0px;">
             <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout="text-only" data-ad-layout-key="-hk-w+1i-26+5k" data-ad-client="ca-pub-3386970467864670" data-ad-slot="4289713314"></ins>

@@ -31,7 +31,9 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
 
         self.loadAds = function () {
             setTimeout(function () {
-                (adsbygoogle = window.adsbygoogle || []).push({});
+                [].forEach.call(document.querySelectorAll('.adsbygoogle'), function () {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                });
             }, 250);
         }
         self.loadComments = function (title, url) {
