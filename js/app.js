@@ -148,7 +148,6 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 self.category(null);
                 self.pageNotFound(false);
                 self.isTransitioning(false);
-                console.log($('#tag-cloud'));
                 $('#tag-cloud').jQCloud(self.tags, {
                     autoResize: true,
                     delay: 350,

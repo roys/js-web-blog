@@ -9,7 +9,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 publishDate: '2017-08-08T06:00:00.000Z',
                 summary: 'This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.',
                 niceUrl: '/2017/08/building-a-real-spa-blog',
-                text: `<h4>tldr;</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.
+                text: `<h4>tl;dr</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.
                 
 <h4>Medium</h4>I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days (at least for tech blogs). And I understand why; the layout is so simple yet attractive and easy to read.
                 
@@ -59,7 +59,7 @@ While one might argue that Knockout is beyond its prime time, it sure works grea
                 publishDate: '2017-08-09T21:00:00.000Z',
                 summary: 'I\'m preparing a series of posts where I\'m disclosing several security vulnerabilities that I discovered the spring and summer of 2017.',
                 niceUrl: '/2017/08/security-vulnerability-disclosures',
-                text: `<h4>tldr;</h4>Over the years I've discovered so many security holes and information leaks on the Internet. Earlier I've only notified the involved parties, but I think it's time to go public doing "responsible disclosure".
+                text: `<h4>tl;dr</h4>Over the years I've discovered so many security holes and information leaks on the Internet. Earlier I've only notified the involved parties, but I think it's time to go public doing "responsible disclosure".
                 
 <h4>The purpose</h4>Working with preparing these posts I've asked myself repeatedly if I should go public with my findings or not.
 
@@ -115,7 +115,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
                 updateDate: '2017-08-17T16:50:00.000Z',
                 summary: 'Using only the plate number of a Norwegian car you can find the name, address, Social Security number, etc. of the owners.',
                 niceUrl: '/2017/08/get-your-ssn-here',
-                text: `<h4>tldr;</h4>While <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Norway's version of the Social Security number (SSN)</a> isn't considered sensitive personal information, it can still be used for ID theft and is sometimes treated as an authenticator and not only used for indentification. Knowing (or systematically picking) a car's number plate you can get quite a bit of personal information about the owners. Also, services hosted alongside the one in question seem to have dubious security.
+                text: `<h4>tl;dr</h4>While <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Norway's version of the Social Security number (SSN)</a> isn't considered sensitive personal information, it can still be used for ID theft and is sometimes treated as an authenticator and not only used for indentification. Knowing (or systematically picking) a car's number plate you can get quite a bit of personal information about the owners. Also, services hosted alongside the one in question seem to have dubious security.
 
 <h4>Summary</h4><table class="summary">
     <tr>
@@ -263,7 +263,7 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                 publishDate: '2017-08-21T07:00:00.000Z',
                 summary: `That a service is heavily gated doesn't mean that your information is safe. I'm taking it down a notch this week; this is not a severe case, but an OK reminder for us developers on how we protect our resources and to never trust the client.`,
                 niceUrl: '/2017/08/auth-auth',
-                text: `<h4>tldr;</h4>The service uses the industry de facto standard for high security in Norway - <a href="https://bankid.no">BankID</a> - for authentication, but still missed authorization check on a HTTP PUT call. A classical weakness to be found in web apps of today.
+                text: `<h4>tl;dr</h4>The service uses the industry de facto standard for high security in Norway - <a href="https://bankid.no">BankID</a> - for authentication, but still missed authorization check on a HTTP PUT call. A classical weakness to be found in web apps of today.
                 
 <h4>Summary</h4><table class="summary">
 <tr>
@@ -382,7 +382,7 @@ curl 'https://example.com/UpdateTask' \\
                 publishDate: '2017-08-28T04:45:00.000Z',
                 summary: `One of the "digital mailbox" services used by more than 400 central and local Norwegian government agencies to send mail, was leaking IP addresses and full names.`,
                 niceUrl: '/2017/08/digipost-leak',
-                text: `<h4>tldr;</h4><i>Digipost</i> - one of two "digital mailboxes" in Norway where you can get mail from public authorities - leaked users' full real name, IP addresses and login timestamps.
+                text: `<h4>tl;dr</h4><i>Digipost</i> - one of two "digital mailboxes" in Norway where you can get mail from public authorities - leaked users' full real name, IP addresses and login timestamps.
                 
 <h4>Summary</h4><table class="summary">
 <tr>
@@ -491,7 +491,7 @@ The first URL apparently returned the number of unpaid invoices you have. Not so
                 summary: `My smart home isn't all smart. When it comes to security it's pretty dumb.`,
                 niceUrl: '/2017/08/my-dumb-smart-home',
                 text: `<div style="background-color:#ffecb3;padding:10px 10px 10px 10px;">This post was originally <a href="https://plus.google.com/+RoySolberg/posts/gNt4paU7KEZ">published on Google+</a> September 2015.</div>
-<h4>tldr;</h4>It isn't that the home automation system <a href="http://www.hdlautomation.com/">HDL-BUS Pro</a> has any security holes; it doesn't have any security. If your house, the hotel you're staying on or your business uses HDL you should definitely read on.
+<h4>tl;dr</h4>It isn't that the home automation system <a href="http://www.hdlautomation.com/">HDL-BUS Pro</a> has any security holes; it doesn't have any security. If your house, the hotel you're staying on or your business uses HDL you should definitely read on.
                 
 <h4>Intro</h4>This spring I moved into my new house. When building a house in 2014/2015 you kind of feel obligated to make it a bit smart. Being a programmer it makes it a must. I looked into quite a few systems and protocols for home automation. Since this is a new building I preferred a cabled system instead of a wireless one. The electrical contractor for the house wasn't much updated on smart homes, but luckily they had a few electricians which knew and installs HDL-BUS Pro systems. So a bit coincidentally I ended up with HDL.
 

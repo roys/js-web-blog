@@ -56,3 +56,6 @@ a[href*="//blog.roysolberg.com/"]:after, footer a[href*="//"]:after {
   content: '';
   margin: 0;
 }
+.code{
+    font-family: Courier New, monospace;
+}
