@@ -1,4 +1,14 @@
 RewriteEngine on
+RewriteCond %{HTTP_USER_AGENT} ^.*pinterest.*$ [OR]
+RewriteCond %{HTTP_USER_AGENT} ^.*linkedin.*$ [OR]
+RewriteCond %{HTTP_USER_AGENT} ^.*slack.*$ [OR]
+RewriteCond %{HTTP_USER_AGENT} ^.*facebook.*$ [OR]
+RewriteCond %{HTTP_USER_AGENT} ^.*yahoo.*$ [OR]
+RewriteCond %{HTTP_USER_AGENT} ^.*Twitterbot.*$ [OR]
+RewriteCond %{HTTP_USER_AGENT} ^.*bing.*$
+RewriteCond %{REQUEST_URI} !.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico)$
+RewriteRule ^(.+)$ preview.cgi?page=$1 [L]
+
 RewriteCond %{REQUEST_URI} !^/index.html$
 RewriteCond %{REQUEST_URI} !.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico)$
 RewriteRule .* index.html [L]
