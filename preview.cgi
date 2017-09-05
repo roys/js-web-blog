@@ -12,7 +12,6 @@ print 'Content-type: text/html\r\n\r\n'
 sys.stderr = sys.stdout
 # TODO: Clean up this script
 # TODO: Use a string template or something for the markup
-# TODO: Add preview image
 # 'REDIRECT_QUERY_STRING': 'page=X'
 
 page = os.environ['REQUEST_URI']
@@ -36,30 +35,44 @@ if matchObject is not None:
     for post in posts:
         # print post['niceUrl']
         if post['niceUrl'] in page:
+            url = post['niceUrl']
+            title = post['title'].encode('utf-8')
+            summary = post['summary'].encode('utf-8')
+            text = post['text'].encode('utf-8')
+
+            escapedTitle = title.replace("\"", "&quot;")
+            escapedSummary = summary.replace("\"", "&quot;")
+
+            imageUrl = None
+            if len(post.get('images', [])):
+                imageUrl = post['images'][0]
+
             print '<!DOCTYPE html>'
             print '<html>'
             print '<head>'
             print '<meta charset="utf-8" />'
 
-            print '<meta property="og:title" content="' + post['title'] + '"/>'
-            print '<meta property="og:image" content=""/>'
-            print '<meta property="og:description" content="' + post['summary'] + '"/>'
-            print '<meta property="og:url" content="' + post['niceUrl'] + '" />'
-            
-            print '<meta name="twitter:card" content="summary" />'
-            print '<meta name="twitter:site" content="@roysolberg" />'
-            print '<meta name="twitter:title" content="' + post['title'] + '" />'
-            print '<meta name="twitter:description" content="' + post['summary'] + '" />'
-            print '<meta name="twitter:image" content="" />'
+            print '<meta property="og:title" content="' + escapedTitle + '"/>'
+            if imageUrl is not None:
+                print '<meta property="og:image" content="' + imageUrl + '"/>'
+            print '<meta property="og:description" content="' + escapedSummary + '"/>'
+            print '<meta property="og:url" content="' + url + '" />'
 
-            print '<title>' + post['title'] + '</title>'
+            print '<meta name="twitter:card" content="summary_large_image" />'
+            print '<meta name="twitter:site" content="@roysolberg" />'
+            print '<meta name="twitter:title" content="' + escapedTitle + '" />'
+            print '<meta name="twitter:description" content="' + escapedSummary + '" />'
+            if imageUrl is not None:
+                print '<meta name="twitter:image" content="' + imageUrl + '" />'
+
+            print '<title>' + title + '</title>'
 
             print '</head>'
             print '<body>'
             print '<article>'
-            print '<h1>' + post['title'] + '</h1>'
-            print '<p>' + post['summary'] + '</p>'
-            print '<p>' + post['text'] + '</p>'
+            print '<h1>' + title + '</h1>'
+            print '<p>' + summary + '</p>'
+            print '<p>' + text + '</p>'
             print '</article>'
             print '</body>'
             print '</html>'

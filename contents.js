@@ -4,12 +4,12 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
     SpaBlog.posts =
         [
             {
-                title: 'Building a real SPA blog',
-                published: true,
-                publishDate: '2017-08-08T06:00:00.000Z',
-                summary: 'This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.',
-                niceUrl: '/2017/08/building-a-real-spa-blog',
-                text: `<h4>tl;dr</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.
+                "title": "Building a real SPA blog",
+                "published": true,
+                "publishDate": "2017-08-08T06:00:00.000Z",
+                "summary": `This blog is a real single-page application with no server code or database. It\'s refreshingly easy to work with.`,
+                "niceUrl": "/2017/08/building-a-real-spa-blog",
+                "text": `<h4>tl;dr</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.
                 
 <h4>Medium</h4>I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href="https://medium.com/">medium.com</a>. It seems like they are really dominating these days (at least for tech blogs). And I understand why; the layout is so simple yet attractive and easy to read.
                 
@@ -29,7 +29,7 @@ I expected to settle with a medium.com blog. However, it isn't possible to have 
 
 <h5>JavaScript framework</h5>I suppose <a href="https://angular.io/">Angular 2</a> or <a href="https://facebook.github.io/react/">React</a> would be among the most logical choices of JavaScript frameworks in 2017. But I wanted productivity and not use a lot of time to learn yet another framework when all I want is a quick and simple blog, so I went for good old <a href="http://knockoutjs.com/">Knockout</a> which I have used quite a lot as earlier on as an IT consultant.
 
-<img class="materialboxed responsive-img" title="Knockout js dead? Not the Google auto completion you want." data-caption="Knockout js dead? Not the Google auto completion you want." alt="Is Knockout JS dead?" src="https://rawgit.com/roys/js-web-blog/master/images/knockout-js_dead.png">
+<img class="materialboxed responsive-img" title="Knockout js dead? Not the Google auto completion you want." data-caption="Knockout js dead? Not the Google auto completion you want." alt="Is Knockout JS dead?" src="/images/knockout-js_dead.png">
 
 While one might argue that Knockout is beyond its prime time, it sure works great and it is mature. And no matter which newer JavaScript framework I would go for it would soon be considered "old". If you haven't read the article <a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">How it feels to learn JavaScript in 2016</a> by Jose Aguinaga, you really should. It's painful to read, but so true.
 
@@ -37,29 +37,30 @@ While one might argue that Knockout is beyond its prime time, it sure works grea
 
 <h4>GitHub project</h4>If you're interested you can have a look at the source code for this blog at <a href="https://github.com/roys/js-web-blog">https://github.com/roys/js-web-blog</a>. The project itself is licenced under the MIT License, but for the contents (posts and images) I reserve all rights.
 `,
-                category:
+                "images": ["/images/knockout-js_dead.png"],
+                "category":
                 {
-                    title: 'Software development',
-                    url: '/software-development'
+                    "title": "Software development",
+                    "url": "/software-development"
                 },
-                tags: [
+                "tags": [
                     {
-                        title: 'JavaScript',
-                        url: '/javascript'
+                        "title": "JavaScript",
+                        "url": "/javascript"
                     },
                     {
-                        title: 'SPA',
-                        url: '/spa'
+                        "title": "SPA",
+                        "url": "/spa"
                     }
                 ]
             },
             {
-                title: 'Security vulnerability disclosures',
-                published: true,
-                publishDate: '2017-08-09T21:00:00.000Z',
-                summary: 'I\'m preparing a series of posts where I\'m disclosing several security vulnerabilities that I discovered the spring and summer of 2017.',
-                niceUrl: '/2017/08/security-vulnerability-disclosures',
-                text: `<h4>tl;dr</h4>Over the years I've discovered so many security holes and information leaks on the Internet. Earlier I've only notified the involved parties, but I think it's time to go public doing "responsible disclosure".
+                "title": "Security vulnerability disclosures",
+                "published": true,
+                "publishDate": "2017-08-09T21:00:00.000Z",
+                "summary": `I\'m preparing a series of posts where I\'m disclosing several security vulnerabilities that I discovered the spring and summer of 2017.`,
+                "niceUrl": "/2017/08/security-vulnerability-disclosures",
+                "text": `<h4>tl;dr</h4>Over the years I've discovered so many security holes and information leaks on the Internet. Earlier I've only notified the involved parties, but I think it's time to go public doing "responsible disclosure".
                 
 <h4>The purpose</h4>Working with preparing these posts I've asked myself repeatedly if I should go public with my findings or not.
 
@@ -96,26 +97,26 @@ The purpose of posting these vulnerabilities is fivefold:
 
 If you want more thoughts about responsible disclosure I would recommand reading <a href="https://www.troyhunt.com/kids-pass-just-reminded-us-how-hard-responsible-disclosure-is/">Troy Hunt's site</a> (and maybe especially the video in that link).
 `,
-                category:
+                "category":
                 {
-                    title: 'Security',
-                    url: '/security'
+                    "title": "Security",
+                    "url": "/security"
                 },
-                tags: [
+                "tags": [
                     {
-                        title: 'Background article',
-                        url: '/background'
+                        "title": "Background article",
+                        "url": "/background"
                     }
                 ]
             },
             {
-                title: 'Case #1: Get your Social Security numbers here!',
-                published: true,
-                publishDate: '2017-08-14T05:30:00.000Z',
-                updateDate: '2017-08-17T16:50:00.000Z',
-                summary: 'Using only the plate number of a Norwegian car you can find the name, address, Social Security number, etc. of the owners.',
-                niceUrl: '/2017/08/get-your-ssn-here',
-                text: `<h4>tl;dr</h4>While <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Norway's version of the Social Security number (SSN)</a> isn't considered sensitive personal information, it can still be used for ID theft and is sometimes treated as an authenticator and not only used for indentification. Knowing (or systematically picking) a car's number plate you can get quite a bit of personal information about the owners. Also, services hosted alongside the one in question seem to have dubious security.
+                "title": `Case #1: Get your Social Security numbers here!`,
+                "published": true,
+                "publishDate": "2017-08-14T05:30:00.000Z",
+                "updateDate": "2017-08-17T16:50:00.000Z",
+                "summary": `Using only the plate number of a Norwegian car you can find the name, address, Social Security number, etc. of the owners.`,
+                "niceUrl": "/2017/08/get-your-ssn-here",
+                "text": `<h4>tl;dr</h4>While <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Norway's version of the Social Security number (SSN)</a> isn't considered sensitive personal information, it can still be used for ID theft and is sometimes treated as an authenticator and not only used for indentification. Knowing (or systematically picking) a car's number plate you can get quite a bit of personal information about the owners. Also, services hosted alongside the one in question seem to have dubious security.
 
 <h4>Summary</h4><table class="summary">
     <tr>
@@ -151,7 +152,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
 Within a couple of minutes you have a pretty decent control of the HTTP calls for that app.
 
 <h5>Web Service endpoint</h5>The first surprise I got was that the app and server actually use the procotol <a href="https://en.wikipedia.org/wiki/SOAP">SOAP</a> which is just terrible to work with. (I suspect people having to use, develop and debug SOAP services live in a fog of <a href="http://www.urbandictionary.com/define.php?term=FML#1256378">#FML</a>.)
-<!--img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="We can finally get all the details about the real-life replica of Il Tempo Gigante. Picture by Curt (https://www.flickr.com/photos/curt-dk/ / CC BY-NC 2.0)" data-caption="We can finally get all the details about the real-life replica of Il Tempo Gigante. Picture by Curt (https://www.flickr.com/photos/curt-dk/ / CC BY-NC 2.0)" src="http://blog.roysolberg.com/images/il_tempo_gigante.jpg"/-->
+<!--img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="We can finally get all the details about the real-life replica of Il Tempo Gigante. Picture by Curt (https://www.flickr.com/photos/curt-dk/ / CC BY-NC 2.0)" data-caption="We can finally get all the details about the real-life replica of Il Tempo Gigante. Picture by Curt (https://www.flickr.com/photos/curt-dk/ / CC BY-NC 2.0)" src="/images/il_tempo_gigante.jpg"/-->
 <img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Some of the data about the real-life replica of Il Tempo Gigante returned by the web service." data-caption="Some of the data about the real-life replica of Il Tempo Gigante returned by the web service." src="/images/il_tempo_gigante_ws.png"/>The second surprise was that the web service actually sent back much more info than what it display in the user interface in the app, and not only the municipality that you also get with the amentioned SMS service. I've summarized all the details further down after all the technical details here. <b>But seeing both the owner and co-owner's SSNs and addresses surprised me the most.</b>
 
 I noticed that the web service call always included the username and password instead of the returned session id. No biggie, but a bit strange. <b>The strings for usernames and password were all upper case and only 6-7 characters long. The password was almost the same as the username and all of them containing the name of the customer and the abbreviation of the service name. I hope that isn't the standard, that it gives me a clue on how the logins for the other services are.</b>
@@ -223,47 +224,48 @@ What about insurance companies? They could in theory use the dataset to target p
 
 If you use your imagination I'm sure you can come up with other ways to (ab)use the data.
 `,
-                links: [
+                "images": ["/images/il_tempo_gigante_ws.png", "/images/tryg-trygg_paa_reise.png", "/images/curl_infotorg.png"],
+                "links": [
                     {
-                        title: `Background: Purpose of these posts`,
-                        url: '/2017/08/security-vulnerability-disclosures'
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
                     }
                 ],
-                category:
+                "category":
                 {
-                    title: 'Security',
-                    url: '/security'
+                    "title": "Security",
+                    "url": "/security"
                 },
-                tags: [
+                "tags": [
                     {
-                        title: 'Security Monday',
-                        url: '/security-monday'
+                        "title": "Security Monday",
+                        "url": "/security-monday"
                     },
                     {
-                        title: 'Information leak',
-                        url: '/information-leak'
+                        "title": "Information leak",
+                        "url": "/information-leak"
                     },
                     {
-                        title: 'Social Security numbers',
-                        url: '/ssn'
+                        "title": "Social Security numbers",
+                        "url": "/ssn"
                     },
                     {
-                        title: 'OWASP 2013 A2',
-                        url: '/owasp-2013-a2'
+                        "title": "OWASP 2013 A2",
+                        "url": "/owasp-2013-a2"
                     },
                     {
-                        title: 'OWASP 2013 A6',
-                        url: '/owasp-2013-a6'
+                        "title": "OWASP 2013 A6",
+                        "url": "/owasp-2013-a6"
                     }
                 ]
             },
             {
-                title: `Case #2: Good authentication, but lacking authorization`,
-                published: true,
-                publishDate: '2017-08-21T07:00:00.000Z',
-                summary: `That a service is heavily gated doesn't mean that your information is safe. I'm taking it down a notch this week; this is not a severe case, but an OK reminder for us developers on how we protect our resources and to never trust the client.`,
-                niceUrl: '/2017/08/auth-auth',
-                text: `<h4>tl;dr</h4>The service uses the industry de facto standard for high security in Norway - <a href="https://bankid.no">BankID</a> - for authentication, but still missed authorization check on a HTTP PUT call. A classical weakness to be found in web apps of today.
+                "title": `Case #2: Good authentication, but lacking authorization`,
+                "published": true,
+                "publishDate": "2017-08-21T07:00:00.000Z",
+                "summary": `That a service is heavily gated doesn't mean that your information is safe. I'm taking it down a notch this week; this is not a severe case, but an OK reminder for us developers on how we protect our resources and to never trust the client.`,
+                "niceUrl": "/2017/08/auth-auth",
+                "text": `<h4>tl;dr</h4>The service uses the industry de facto standard for high security in Norway - <a href="https://bankid.no">BankID</a> - for authentication, but still missed authorization check on a HTTP PUT call. A classical weakness to be found in web apps of today.
                 
 <h4>Summary</h4><table class="summary">
 <tr>
@@ -342,47 +344,47 @@ curl 'https://example.com/UpdateTask' \\
 
 <h4>Conclusion</h4>This was a minor issue, but an issue I see quite a bit. The reception and handling was good, at least until I told I was publishing this. Developers: Go and check those POST and PUT requests and double check that you verify if the client is allowed to do what it wants to.
 `,
-                links: [
+                "links": [
                     {
-                        title: `Background: Purpose of these posts`,
-                        url: '/2017/08/security-vulnerability-disclosures'
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
                     }
                 ],
-                category:
+                "category":
                 {
-                    title: 'Security',
-                    url: '/security'
+                    "title": "Security",
+                    "url": "/security"
                 },
-                tags: [
+                "tags": [
                     {
-                        title: 'Security Monday',
-                        url: '/security-monday'
+                        "title": "Security Monday",
+                        "url": "/security-monday"
                     },
                     {
-                        title: 'Authorization',
-                        url: '/authorization'
+                        "title": "Authorization",
+                        "url": "/authorization"
                     },
                     {
-                        title: 'Session handling',
-                        url: '/session-handling'
+                        "title": "Session handling",
+                        "url": "/session-handling"
                     },
                     {
-                        title: 'OWASP 2013 A2',
-                        url: '/owasp-2013-a2'
+                        "title": "OWASP 2013 A2",
+                        "url": "/owasp-2013-a2"
                     },
                     {
-                        title: 'OWASP 2013 A7',
-                        url: '/owasp-2013-a7'
+                        "title": "OWASP 2013 A7",
+                        "url": "/owasp-2013-a7"
                     }
                 ]
             },
             {
-                title: `Case #3: Who's got your IP address today?`,
-                published: true,
-                publishDate: '2017-08-28T04:45:00.000Z',
-                summary: `One of the "digital mailbox" services used by more than 400 central and local Norwegian government agencies to send mail, was leaking IP addresses and full names.`,
-                niceUrl: '/2017/08/digipost-leak',
-                text: `<h4>tl;dr</h4><i>Digipost</i> - one of two "digital mailboxes" in Norway where you can get mail from public authorities - leaked users' full real name, IP addresses and login timestamps.
+                "title": `Case #3: Who's got your IP address today?`,
+                "published": true,
+                "publishDate": "2017-08-28T04:45:00.000Z",
+                "summary": `One of the "digital mailbox" services used by more than 400 central and local Norwegian government agencies to send mail, was leaking IP addresses and full names.`,
+                "niceUrl": "/2017/08/digipost-leak",
+                "text": `<h4>tl;dr</h4><i>Digipost</i> - one of two "digital mailboxes" in Norway where you can get mail from public authorities - leaked users' full real name, IP addresses and login timestamps.
                 
 <h4>Summary</h4><table class="summary">
 <tr>
@@ -454,43 +456,44 @@ The first URL apparently returned the number of unpaid invoices you have. Not so
 
 <h4>Conclusion</h4><b>It's important to underline that I never got access to any documents, communication or any information regarded as sensitive.</b> But for me this is a type of service that should have the same level of security as a bank. There just shouldn't be any information leaks. I truly believe that the information leaked could've be used for bad purposes.
 `,
-                links: [
+                "images": ["/images/digipost_eventlogs.png"],
+                "links": [
                     {
-                        title: `Background: Purpose of these posts`,
-                        url: '/2017/08/security-vulnerability-disclosures'
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
                     }
                 ],
-                category:
+                "category":
                 {
-                    title: 'Security',
-                    url: '/security'
+                    "title": "Security",
+                    "url": "/security"
                 },
-                tags: [
+                "tags": [
                     {
-                        title: 'Security Monday',
-                        url: '/security-monday'
+                        "title": "Security Monday",
+                        "url": "/security-monday"
                     },
                     {
-                        title: 'Information leak',
-                        url: '/information-leak'
+                        "title": "Information leak",
+                        "url": "/information-leak"
                     },
                     {
-                        title: 'Authorization',
-                        url: '/authorization'
+                        "title": "Authorization",
+                        "url": "/authorization"
                     },
                     {
-                        title: 'OWASP 2013 A7',
-                        url: '/owasp-2013-a7'
+                        "title": "OWASP 2013 A7",
+                        "url": "/owasp-2013-a7"
                     }
                 ]
             },
             {
-                title: `My dumb smart home`,
-                published: true,
-                publishDate: '2017-08-31T05:15:00.000Z',
-                summary: `My smart home isn't all smart. When it comes to security it's pretty dumb.`,
-                niceUrl: '/2017/08/my-dumb-smart-home',
-                text: `<div style="background-color:#ffecb3;padding:10px 10px 10px 10px;">This post was originally <a href="https://plus.google.com/+RoySolberg/posts/gNt4paU7KEZ">published on Google+</a> September 2015.</div>
+                "title": `My dumb smart home`,
+                "published": true,
+                "publishDate": "2017-08-31T05:15:00.000Z",
+                "summary": `My smart home isn't all smart. When it comes to security it's pretty dumb.`,
+                "niceUrl": "/2017/08/my-dumb-smart-home",
+                "text": `<div style="background-color:#ffecb3;padding:10px 10px 10px 10px;">This post was originally <a href="https://plus.google.com/+RoySolberg/posts/gNt4paU7KEZ">published on Google+</a> September 2015.</div>
 <h4>tl;dr</h4>It isn't that the home automation system <a href="http://www.hdlautomation.com/">HDL-BUS Pro</a> has any security holes; it doesn't have any security. If your house, the hotel you're staying on or your business uses HDL you should definitely read on.
                 
 <h4>Intro</h4>This spring I moved into my new house. When building a house in 2014/2015 you kind of feel obligated to make it a bit smart. Being a programmer it makes it a must. I looked into quite a few systems and protocols for home automation. Since this is a new building I preferred a cabled system instead of a wireless one. The electrical contractor for the house wasn't much updated on smart homes, but luckily they had a few electricians which knew and installs HDL-BUS Pro systems. So a bit coincidentally I ended up with HDL.
@@ -529,21 +532,138 @@ HDL has a component called IP gateway which is a gateway between ethernet and th
 
 For the ones of you trusting on your local network security I want to quote a great book I'm reading now - <a href="http://shop.oreilly.com/product/0636920033547.do">Abusing the Internet of Things" by Nitesh Dhanjani</a>: <i>"As we add additional IoT devices to our homes, the reliance on WiFi security becomes a hard sell. Given the impact to our physical privacy and safety, it's difficult to stand by the argument that all bets are off once a single device (computer or IoT device) is compromised. Homes in developed countries are bound to have dozens of remotely controllable IoT devices. The single point of failure can't be the WiFi password. What's more, a compromised computer or device will already have access to the network, so a remote attacker does not need the WiFi password."</i>
 `,
-                links: [
+                "links": [
                     {
-                        title: `Background: Purpose of these posts`,
-                        url: '/2017/08/security-vulnerability-disclosures'
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
                     }
                 ],
-                category:
+                "category":
                 {
-                    title: 'Smart home',
-                    url: '/smart-home'
+                    "title": "Smart home",
+                    "url": "/smart-home"
                 },
-                tags: [
+                "tags": [
                     {
-                        title: 'HDL Buspro',
-                        url: '/hdl-buspro'
+                        "title": "HDL Buspro",
+                        "url": "/hdl-buspro"
+                    }
+                ]
+            },
+            {
+                "title": `Case #4: Blast from the past`,
+                "published": true,
+                "publishDate": "2017-09-04T05:25:00.000Z",
+                "summary": `In 2017 you don't see that many sites running PHP, but recently I stumbled on this site of classical PHP vulnerabilities.`,
+                "niceUrl": "/2017/09/php-hack",
+                "text": `<h4>tl;dr</h4>A small Norwegian company is using a completely broken and open amateur PHP CMS. The site is open for (at least) local file inclusion and it's possible to completely take over the CMS.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td>Anonymous, let's call them <a href="https://en.wikipedia.org/wiki/Fictional_company">Acme2</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="red-text">Critical</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>August 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="red-text">Poor</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="red-text">Not fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>Not even a thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Completely broken PHP web site</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>I actually can't remember why I landed on the web site. Someone asked me to read something on this or a linking web site. Having seen a lot of bad sites over the years you can sometimes tell just from looking at the front page that you'll find some issues there.
+
+The site is for a very small Norwegian company doing some kind of training programs for other companies. It has some public facing login for editing the content inline and is written in the server-side scripting language <a href="https://en.wikipedia.org/wiki/PHP">PHP</a>. <a href="https://trends.google.com/trends/explore?date=all&q=%2Fm%2F060kv">There was a time when PHP was very popular</a>, but I guess those days over.
+
+<h4>Approach (technical stuff)</h4>Once in a while I take a quick peek at web sites' source code. I was expecting to find something on this particular one, but I didn't expect to find it that quickly:
+<pre class="prettyprint">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
+&lt;head&gt;
+&lt;title>[name of company]&lt;/title&gt;
+...
+&lt;link rel="stylesheet" type="text/css"
+    href="merge.php?css[]=%2Fcss%2Fstandard.css&amp;css[]=%2Fcss%2Fcustom.css" /&gt;
+...
+&lt;/head&gt;
+...
+&lt;/html&gt;
+</pre>
+Can you spot the opening? <b>Obviously the CSS was produced by some PHP script combining separate CSS files into one. Could it be that it would work for other files and directories?</b>
+
+Well, first I had to find the name of some other PHP files. I didn't see any, so I logically guessed on <span class="code">index.php</span>: <pre class="prettyprint">http://example.com/merge.php?css[]=index.php</pre>
+But then it responed something like <pre class="prettyprint lang-php">/* File is not a CSS or JavaScript file. */</pre>
+Good, maybe there was some sort of security in place after all?
+
+As you might know, PHP is built mainly using the programming language C. And C uses <a href="https://en.wikipedia.org/wiki/Null_character">null bytes</a> to terminate strings. So the next natural step is to try a URL like <pre class="prettyprint">http://example.com/merge.php?css[]=index.php%00.css</pre> where the script will still check for the <span class="code">.css</span> file ending, but when using the input string to include a underlying file it'll only use the part up to the null byte (URL encoded as <span class="code">%00</span>).
+
+<b>This was bulls eye. I got the source of the <span class="code">index.php</span> file back. At this point you know that you are golden.</b>
+
+Normally I would just provide a URL like <pre class="prettyprint">http://example.com/merge.php?css[]=../../../../../etc/passwd%00.css</pre> just to prove the point to the site owner. Not that <span class="code"><a href="https://en.wikipedia.org/wiki/Passwd">/etc/passwd</a></span> contains any passwords any longer, but it will typically reveal usernames and shows that one can retrieve almost any file from the file system. However, this was a Windows machine and the <span class="code">index.php</span> was not containing anything fun in itself.
+
+<span class="code">index.php</span> did however point me towards other scripts files and moments later <b>I got hold of this PHP file that actually defined the username and <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">hashed</a> version of the password of the admin user.</b> Given the state of the site I'd be surprised if there even was some random <a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">salt</a> per user. So what you do you do when you have a hash? Well, you search for a online <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table</a> site.
+
+<b>I got an immediate hit for the hash.</b> Not surprisingly the hash function used was the no longer recommended <a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a> and the password itself was so short and simple that you probably won't find it on <a href="https://en.wikipedia.org/wiki/List_of_the_most_common_passwords">lists of the most common passwords</a>. Using the username and password you'd get full access to the content management system for the site.
+
+At this point I stopped looking any further. I had enough info to report the issue and give a sense of the severity of what I saw.
+
+<h5>What I overlooked</h5>In my eagerness to find the security holes in the web app (and due to lacking branding) I didn't notice that this was actually not a homemade PHP site like I first thought. I didn't see it until writing this post, but there was a very interesting HTML meta tag: <pre class="prettyprint">&lt;meta name="generator" content="gpEasy CMS" /&gt;</pre>
+While I couldn't easily find the full history, it seems like gpEasy CMS is an old version of <a href="http://www.typesettercms.com/">Typesetter CMS</a>. I couldn't find the file inclusion among <a href="https://www.cvedetails.com/product/19479/Gpeasy-Gpeasy-Cms.html?vendor_id=10881">the issues on CVE details</a>, though there was <a href="https://packetstormsecurity.com/search/?q=gpeasy">another site with quite a few issues listed</a>.
+
+<h4>Security issue</h4>This is a completely broken PHP CMS. It's possible to retrieve about any file on the server, and you can change any contents of the site.
+
+This is only speculation as I didn't look further after finding the file inclusion issue, but when you find a site like this you most probably also will find other types of holes like remote code injection.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>I sent an e-mail to the contact address. <b>8 minutes later I got a response. That's a new record.</b> But the answer wasn't that uplifting. Apparently the site hadn't been of much in use the last years (though I would definitely guessed otherwise looking at the public accounting and taxation figures..). It didn't seem to be of any interest doing anything with the site or server. So hopefully there isn't anything of value there and hopefully no one makes the server into some kind of <a href="https://en.wikipedia.org/wiki/Zombie_(computer_science)">zombie</a>.
+
+<h4>Anonymous you say?</h4>This is a small company, possibly not in any real operation. They haven't fixed - and probably won't fix - the issue. I don't think it's right naming them. Let's just hope no one else finds the site and that they don't have any important or customer data on the server.
+
+<h4>Conclusion</h4>This was a blast from the past for me. It's been quite some time since I last saw an amateur PHP site like this. PHP once was very hot as the scripting language, partly because it is very easy to get started with, but it had a lot of pitfalls and it was so easy to make a site insecure. As the language matured the usage has gone down. Today most issues I see are HTTP service endpoints with lacking authorization checks.
+`,
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "PHP",
+                        "url": "/php"
+                    },
+                    {
+                        "title": "File inclusion",
+                        "url": "/file-inclusion"
+                    },
+                    {
+                        "title": "OWASP 2013 A1",
+                        "url": "/owasp-2013-a1"
                     }
                 ]
             }
