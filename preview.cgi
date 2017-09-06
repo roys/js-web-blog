@@ -17,7 +17,7 @@ sys.stderr = sys.stdout
 page = os.environ['REQUEST_URI']
 # print page
 
-with open('./contents_es2015.js') as contents_file:
+with open('./contents_json.js') as contents_file:
     js_contents = contents_file.read()
     # print js_contents
 
