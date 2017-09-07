@@ -29,6 +29,9 @@ ul {
 .page-footer {
     padding-top: 0px;
 }
+.page-footer a{
+    text-decoration: underline;
+}
 table.article{
     display: inline-table;
 }
@@ -49,7 +52,7 @@ table.summary td{
 }
 a[href^="http://"]:after, 
 a[href^="https://"]:after {
-  content: url(http://blog.roysolberg.com/images/external_link.png);
+  content: url(https://blog.roysolberg.com/images/external_link.png);
   margin: 0 0 0 5px;
 }
 a[href*="//blog.roysolberg.com/"]:after, footer a[href*="//"]:after {

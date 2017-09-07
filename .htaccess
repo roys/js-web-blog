@@ -1,4 +1,8 @@
 RewriteEngine on
+# TODO: Why won't it work just $ at the end?
+RewriteCond %{REQUEST_URI} ^/atom.*$
+RewriteRule .* atom.cgi [L]
+
 RewriteCond %{HTTP_USER_AGENT} ^.*pinterest.*$ [OR]
 RewriteCond %{HTTP_USER_AGENT} ^.*linkedin.*$ [OR]
 RewriteCond %{HTTP_USER_AGENT} ^.*slack.*$ [OR]
@@ -6,9 +10,10 @@ RewriteCond %{HTTP_USER_AGENT} ^.*facebook.*$ [OR]
 RewriteCond %{HTTP_USER_AGENT} ^.*yahoo.*$ [OR]
 RewriteCond %{HTTP_USER_AGENT} ^.*Twitterbot.*$ [OR]
 RewriteCond %{HTTP_USER_AGENT} ^.*bing.*$
-RewriteCond %{REQUEST_URI} !.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico)$
+RewriteCond %{REQUEST_URI} !^/$
+RewriteCond %{REQUEST_URI} !.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico|txt)$
 RewriteRule ^(.+)$ preview.cgi?page=$1 [L]
 
 RewriteCond %{REQUEST_URI} !^/index.html$
-RewriteCond %{REQUEST_URI} !.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico)$
+RewriteCond %{REQUEST_URI} !.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico|txt)$
 RewriteRule .* index.html [L]

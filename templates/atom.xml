@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en" xml:base="$baseUrl">
+	<title>blog.roysolberg.com</title>
+	<id>$feedId</id>
+    <updated>2017-09-07T18:30:00+02:00</updated>
+	<link rel="self" href="/atom" />
+	<author>
+		<name>Roy Solberg</name>
+		<uri>http://roysolberg.com</uri>
+	</author>
+    <category term="blog"/>
+    <category term="security"/>
+    <category term="software development"/>
+    <rights>© 2017 Roy Solberg</rights>
+$entries
+</feed>

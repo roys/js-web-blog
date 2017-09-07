@@ -1,0 +1,17 @@
+	<entry>
+		<title>$title</title>
+		<link href="$url"/>
+		<id>$id</id>
+		<category term="$category"/>
+		<updated>$updated</updated>
+		<published>$published</published>
+		<author>
+			<name>$author</name>
+		</author>
+		<summary>$summary</summary>
+		<content type="html">
+			<![CDATA[
+$contents
+			]]>
+		</content>
+	</entry>

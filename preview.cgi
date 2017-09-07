@@ -9,7 +9,7 @@ import re
 
 print 'Content-type: text/html\r\n\r\n'
 
-BASE_URL = 'http://blog.roysolberg.com'
+BASE_URL = 'https://blog.roysolberg.com'
 
 sys.stderr = sys.stdout
 # TODO: Clean up this script
