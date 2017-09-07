@@ -9,7 +9,7 @@ from string import Template
 
 print 'Content-type: application/atom+xml\r\n'
 
-BASE_URL = 'https://blog.roysolberg.com/'
+BASE_URL = 'https://blog.roysolberg.com'
 PATTERN = re.compile(
     r'(?:SpaBlog\.posts =)(.*)(?:;.*}\(window\.SpaBlog\))', re.DOTALL)
 
