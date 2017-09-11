@@ -254,6 +254,48 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         "url": "/spa"
                     }
                 ]
+            },
+            {
+                "title": "Case #5: Tell me your bank account no. and I'll tell you how rich you are",
+                "published": true,
+                "publishDate": "2017-09-11T05:00:00.000Z",
+                "summary": "I'm sure you expect your bank accounts to be safe from prying eyes. For a while other customers knowing my bank account number could check my account balance.",
+                "niceUrl": "/2017/09/skandiabanken-leak",
+                "text": "<h4>tl;dr</h4>The Norwegian bank Skandiabanken leaked the balance of other customers' bank accounts. I also question parts of their session handling.\n                \n<h4>Summary</h4><table class=\"summary\">\n<tr>\n    <td style=\"width:30%\">Who:</td>\n    <td><a href=\"https://skandiabanken.no\">Skandiabanken</a></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Severity level:</td>\n    <td><span class=\"red-text\">High</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reported:</td>\n    <td>September 2017</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reception and handling:</td>\n    <td><span class=\"green-text\">Very good</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Status:</td>\n    <td><span class=\"green-text\">Fixed</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reward:</td>\n    <td>A big thank you</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Issue:</td>\n    <td>Information leak with other customers' bank account balances and account names</td>\n</tr>\n</table>\n<div style=\"padding-top:80px;\" class=\"col s12 m5 l5 xl4 right\"><div class=\"card-panel light-blue darken-1\"><span style=\"text-decoration:underline;\" class=\"white-text\"><a class=\"white-text\" href=\"/2017/08/security-vulnerability-disclosures\">Background: The purpose of these posts</a></span></div></div>\n<h4>Background</h4>Skandiabanken - soon to be called Sbanken - is a fairly large bank in Norway with its more than 400,000 customers. It was Norway's first pure online bank when it started in 2000. I have been a customer since that first time and all along from the start it's been my favourite bank.\n\nThis summer a regulation for personal savings accounts for shares was approved. From September 1st 2017 it was possible to move shares and funds into this new type of account. The timing meant that all banks in Norway suddenly were in a hurry for getting the product ready.\n\nThe morning of the opening of the new account type I was logged in to create one for myself. I noticed that there was a few missing text translations and some places where it said <i>undefined</i> in the user interface. This new part of the bank wasn't all bug free yet.\n\n<h4>Approach (technical stuff)</h4><img style=\"width:500px;float:left;margin-right:20px;\" class=\"materialboxed responsive-img\" title=\"Screenshot from Vivaldi containing JSON with back account details.\" data-caption=\"Screenshot from Vivaldi containing JSON with back account details.\" src=\"/images/skandiabanken_accountdetails.png\"/>I opened <a href=\"https://help.vivaldi.com/article/developer-tools/\">Vivaldi developer tools</a> when logged in, to see what was going on in regards of network calls. I was surprised to see that one of the presumably new <a href=\"https://en.wikipedia.org/wiki/Ajax_(programming)\">Ajax</a> calls contained one of my bank account numbers. I could be wrong, but I think it's atypical for them to use that ID when asking for data from the backend. That of course doesn't mean anything, but I got curious and wondered if my data was properly secured.\n\nThe Ajax call returned <a href=\"https://en.wikipedia.org/wiki/JSON\">JSON</a> with the balance and some other data about the bank account in question. <b>I asked a friend for a bank account number and permission to check if I could get any of his data returned. And indeed I got his data.</b>\n\n<h4>Security issue</h4><b>Knowing just the bank account number of another customer one would get these data:</b>\n- Some UUID of the bank account\n- Customer's own name of the account\n- <b>The account's bank balance</b>\n- <b>The account's book balance</b>\n\n<h4>Reception and handling</h4><h5>Day zero</h5>I notified the bank and they immediately responded and started checking out the issue.\n\n<b>Just hours later they had rolled out a fix for the problem.</b> This must be the quickest fix I have ever seen for a security issue.\n\nLater the same I day I was phoned up by one of the chiefs who thanked me and told me they were grateful for that I found and reported the issue.\n\n<h5>Day 4 - incorrectly reporting a second issue...</h5>I had left my browser logged into this new part of the bank called \"Min sparing\" (\"My savings\"). When I returned to the computer quite a bit later I noticed that I was still logged in. And I noticed that I could close and open my browser and still be logged in to this part of the bank. Going to other parts of the bank would log me out from everything.\n\nI reported this by e-mail, but just after that I learned that <a href=\"https://skandiabanken.no/sporsmal-og-svar/min-sparing/hvor-lenge-kan-jeg-vare-inaktiv-i-min-sparing-appen-for-jeg-blir-logget-ut/\">this part of the bank has 9 hours session time</a> and not 20 minutes as most parts of the bank. I felt a bit embarrassed for reporting a non-issue and wasting their time.\n\n<h5>Day 5 - ...or was I into something?</h5>The next morning I realized something. Though this \"My savings\" session time was intentionally high, Skandiabanken offers simultaneous logins, and logging out from one session doesn't invalidate any others. <b>This means that if you are able to get access to a computer where the user forgot to log out after accessing \"My savings\" in the last hours you can get hold of the cookies and keep the session alive by only calling the server once in a while.</b>\n\n<b>What's more is that you can do this call from any location. You don't have to use the same computer or IP address.</b> The \"My savings\" page gives a pretty good glance into your economy (like shares, funds and some transactions), and using the mentioned Ajax call you <s>can</s> could also use the same cookie to access the balance of other known account numbers for that logged in user. <b>Hopefully the session can't be kept alive forever without signing in again.</b> While testing I had this one session alive for more than 36 hours (while changing locations and having other devices logged in and out).\n\n<b>Skandiabanken replied and told me that this session handling is a feature and not a bug.</b> They want a long session time, and they don't want to restrict the session to IP addresses because of mobile clients.\n\n<h5>Day 5 - new webapp deployed</h5>Skandiabanken seems to have removed the bank account number from the Ajax call, making it always return the balance of the payment account for funds and making the \"My savings\" page only getting savings related data. I would say that's a step in right direction. The 9 hours session time seems to stay the same.\n\n<h4>Conclusion</h4><b>As far as I know the security hole with balance access was introduced that morning and was only in the wild less than a day.</b> I have worked with online banking as an IT consultant and know how seriously security is taken in that industry. I was pleased - but not surprised - to see how seriously and professionally Skandiabanken handled everything.\n\nI feel confident that this issue would've been discovered relatively quickly by the bank itself hadn't I reported it. However, for me online banking is one of those services that just need to always be secure and never leak information like this.\n\n<b>What makes me a bit uneasy is the session handling feature/issue where someone could be watching my economy with a logged in session that I'm unaware of.</b>\n\n<b>Please remember to always hit that <i>Log out</i> button.</b>\n",
+                "images": ["/images/skandiabanken_accountdetails.png"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Authorization",
+                        "url": "/authorization"
+                    },
+                    {
+                        "title": "Bank account",
+                        "url": "/bank-account"
+                    },
+                    {
+                        "title": "OWASP 2013 A7",
+                        "url": "/owasp-2013-a7"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
