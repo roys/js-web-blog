@@ -89,7 +89,8 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         "title": "OWASP 2013 A6",
                         "url": "/owasp-2013-a6"
                     }
-                ]
+                ],
+                "commentsIdentifier": "http://blog.roysolberg.com/2017/08/get-your-ssn-here"
             },
             {
                 "title": "Case #2: Good authentication, but lacking authorization",
@@ -130,7 +131,8 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         "title": "OWASP 2013 A7",
                         "url": "/owasp-2013-a7"
                     }
-                ]
+                ],
+                "commentsIdentifier": "http://blog.roysolberg.com/2017/08/auth-auth"
             },
             {
                 "title": "Case #3: Who's got your IP address today?",
@@ -168,7 +170,8 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         "title": "OWASP 2013 A7",
                         "url": "/owasp-2013-a7"
                     }
-                ]
+                ],
+                "commentsIdentifier": "http://blog.roysolberg.com/2017/08/digipost-leak"
             },
             {
                 "title": "My dumb smart home",
@@ -295,7 +298,8 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         "title": "OWASP 2013 A7",
                         "url": "/owasp-2013-a7"
                     }
-                ]
+                ],
+                "commentsIdentifier": "https://blog.roysolberg.com/2017/09/skandiabanken-leak"
             }
         ];
 }(window.SpaBlog));

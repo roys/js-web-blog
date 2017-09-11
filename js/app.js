@@ -18,10 +18,8 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         processCategoriesAndTags();
 
         window.onpopstate = function (event) {
-            console.log('***');
             console.log("onpopstate() location: " + document.location + ", state: " + JSON.stringify(event.state));
             console.log(event);
-            console.log('*******');
             if (!self.changingUrl) {
                 self.changingUrl = true;
                 self.goToPageBasedOnUrl();
@@ -36,7 +34,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 });
             }, 250);
         }
-        self.loadComments = function (title, url) {
+        self.loadComments = function (title, url, identifier) {
             if (self.commentsTimer) {
                 clearTimeout(self.commentsTimer);
             }
@@ -45,6 +43,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     reload: true,
                     config: function () {
                         this.page.url = window.location.href;
+                        this.page.identifier = identifier;
                         this.page.title = title;
                         this.language = 'en';
                     }
@@ -170,7 +169,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         PR.prettyPrint();
                     }, 250);
                     self.loadAds();
-                    self.loadComments(post.title, post.niceUrl);
+                    self.loadComments(post.title, post.niceUrl, post.commentsIdentifier ? post.commentsIdentifier : post.niceUrl);
                 }, 250);
             }
         }
