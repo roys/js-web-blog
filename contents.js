@@ -52,7 +52,8 @@ While one might argue that Knockout is beyond its prime time, it sure works grea
                         "title": "SPA",
                         "url": "/spa"
                     }
-                ]
+                ],
+                "commentsIdentifier": "http://blog.roysolberg.com/2017/08/get-your-ssn-here"
             },
             {
                 "title": "Security vulnerability disclosures",
@@ -128,7 +129,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
         <td><span class="green-text">Low</span> to <span class="orange-text">medium</span></td>
     </tr>
     <tr>
-        <td style="widoffth:30%">Reported:</td>
+        <td style="width:30%">Reported:</td>
         <td>February 2017</td>
     </tr>
     <tr>
@@ -257,7 +258,8 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                         "title": "OWASP 2013 A6",
                         "url": "/owasp-2013-a6"
                     }
-                ]
+                ],
+                "commentsIdentifier": "http://blog.roysolberg.com/2017/08/get-your-ssn-here"
             },
             {
                 "title": `Case #2: Good authentication, but lacking authorization`,
@@ -376,7 +378,8 @@ curl 'https://example.com/UpdateTask' \\
                         "title": "OWASP 2013 A7",
                         "url": "/owasp-2013-a7"
                     }
-                ]
+                ],
+                "commentsIdentifier": "http://blog.roysolberg.com/2017/08/auth-auth"
             },
             {
                 "title": `Case #3: Who's got your IP address today?`,
@@ -485,7 +488,8 @@ The first URL apparently returned the number of unpaid invoices you have. Not so
                         "title": "OWASP 2013 A7",
                         "url": "/owasp-2013-a7"
                     }
-                ]
+                ],
+                "commentsIdentifier": "http://blog.roysolberg.com/2017/08/digipost-leak"
             },
             {
                 "title": `My dumb smart home`,
@@ -664,6 +668,213 @@ This is only speculation as I didn't look further after finding the file inclusi
                     {
                         "title": "OWASP 2013 A1",
                         "url": "/owasp-2013-a1"
+                    }
+                ]
+            },
+            {
+                "title": "Building an almost real SPA blog",
+                "published": true,
+                "publishDate": "2017-09-07T14:50:00.000Z",
+                "summary": "I thought I could have this blog as a real single-page application with no server code. That sort of worked. If it only hadn't been for the previews.",
+                "niceUrl": "/2017/09/an-almost-real-spa-blog",
+                "text": `<h4>tl;dr</h4>My first post on this blog was <a href="/2017/08/building-a-real-spa-blog">Building almost a real SPA blog</a>. While the title mostly is still true, I ended up having a bit more <span class="code">.htaccess</span> config and a small Python script for previews of posts in social media and add support for web feed.
+                
+<h4>Single-page application</h4>I was able to build this blog as a <a href="https://en.wikipedia.org/wiki/Single-page_application">single-page application</a>. I had - and still have - all contents in <a href="https://github.com/roys/js-web-blog/blob/master/contents.js">one single static JavaScript array</a> and use the JavaScript framework <i>Knockout</i> and the front-end framework <i>Materialize</i>. So far so good.
+                
+<h4>Search engine optimization</h4>Google has since 2014 been able to <a href="https://webmasters.googleblog.com/2015/10/deprecating-our-ajax-crawling-scheme.html">render and understand JavaScript web applications</a>. <b>Using the Search Console's <a href="https://www.google.com/webmasters/tools/googlebot-fetch">Fetch as Google</a> I have been able to verify that Google understands my site just perfect.</b> Doing a <a href="https://www.google.no/search?q=site:blog.roysolberg.com">site: search</a> also confirms that.
+
+I have to admit that I don't care too much about other search engines like Bing, Yahoo, etc. Google is in its own class when it comes to searching. However, because of the mentioned Python script I now have a tool for that as well. More about that in a second.
+
+<h4>Article preview</h4><img style="width:450px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Typical article preview using Open Graph Protocol tags." data-caption="Typical article preview using Open Graph Protocol tags." src="/images/linkedin_preview.png"/>I sometimes post my articles to <a href="https://twitter.com/roysolberg">Twitter</a>, Facebook and <a href="https://www.linkedin.com/in/roysolberg/">LinkedIn</a>. <b>When creating a preview of the links those sites certainly does not try to parse any of the contents as a modern browser. They just look for <a href="https://dev.twitter.com/cards/overview">Twitter Cards</a> or <a href="http://ogp.me/">Open Graph Protocol</a> (OGP) meta tags.</b> If they don't find anything they typically default to the <span class="code">&lt;title/&gt;</span> tag.
+
+My <span class="code">index.html</span> only has a standard <span class="code">&lt;title/&gt;</span> tag which makes no sense in the context of my articles. That makes the previews pretty bad, so I mostly skipped them in the start. However, I think the content is so much better with a good preview of the contents. I'm sure it also makes more people click the links.
+
+<h4>Web feed</h4>Naturally one doesn't get any web feed like <a href="https://en.wikipedia.org/wiki/Atom_(standard)">Atom</a> or <a href="https://en.wikipedia.org/wiki/RSS">RSS</a> out of the box when building a single-page application. And that's also one of the things I wanted to have for my site.
+
+So far I've added support for Atom which you can acess at <a href="https://blog.roysolberg.com/atom">https://blog.roysolberg.com/atom</a>.
+
+<h4>The easy way out</h4>I couldn't find a way to solve the preview challenge without resorting to some backend code. I really like <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">the programming language Python</a>. Writing just a few lines of code I was able to create a script that read the contents in the JavaScript array and produced the necessary OGP tags. You can <a href="https://github.com/roys/js-web-blog/blob/master/preview.cgi">see the source code of the script on GitHub</a>.
+
+Now that I had the script for generating the preview I needed a way to route the bots to it. For that I used the already existing <span class="code">.htaccess</span> configuration file and look for the <a href="https://en.wikipedia.org/wiki/User_agent">User-Agent header</a> belonging to the different sites' bots. You can <a href="https://github.com/roys/js-web-blog/blob/master/.htaccess">see the source code for .htaccess on GitHub</a>.
+
+Because of the preview setup I got support for other non-Google search engines for free. They access the same code as generated by the Python script. Google is still served the same site as you are.
+
+Having the preview script it didn't take long to make support for the Atom feed. You can <a href="https://github.com/roys/js-web-blog/blob/master/atom.cgi">see the source code of the script on GitHub</a>.
+
+<h4>Wishes for the future</h4><b>I don't think the Open Graph Protocol is very flexible or ready for single-page applications and thicker clients.</b>
+
+<b>The first thing that hit me when creating the script was that I couldn't just inject the meta data as HTTP headers.</b> I had to create HTML markup for it. I can't understand why one shouldn't be able to choose between headers and tags.
+
+Secondly the different social media sites need to start doing what Google has been doing since 2014; render the pages with some kind of <a href="https://en.wikipedia.org/wiki/Headless_browser">headless browser</a> to be able to understand the contents and get dynamically injected OGP meta tags. It's not that much magic or resource demanding in 2017.
+
+<h4>GitHub project</h4>If you're interested you can have a look at the source code for this blog at <a href="https://github.com/roys/js-web-blog">https://github.com/roys/js-web-blog</a>. The project itself is licenced under the MIT License, but for the contents (posts and images) I reserve all rights.
+`,
+                "images": ["/images/linkedin_preview.png"],
+                "category":
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
+                "tags": [
+                    {
+                        "title": "JavaScript",
+                        "url": "/javascript"
+                    },
+                    {
+                        "title": "SPA",
+                        "url": "/spa"
+                    }
+                ]
+            },
+            {
+                "title": "Case #5: Tell me your bank account no. and I'll tell you how rich you are",
+                "published": true,
+                "publishDate": "2017-09-11T05:00:00.000Z",
+                "summary": "I'm sure you expect your bank accounts to be safe from prying eyes. For a while other customers knowing my bank account number could check my account balance.",
+                "niceUrl": "/2017/09/skandiabanken-leak",
+                "text": `<h4>tl;dr</h4>The Norwegian bank Skandiabanken leaked the balance of other customers' bank accounts. I also question parts of their session handling.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://skandiabanken.no">Skandiabanken</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="red-text">High</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>September 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Very good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A big thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Information leak with other customers' bank account balances and account names</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div>
+<h4>Background</h4>Skandiabanken - soon to be called Sbanken - is a fairly large bank in Norway with its more than 400,000 customers. It was Norway's first pure online bank when it started in 2000. I have been a customer since that first time and all along from the start it's been my favourite bank.
+
+This summer a regulation for personal savings accounts for shares was approved. From September 1st 2017 it was possible to move shares and funds into this new type of account. The timing meant that all banks in Norway suddenly were in a hurry for getting the product ready.
+
+The morning of the opening of the new account type I was logged in to create one for myself. I noticed that there was a few missing text translations and some places where it said <i>undefined</i> in the user interface. This new part of the bank wasn't all bug free yet.
+
+<h4>Approach (technical stuff)</h4><img style="width:500px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from Vivaldi containing JSON with back account details." data-caption="Screenshot from Vivaldi containing JSON with back account details." src="/images/skandiabanken_accountdetails.png"/>I opened <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> when logged in, to see what was going on in regards of network calls. I was surprised to see that one of the presumably new <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> calls contained one of my bank account numbers. I could be wrong, but I think it's atypical for them to use that ID when asking for data from the backend. That of course doesn't mean anything, but I got curious and wondered if my data was properly secured.
+
+The Ajax call returned <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> with the balance and some other data about the bank account in question. <b>I asked a friend for a bank account number and permission to check if I could get any of his data returned. And indeed I got his data.</b>
+
+<h4>Security issue</h4><b>Knowing just the bank account number of another customer one would get these data:</b>
+- Some UUID of the bank account
+- Customer's own name of the account
+- <b>The account's bank balance</b>
+- <b>The account's book balance</b>
+
+<h4>Reception and handling</h4><h5>Day zero</h5>I notified the bank and they immediately responded and started checking out the issue.
+
+<b>Just hours later they had rolled out a fix for the problem.</b> This must be the quickest fix I have ever seen for a security issue.
+
+Later the same I day I was phoned up by one of the chiefs who thanked me and told me they were grateful for that I found and reported the issue.
+
+<h5>Day 4 - incorrectly reporting a second issue...</h5>I had left my browser logged into this new part of the bank called "Min sparing" ("My savings"). When I returned to the computer quite a bit later I noticed that I was still logged in. And I noticed that I could close and open my browser and still be logged in to this part of the bank. Going to other parts of the bank would log me out from everything.
+
+I reported this by e-mail, but just after that I learned that <a href="https://skandiabanken.no/sporsmal-og-svar/min-sparing/hvor-lenge-kan-jeg-vare-inaktiv-i-min-sparing-appen-for-jeg-blir-logget-ut/">this part of the bank has 9 hours session time</a> and not 20 minutes as most parts of the bank. I felt a bit embarrassed for reporting a non-issue and wasting their time.
+
+<h5>Day 5 - ...or was I into something?</h5>The next morning I realized something. Though this "My savings" session time was intentionally high, Skandiabanken offers simultaneous logins, and logging out from one session doesn't invalidate any others. <b>This means that if you are able to get access to a computer where the user forgot to log out after accessing "My savings" in the last hours you can get hold of the cookies and keep the session alive by only calling the server once in a while.</b>
+
+<b>What's more is that you can do this call from any location. You don't have to use the same computer or IP address.</b> The "My savings" page gives a pretty good glance into your economy (like shares, funds and some transactions), and using the mentioned Ajax call you <s>can</s> could also use the same cookie to access the balance of other known account numbers for that logged in user. <b>Hopefully the session can't be kept alive forever without signing in again.</b> While testing I had this one session alive for more than 36 hours (while changing locations and having other devices logged in and out).
+
+<b>Skandiabanken replied and told me that this session handling is a feature and not a bug.</b> They want a long session time, and they don't want to restrict the session to IP addresses because of mobile clients.
+
+<h5>Day 5 - new webapp deployed</h5>Skandiabanken seems to have removed the bank account number from the Ajax call, making it always return the balance of the payment account for funds and making the "My savings" page only getting savings related data. I would say that's a step in right direction. The 9 hours session time seems to stay the same.
+
+<h4>Conclusion</h4><b>As far as I know the security hole with balance access was introduced that morning and was only in the wild less than a day.</b> I have worked with online banking as an IT consultant and know how seriously security is taken in that industry. I was pleased - but not surprised - to see how seriously and professionally Skandiabanken handled everything.
+
+I feel confident that this issue would've been discovered relatively quickly by the bank itself hadn't I reported it. However, for me online banking is one of those services that just need to always be secure and never leak information like this.
+
+<b>What makes me a bit uneasy is the session handling feature/issue where someone could be watching my economy with a logged in session that I'm unaware of.</b>
+
+<b>Please remember to always hit that <i>Log out</i> button.</b>
+`,
+                "images": ["/images/skandiabanken_accountdetails.png"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Authorization",
+                        "url": "/authorization"
+                    },
+                    {
+                        "title": "Bank account",
+                        "url": "/bank-account"
+                    },
+                    {
+                        "title": "OWASP 2013 A7",
+                        "url": "/owasp-2013-a7"
+                    }
+                ],
+                "commentsIdentifier": "https://blog.roysolberg.com/2017/09/skandiabanken-leak"
+            },
+            {
+                "title": "1995: When you could get a demo of the Internet on a floppy disk",
+                "published": true,
+                "publishDate": "2017-09-13T23:00:00.000Z",
+                "summary": "This one is for you who actually know what that save icon in Word is.",
+                "niceUrl": "/2017/09/internet-demo",
+                "text": `<h4>tl;dr</h4>I've uploaded all the HTML files from a Norwegian Internet Service Provider's Internet demo diskette so you can (almost) surf like it's 1995.
+
+<h4>Background</h4><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The diskette containing the browser and demo pages." data-caption="The diskette containing the browser and demo pages." src="/images/floppy02.jpg">
+Back in 1995 - one year before I tried the Internet for the first time, and two years before I got Internet access at home - my mother brought me this floppy disk from work. She thought I might be interested in checking it out. <b>It was a demo of the Internet!</b>
+
+I didn't really know what the <a href="https://en.wikipedia.org/wiki/World_Wide_Web">World Wide Web</a> was about. The diskette contained a web browser (I think it was <a href="https://en.wikipedia.org/wiki/Mosaic_(web_browser)">Mosaic</a> (sorry, I only copied the <span class="code">.htm</span> files 10 years ago)). And it actually gave a feel of what the Internet was like.
+
+<h4>Demo</h4>Below is the demo itself. It's nice to see the HTML pages still working the same 22 years later. You can also <a href="https://blog.roysolberg.com/stuff/sol/initial.htm">open demo in full screen</a>.
+<input type="button" value=" < " onclick="window.parent.frames[1].history.back()"/> <input type="button" value=" > " onclick="window.parent.frames[1].history.forward()"/>
+<iframe style="margin: none;padding: none;border:1px solid #000;line-height: 0;" src="https://blog.roysolberg.com/stuff/sol/initial.htm" width="600" height="600" />
+
+<h4>First lines of HTML</h4>When I tried the demo disk I remember being curious about how those pages worked. I found the source code and from there I wrote my first lines of HTML. It was pretty cool to see how the markup was rendered in the browser from the floppy disk. Little did I know I would code web pages for a living 10 years later. :)
+
+<h4>References</h4>- <a href="https://www.nrk.no/trondelag/hun-lanserte-internett-i-norge-1.11078996">– Folk syntes internett var for raringer</a>
+- <a href="http://www.oslo.net/historie/CW/utg/9510/cw951033.html">"Scandinavia online" på lufta</a>
+`,
+                "images": ["/images/floppy01.jpg", "/images/floppy02.jpg"],
+                "category":
+                {
+                    "title": "Internet archive",
+                    "url": "/internet-archive"
+                },
+                "tags": [
+                    {
+                        "title": "1990s",
+                        "url": "/security-monday"
                     }
                 ]
             }
