@@ -846,7 +846,7 @@ I feel confident that this issue would've been discovered relatively quickly by 
             {
                 "title": "1995: When you could get a demo of the Internet on a floppy disk",
                 "published": true,
-                "publishDate": "2017-09-13T23:00:00.000Z",
+                "publishDate": "2017-09-13T21:00:00.000Z",
                 "summary": "This one is for you who actually know what that save icon in Word is.",
                 "niceUrl": "/2017/09/internet-demo",
                 "text": `<h4>tl;dr</h4>I've uploaded all the HTML files from a Norwegian Internet Service Provider's Internet demo diskette so you can (almost) surf like it's 1995.
