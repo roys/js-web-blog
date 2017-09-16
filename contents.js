@@ -847,6 +847,7 @@ I feel confident that this issue would've been discovered relatively quickly by 
                 "title": "1995: When you could get a demo of the Internet on a floppy disk",
                 "published": true,
                 "publishDate": "2017-09-13T21:00:00.000Z",
+                "updateDate": "2017-09-16T06:10:00.000Z",
                 "summary": "This one is for you who actually know what that save icon in Word is.",
                 "niceUrl": "/2017/09/internet-demo",
                 "text": `<h4>tl;dr</h4>I've uploaded all the HTML files from a Norwegian Internet Service Provider's Internet demo diskette so you can (almost) surf like it's 1995.
@@ -854,7 +855,7 @@ I feel confident that this issue would've been discovered relatively quickly by 
 <h4>Background</h4><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The diskette containing the browser and demo pages." data-caption="The diskette containing the browser and demo pages." src="/images/floppy02.jpg">
 Back in 1995 - one year before I tried the Internet for the first time, and two years before I got Internet access at home - my mother brought me this floppy disk from work. She thought I might be interested in checking it out. <b>It was a demo of the Internet!</b>
 
-I didn't really know what the <a href="https://en.wikipedia.org/wiki/World_Wide_Web">World Wide Web</a> was about. The diskette contained a web browser (I think it was <a href="https://en.wikipedia.org/wiki/Mosaic_(web_browser)">Mosaic</a> (sorry, I only copied the <span class="code">.htm</span> files 10 years ago)). And it actually gave a feel of what the Internet was like.
+I didn't really know what the <a href="https://en.wikipedia.org/wiki/World_Wide_Web">World Wide Web</a> was about. The diskette contained the web browser <a href="https://en.wikipedia.org/wiki/Mosaic_(web_browser)">Mosaic</a>, and it actually gave a feel of what the Internet was like.
 
 <h4>Demo</h4>Below is the demo itself. It's nice to see the HTML pages still working the same 22 years later. You can also <a href="https://blog.roysolberg.com/stuff/sol/initial.htm">open demo in full screen</a>.
 <input type="button" value=" < " onclick="window.parent.frames[1].history.back()"/> <input type="button" value=" > " onclick="window.parent.frames[1].history.forward()"/>
