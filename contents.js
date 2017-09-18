@@ -878,6 +878,126 @@ I didn't really know what the <a href="https://en.wikipedia.org/wiki/World_Wide_
                         "url": "/security-monday"
                     }
                 ]
+            },
+            {
+                "title": "Case #6: Who's looking at your pictures?",
+                "published": true,
+                "publishDate": "2017-09-18T05:25:00.000Z",
+                "summary": "A campaign where you can upload your pictures is making a small version of them publicly available at a \"impossible to guess\" URL. It was possible to systematically retrieve all the images.",
+                "niceUrl": "/2017/09/picture-leak",
+                "text": `<h4>tl;dr</h4>A campaign web site from Norway's leading supplier of branded goods, where one could upload images - typically of your kid, and typically including their first name and year of birth - was, and still is, making a small 90 x 90 pixels image publicly available. It was possible to systematically retrieve the data.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="http://www.orklafoods.no/">Orkla Food</a>'s <a href="http://kampanje.stabburetleverpostei.no">campaign</a> by <a href="https://www.japanphoto.no/">Japan Photo</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="green-text">Low</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>August 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="orange-text">Partially fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>A small version of the uploaded picture and often the given name and year of birth of the person in the picture is available publicly available</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4><img style="width:300px;float:left;margin-right:20px;" title="Example of the image type that is publicly available." src="/images/leverpostei02.jpg"/><i>Stabburet Leverpostei</i> is a kind of <a href="https://en.wikipedia.org/wiki/Liver_pâté">liver pâté</a> that has been part of the diet for many Norwegians for generations. They have had a pretty iconic can with a picture of a kid on the front. At first they had the same kid from 1955 to 1970, but in more recent times they have been using the front as more of a marketing opportunity with competitions, campaigns and more a frequent change and use of several different faces.
+
+In August 2017 I saw a TV commercial telling that <b>if you bought 3 cans of Stabburet Leverpostei you could upload your own picture and receive your own cover that you can use at home.</b>
+
+Of course this made me wonder if the images were securly stored.
+
+<h4>Approach (technical stuff)</h4><img style="width:439px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Image created by the campaign website." data-caption="Image created by the campaign website." src="/images/leverpostei01.png"/>I went through the wizard for uploading images, getting the lid and buying other products at the same time as having <a href="https://developers.google.com/web/tools/chrome-devtools/">Chrome DevTools</a> open. I looked for anything out of the ordinary and of course tried out different URLs with different IDs and input.
+
+What I saw was that every image uploaded got a <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a> which was used when refering to the image in the different web pages.
+
+They also had this share function where you share the lid that you had created to different social media. What this did was just refer to this UUID at some URL.
+
+The sensible thing would be to make the image publicly available at some URL the moment the customer chose to share the image. As long as it is public, one should expect the image to be accessible to anyone knowing or guessing the URL.
+
+<b>The first problem was - and still is - that all images - shared or not - are publicly available if you just know the URL. For me this looks like quite a trend. Developers often assume that because a URL is hard to guess it should be considered private.</b> This spring we had some media coverage in Norway on how <a href="https://www.digi.no/artikler/16-mai-ble-det-full-kriseberedskap-i-evry-etter-datalekkasje-rotarsaken-kan-pavirke-alle-norske-selskaper/383149">a change in the browser Microsoft Edge made Bing index a lot of URLs like these</a> (Norwegian text). Yes, the URLs might be hard to guess, but the problem is that the URL will always be valid, it will always be public, and you don't know who's accessing it.
+
+Going through the checkout process I noticed that the URL for the final receipt - <a href="http://www.stabburetleverpostei.no/takk-for-din-lokkbestilling/">http://www.stabburetleverpostei.no/takk-for-din-lokkbestilling/</a> - included the mentioned UUID. And, what's more, <b>the URL redirecting to that URL had the format <span class="code">http://kampanje.stabburetleverpostei.no/checkout/finished/&lt;some auto incremental ID&gt;</span>. Iterating the ID made it possible to collect the UUIDs from seemingly all the orders (I only tried a few).</b>
+
+E.g., going to
+<a style="font-size:smaller;" class="code" href="http://kampanje.stabburetleverpostei.no/checkout/finished/2095270">http://kampanje.stabburetleverpostei.no/checkout/finished/<b>2095270</b></a>
+would redirect to 
+<a style="font-size:smaller;" class="code" href="http://www.stabburetleverpostei.no/takk-for-din-lokkbestilling/?lokkid=0498600376a123f1530f1fed7083b350">/takk-for-din-lokkbestilling/?lokkid=<b>0498600376a123f1530f1fed7083b350</b></a>
+which meant that the image could be seen at
+<a style="font-size:smaller;" class="code" href="http://kampanje.stabburetleverpostei.no/bestill/streamthumb/0498600376a123f1530f1fed7083b350">/bestill/streamthumb/<b>0498600376a123f1530f1fed7083b350</b></a>.
+
+<h4>Security issues</h4>I found two issues in the campaign web site. One is now fixed, but the other persists:
+- <b>Fixed: One could iterate through the completed orders and get the URL of all images</b>
+- <b>Not fixed: Seemingly all images from the orders - even the ones not completed - are public (often including given name and year of birth)</b>
+
+The fact that all images are publicly available is not mentioned in the terms of this campaign.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>At night I sent an e-mail to the contact address (for Eurofoto (owned by Japan Photo)) telling them about by my findings.
+
+<h5>Day 1</h5>Just before midnight I received an e-mail telling me that they have stopped adding the image UUID to the URL of the "thank you" page. That's a very impressive response time. It does, however, seem like all images still are publicly available.
+
+<h4>Why the low severity level?</h4>On one hand one could blow this up really big; a lot of pictures of kids with what's probably often their real given name and their year of birth. But, let's be real; in this case we are talking about <b>small</b> images; about 90 x 90 pixels are of the person itself (and then the rest is the rest of the can with the name, year and stuff).
+
+Now, this is <b>speculation</b>, but I wouldn't be surprised if the full size images are available on some other public URL. However, I did not find that. And looking at the image data being uploaded we're looking at a image size (of the person) as small as about 220 x 220 pixels. That is still a pretty low resolution.
+
+Also, there is no connection between the images and data like full name or location.
+
+<h4>Conclusion</h4><b>You - as a consumer - should always assume that whatever kind of images or information that you are uploading or sending to some third party can end up in either the wrong hands or be publicly available.
+
+All you developers: Please don't think that UUIDs makes data private. You still need authentication and authorization; and you still need to check that it's actually working.
+
+If companies choose to store images like in this case, they should indeed mention that in the terms of the site. That is not the case here.</b> I also wish they would mention for how long they are storing the images.
+`,
+                "images": ["/images/leverpostei01.png", "/images/leverpostei02.jpg"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "UUID",
+                        "url": "/uuid"
+                    },
+                    {
+                        "title": "Images",
+                        "url": "/images"
+                    },
+                    {
+                        "title": "OWASP 2013 A4",
+                        "url": "/owasp-2013-a4"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
