@@ -998,6 +998,139 @@ If companies choose to store images like in this case, they should indeed mentio
                         "url": "/owasp-2013-a4"
                     }
                 ]
+            },
+            {
+                "title": "Case #7: Fitness center chain was leaking personal info",
+                "published": true,
+                "publishDate": "2017-09-25T05:15:00.000Z",
+                "summary": "Is your gym telling on you? It sure was telling on me and my fellow members. Everything from contact info to pictures to bank account numbers to the time people enter the gym was leaking for a long, long time.",
+                "niceUrl": "/2017/09/gym-leak",
+                "text": `<h4>tl;dr</h4>A fitness center chain consisting of three centers was leaking the members' names, e-mail addresses, phone numbers, pictures, bank account numbers, logs of all visits, etc. They are still running vulnerable server software.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="http://energi-trening.no">Energi Treningssenter</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="red-text">High</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>April 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="orange-text">Partially fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>All kinds of personal info was leaked</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>Energi Treningssenter at Askøy is an excellent fitness center. It's modern, big and has all the equipment you want. I used to train there for a while, so I had - and still have - access to the member site where you see your personal details, payment history and full log of your visits.
+
+<b>Some years ago I noticed that the picture taken for the key card to the gym was publicly available. Just knowing the URL you could iterate through the images of all the members without having to be logged in.</b> I never bothered to report it back then. When I started considering this article series I remembered the issue with the pictures and wondered if my personal data was safe. The whole site had much of the feel as <a href="https://blog.roysolberg.com/2017/09/php-hack">the completely vulnerable PHP site</a> I wrote about earlier on.
+
+<h4>Approach (technical stuff)</h4>I logged in to the gym's site while having <a href="https://en.wikipedia.org/wiki/Web_development_tools">the browser development tools</a> open. I looked for anything out of the ordinary in the HTTP calls and in the source code.
+
+<h5>No encryption</h5>The first thing that hit me is that all URLs are <span class="code">http</span> and not <span class="code">https</span>. Even when submitting the form with username and password there is no encryption.
+
+<h5>The secrets of the source</h5><img style="width:480px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Source code from membership page" data-caption="Source code from membership page" src="/images/energi02.png"/>I spotted three links to an <a href="https://en.wikipedia.org/wiki/Active_Server_Pages">ASP</a> that was hidden with CSS: <span class="code">display: none;</span>
+
+The ASP looked like it let you change database fields for any user, but from failing to even change my own data I'm not sure what the deal was. However, this page was vulnerable for <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>. A good opportunity to steal the session cookie which seems to work perfectly fine across IP addresses. Or one could just let the user send his or her personal data directly.
+
+The source also revealed the use of some kind of "add on" used for file upload. Is it possible to upload code that can be executed? I hope not. I wasn't able to make tell for sure, but there was indeed web forms for uploading all kinds of files.
+
+<h5>Known vulnerabilities</h5>There seems to be three different servers involved serving the site. Looking at the headers and the default error pages reveals outdated server software that have known vulnerabilities. However, <a href="/2017/08/security-vulnerability-disclosures">as I've stated in the background for these posts</a>, that is out of scope for now.
+
+<h5>Plain text passwords</h5>When you log in you will be told if the username you entered exists or not. If you use the "Forgot password" function you're told if you're entering a known e-mail address or not. And the e-mail you receive is not for resetting the password, it just contains both the username and the password. Fail x 3.
+
+<h5>The lucky guess</h5><img style="width:480px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Full list of all visits of other members was available" data-caption="Full list of all visits of other members was available" src="/images/energi03.png"/>The page with all the personal details doesn't have any IDs or anything, but that doesn't mean that I couldn't try adding it. I tried <span class="code">account.asp?id=&lt;some ID&gt;</span>, and voilà, I got access to other users' personal details. The ID was an incremental integer. <b>Iterating the ID one could seemingly get everyone's name, e-mail address, phone number, bank account number, payment history and full visit log.</b>
+
+<h4>Security issues</h4><img style="width:480px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Membership page with another member's data" data-caption="Membership page with another member's data" src="/images/energi01.png"/>A lot of personal data of previous and current members was leaked:
+- Customer number (also used as username)
+- <b>Full name</b>
+- <b>E-mail address</b>
+- <b>Phone number</b>
+- <b>Bank account number</b>
+- <b>Picture</b>
+- Not fixed: <b>Log of all visits</b>
+- Full payment history
+
+In addition there are quite a few issues that's probably still making the customer data vulnerable:
+ - Not fixed: There's no encryption - not even when logging in
+ - Not fixed: Passwords are stored in plain text
+ - Not fixed: "Forgot password" e-mail contains both username and password
+ - Not fixed: Cross Site Scripting
+ - Not fixed: Old application server with known vulnerabilities
+ - Not fixed: Old ASP.NET version with known vulnerabilities
+
+I believe that these issues have been around for many years.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>At night I sent an e-mail telling about the information leak and general concerns about the solution.
+
+Just 1,5 hour later I got a reply telling that the issue was forwarded to the right body.
+
+<h5>Day 22</h5>I received an e-mail telling that the vendor of the system had fixed the issue. <b>I see that they have removed the issue with the information leak, but everything else still is the same.</b>
+
+<h4>Conclusion</h4>This is yet another example of our personal data in the wild. There are countless security vulnerabilities out there. You should assume that anyone who wants to, knows everything about you and everything you do. <b>And companies that have these types of vulnerabilities won't tell you when they become aware of them.</b>
+
+And to start connecting the dots between the cases I'm representing; <b>do you remember two weeks ago where you could <a href="/2017/09/skandiabanken-leak">see the bank account balance using just the bank account number</a>? Well, wasn't it nice that this case gave you that bank account number?</b>
+
+<b>Looking at the old versions of the software running on these sites I would definitely guess that the data is still vulnerable.</b>
+`,
+                "images": ["/images/energi01.png", "/images/energi02.png", "/images/energi03.png"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "XSS",
+                        "url": "/xss"
+                    },
+                    {
+                        "title": "ASP.NET",
+                        "url": "/asp-net"
+                    },
+                    {
+                        "title": "Images",
+                        "url": "/images"
+                    },
+                    {
+                        "title": "OWASP 2013 A3",
+                        "url": "/owasp-2013-a3"
+                    },
+                    {
+                        "title": "OWASP 2013 A7",
+                        "url": "/owasp-2013-a7"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
