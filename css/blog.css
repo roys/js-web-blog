@@ -19,6 +19,27 @@ ul {
     margin-bottom: 0px;
 }
 
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin:0 -10px;
+}
+.flex-col {
+	flex-grow: 1;
+    width: 32%;
+    padding:0 10px;
+}
+@media only screen and (max-width: 1100px){
+    .flex-col {
+        width: 50%;
+    }
+}
+@media only screen and (max-width: 760px){
+    .flex-col {
+        width: 100%;
+    }
+}
 .card.waves-effect,
 .card .waves-effect {
     display: block;
