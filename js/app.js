@@ -126,7 +126,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 var niceUrl = '/' + path;
                 var foundPost = false;
                 posts.forEach(function (post, index) {
-                    console.log(post);
+                    //console.log(post);
                     if (!foundPost && post.niceUrl === niceUrl) {
                         foundPost = true;
                         self.goToPost(post);
