@@ -11,7 +11,6 @@
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="/css/blog.css" />
-  <!--script type="text/javascript" src="/contents.js?v=7"></script-->
   <script type="text/javascript" src="/contents_json.js?v=4"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -141,6 +140,9 @@
         <!-- a href="/blog/" class="brand-logo left" data-bind="click: function(){$root.goToFrontpage()}">My blog</a -->
         <ul id="nav-mobile" class="left">
           <li><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">blog.roysolberg.com</a></li>
+        </ul>
+        <ul id="nav-mobile" class="right">
+          <li><a class="right" data-bind="click: function(){ga('send','event','game','play','dom2','bored');return true;}" href="javascript:var%20s=document.createElement('script');s.type='text/javascript';s.onerror=function(e){alert('Failed%20to%20load%20the%20script.%20The%20site\'s%20Content%20Security%20Policy%20might%20be%20blocking%20it.%20Feel%20free%20to%20try%20again.');};document.body.appendChild(s);s.src='https://blog.roysolberg.com/js/dom2.min.js';void(0);">I'm bored</a></li>
         </ul>
       </div>
     </div>

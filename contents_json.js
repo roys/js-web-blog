@@ -413,6 +413,90 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         "url": "/owasp-2013-a7"
                     }
                 ]
+            },
+            {
+                "title": "Case #8: SQL injection vulnerable for 10 years",
+                "published": true,
+                "publishDate": "2017-10-02T04:55:00.000Z",
+                "updateDate": "2017-10-02T07:05:00.000Z",
+                "summary": "A company offering an online project and customer relationship management system had a very easy-to-spot SQL injection vulnerability for 10 years or more.",
+                "niceUrl": "/2017/10/10-years-of-injection",
+                "text": "<h4>tl;dr</h4>A Norwegian company with a centralized online project management tool had an SQL injection vulnerability for at least 10 years.\n                \n<h4>Summary</h4><table class=\"summary\">\n<tr>\n    <td style=\"width:30%\">Who:</td>\n    <td>Anonymous, let's call them <a href=\"https://en.wikipedia.org/wiki/Fictional_company\">Acme3</a></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Severity level:</td>\n    <td><span class=\"red-text\">Critical</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reported:</td>\n    <td>Summer 2017 (and possibly 2007)</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reception and handling:</td>\n    <td><span class=\"red-text\">Poor</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Status:</td>\n    <td><span class=\"orange-text\">Who knows..</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reward:</td>\n    <td>A thank you</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Issue:</td>\n    <td>SQL injection affecting all customers</td>\n</tr>\n</table>\n<div style=\"padding-top:80px;\" class=\"col s12 m5 l5 xl4 right\"><div class=\"card-panel light-blue darken-1\"><span style=\"text-decoration:underline;\" class=\"white-text\"><a class=\"white-text\" href=\"/2017/08/security-vulnerability-disclosures\">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>In 2007 I was working for a company that started using a <a href=\"https://en.wikipedia.org/wiki/Software_as_a_service\">SaaS</a> project tool and, more or less, a complete CRM. As a software developer I personally used it for time-tracking for the projects and customers I was working with.\n\n<b>It was a very poor tool for time-tracking (as most time-tracking tools are even today), but that was soon to be overshadowed when I noticed that the URLs contained <a href=\"https://en.wikipedia.org/wiki/SQL\">SQL</a>. Not only did the service leak data, it was possible to alter data. Not only was this possible within our own company, but this was across all of the service's customers.</b>\n\nI of course told about this to my boss. <b>To emphasize the problem I changed my boss' name to be surrounded by the infamous <a href=\"https://en.wikipedia.org/wiki/Blink_element\">&lt;blink/&gt; tag</a> to make it constantly blink while he was logged in.</b>\n\nI also prepared an article for the great \"software engineering disaster blog\" <a href=\"https://thedailywtf.com/\">The Daily WTF</a> which I read daily back then. However, I changed jobs in 2007 and soon forgot all about the article, the security hole and Acme3.\n\nPreparing my blog I looked back at some old issues I had screenshot and made notes from and of course found this one. <b>Checking out their online demo I saw that they still had the SQL injection issue. 10 years later.</b> Seeing the old screenshots that says \"Copyright 2000\" one can wonder how many their customers who have been affected by this.\n\n<h4>Approach (technical stuff)</h4>You don't need very heavy measures to find any issues when you find out that the URLs of a site actually uses SQL. The URLs were \"concealed\" because of the site using <a href=\"https://en.wikipedia.org/wiki/Framing_(World_Wide_Web)\">frames</a>. I had a look at their JavaScript and noticed that it built SQL queries which was used as URL parameters.\n\nThe URLs looked like this: <pre class=\"prettyprint lang-html\">http://example.com/lookup.asp\n?title=Employees&list=0&headers=Employee+Id;First+name;Last+name\n&select=SELECT+EMPLOYEE_ID,FIRST_NAME,LAST_NAME+FROM+EMPLOYEES\n&goURL=someother.asp&key=EmployeeID&projID=&where=&order=3&records=all</pre>\nIt can't really get much worse than this.\n\n<b>So from here one could change the query to e.g. include the password.</b> It's hard to believe, but it does actually look like they have some <a href=\"https://en.wikipedia.org/wiki/Salt_(cryptography)\">salt</a> in the password hashes. <b>But that doesn't matter much as it was possible to run <span class=\"code\">UPDATE</span> statements using the URL.</b>\n\nMy favorite changes I did was in the line of these:\n<pre class=\"prettyprint lang-html\">http://example.com/lookup.asp?headers=version\n&select=<b>UPDATE+EMPLOYEES+SET+FIRST_NAME='&lt;blink&gt;<blink>John+Boss</blink>&lt;/blink&gt;'</b>\n+WHERE+USER_ID='myboss';SELECT+@@VERSION,@@VERSION+AS+ver&order=ver</pre><pre class=\"prettyprint lang-html\">http://example.com/lookup.asp?headers=version\n&select=<b>UPDATE+EMPLOYEES+SET+FIRST_NAME='John+&quot;I+better+report+these+security+issues+to+Acme3+soon&quot;+Boss'</b>\n+WHERE+USER_ID='myboss';SELECT+@@VERSION,@@VERSION+AS+ver&order=ver</pre>\n<b>But what was even more worrying was that each company had a different database in the same database server, and it was possible to do queries across databases.</b> I never tried altering data for other companies, but gaining read access is bad enough. The database user seemed to have access to all kinds of databases and system tables.\n\n<h4>Security issues</h4>Depending on how a company was using the service it was possible for anyone to get access to the following information:\n- <b>Employees' names, usernames, position, password hashes, addresses, phone numbers, e-mail addresses, pictures, payrolls</b>\n- <b>All kinds of info about companies' projects</b>\n- <b>Customers of the company</b>\n- <b>Outoing invoices</b>\n- <b>Budgets</b>\n- <b>Accounting</b>\n- Timesheets\n- And everything else you would expect from a borderline project tool/CRM\n\nFrom the look of it was possible to alter any data as well.\n\n<h4>Reception and handling</h4><h5>Day zero 2017</h5>The company was non-existing in social media etc. I never managed to find any e-mail addresses. But <b>they had a contact form on their website which I used to tell them about this.</b> The only problem was that the form doesn't work at all in some browsers and doesn't give any feedback if it's been successfully submitted in the rest of the browsers.\n\n<b>I got no response.</b>\n\n<h5>Day 14ish</h5><b>I tried the contact form once again just asking if the form was working at all. I never got an answer.</b>\n\n<h5>Day 21ish</h5><b>Suddenly one night there was someone online on a chat on their site.</b> I filled in my name and asked if the contact form on their site worked. The guy just replied <i>\"We saw your \"security\" report\"</i>. What? Why haven't they contacted me? He went on telling that the issue is fixed now. They <i>\"had a round of security this summer\"</i>. Then he told me to say if I saw anything else, gave me a short \"thank you\" and finished <i>\"night\"</i>.\n\nI'm not sure if the conversation was directly unfriendly, but it sure wasn't friendly. And it makes me think that this isn't serious people. Though, at least now I knew the issue was reported and they claimed to have fixed it. I don't want to check.\n\n<h4>Anonymous you say?</h4>This is a bit of a special case going back so many years. Did they receive any reports 10 years ago at all? It would be easier to name them if I was able to communicate with them. The not-so-friendly support chat gave me some bad vibes, and I haven't been able to find out much about the company or the people behind it.\n\nFrom public financial information I see that they have had 1-2 million USD in annual revenue the last 10 years. As far as I can understand they don't have any other products, so they should have quite a few customers using this service.\n\n<h4>Conclusion</h4>From time to time there are news articles about <a href=\"https://en.wikipedia.org/wiki/Industrial_espionage\">industrial espionage</a>. Companies like Acme3 sure makes it easy to those looking for data.\n\n<b>Are you working in one of the companies using this system? Maybe you should use an expert to take a quick look at the systems where your company stores information you don't want to be leaked or even altered.</b>\n\n<b>Is it possible that an issue like this was existing for ten years without no one taking advantage of it? That's hard to believe.</b>\n",
+                "images": [],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "XSS",
+                        "url": "/xss"
+                    },
+                    {
+                        "title": "ASP.NET",
+                        "url": "/asp-net"
+                    },
+                    {
+                        "title": "Microsoft SQL Server",
+                        "url": "/mssql"
+                    },
+                    {
+                        "title": "Data alteration",
+                        "url": "/data-alteration"
+                    },
+                    {
+                        "title": "OWASP 2013 A1",
+                        "url": "/owasp-2013-a1"
+                    },
+                    {
+                        "title": "OWASP 2013 A3",
+                        "url": "/owasp-2013-a3"
+                    }
+                ]
+            },
+            {
+                "title": "DOM II: JavaScript Hell",
+                "published": true,
+                "publishDate": "2017-10-05T19:30:00.000Z",
+                "summary": "Have some fun destroying websites using my bookmarklet.",
+                "niceUrl": "/2017/10/dom2-bookmarklet",
+                "text": "<h4>Bookmarklet</h4><p style=\"text-align:center;\"><a data-bind=\"click: function(){ga('send','event','game','play','dom2','button');return true;}\" href=\"javascript:var%20s=document.createElement('script');s.type='text/javascript';s.onerror=function(e){alert('Failed%20to%20load%20the%20script.%20The%20site\\'s%20Content%20Security%20Policy%20might%20be%20blocking%20it.%20Feel%20free%20to%20try%20again.');};document.body.appendChild(s);s.src='https://blog.roysolberg.com/js/dom2.min.js';void(0);\" class=\"waves-effect waves-light btn-large\">DOM II: JavaScript Hell</a></p>\n<b>Just click the button to play the game on this page.</b>\n\n<b>To try it on other pages, just drag the button to your bookmark row in your browser.</b> After that you can just click the bookmark when visiting other sites.\n\n<h4>What's a bookmarklet?</h4>A <a href=\"https://en.wikipedia.org/wiki/Bookmarklet\">bookmarklet</a> is a bookmark stored in a web browser that contains JavaScript commands that add new features to the browser. Bookmarklets can be useful tools, e.g. for increasing the readability of web pages, do seaches, create short urls, etc.\n\n<a data-bind=\"click: function(){ga('send','event','game','play','dom2','link');return true;}\" href=\"javascript:var%20s=document.createElement('script');s.type='text/javascript';s.onerror=function(e){alert('Failed%20to%20load%20the%20script.%20The%20site\\'s%20Content%20Security%20Policy%20might%20be%20blocking%20it.%20Feel%20free%20to%20try%20again.');};document.body.appendChild(s);s.src='https://blog.roysolberg.com/js/dom2.min.js';void(0);\">DOM II: JavaScript Hell</a> might not be very useful, but hopefully it's an enjoyable small game if you're bored or if you're disliking a web site. :)\n\n<h4>Inspiration</h4>I never forgot about the similar <a href=\"https://github.com/erkie/erkie.github.com\">bookmarklet created by Erik Rothoff Andersson</a> in 2010. I wanted to create something like that, but with my own code and my own twists and also have mobile support.\n\nOh, and the name? Since this game is all about <a href=\"https://en.wikipedia.org/wiki/Document_Object_Model\">DOM</a> manipulation I figured that the name would be a nice play-on-words and tribute to Doom and more specifically <a href=\"https://en.wikipedia.org/wiki/Doom_II:_Hell_on_Earth\">Doom II: Hell on Earth</a>.\n\n<h4>Security</h4>As <a href=\"/category/security\">I write a bit about security</a> I think it's natural to give you a word of warning when it comes to bookmarklets. My bookmarklet is safe to use, but you shouldn't take my word for it. You should never run bookmarklets on pages that have private information stored on it. Luckily, today online banks etc. uses a <a href=\"https://en.wikipedia.org/wiki/Content_Security_Policy\">Content Security Policy</a> that will stop bookmarklets to be run on their page. Otherwise one would risk e.g. financial or private information getting in the wrong hands.\n\n<h4>Feedback</h4>Please leave a comment or send me an e-mail if you see any bugs or have have any suggestions for the game. My guess is that there will be quite a few mobile devices having the some odd values reported from the gyroscope.\n",
+                "images": [],
+                "links": [],
+                "category":
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
+                "tags": [
+                    {
+                        "title": "JavaScript",
+                        "url": "/javascript"
+                    },
+                    {
+                        "title": "Bookmarklet",
+                        "url": "/bookmarklet"
+                    },
+                    {
+                        "title": "Game",
+                        "url": "/game"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
