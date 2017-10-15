@@ -141,7 +141,7 @@
         <ul id="nav-mobile" class="left">
           <li><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">blog.roysolberg.com</a></li>
         </ul>
-        <ul id="nav-mobile" class="right">
+        <ul id="nav-mobile" class="right prepare-print">
           <li><a class="right" data-bind="click: function(){ga('send','event','game','play','dom2',1);return true;}" href="javascript:var%20s=document.createElement('script');s.type='text/javascript';s.onerror=function(e){alert('Failed%20to%20load%20the%20script.%20The%20site\'s%20Content%20Security%20Policy%20might%20be%20blocking%20it.%20Feel%20free%20to%20try%20again.');};document.body.appendChild(s);s.src='https://blog.roysolberg.com/js/dom2.min.js';void(0);">I'm bored</a></li>
         </ul>
       </div>
@@ -254,7 +254,7 @@
         </td>
       </tr>
     </table>
-    <div class="row" style="min-height:200px;margin-top:20px;">
+    <div class="row prepare-print" style="min-height:200px;margin-top:20px;">
       <div class="col s12">
         <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-3386970467864670" data-ad-slot="1640511001"></ins>
       </div>
@@ -264,8 +264,8 @@
         <p style="white-space: pre-wrap;" class="flow-text" data-bind="html: post().text"></p>
       </div>
     </div>
-    <div id="disqus_thread"></div>
-    <div class="row" style="min-height:200px;margin-top:20px;">
+    <div id="disqus_thread" class="prepare-print"></div>
+    <div class="row prepare-print" style="min-height:200px;margin-top:20px;">
       <div class="col s12">
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3386970467864670" data-ad-slot="5601565027" data-ad-format="auto"></ins>
       </div>
