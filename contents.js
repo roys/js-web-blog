@@ -1726,7 +1726,7 @@ What's more is that the app and server used an incremental integer as ID for the
 <h5>Android system log</h5>Being an Android developer I work most days with the phone's system log on the screen. What I didn't see until after I found out of everything, is that <b>the Gator app actually constantly logs the URL which you can just open in your browser and change the integer ID in and get the position of any child wearing the watch</b>.
 
 <img class="materialboxed responsive-img" title="The Gator app constantly prints out one of the vulernable URLs to the Android system log." data-caption="The Gator app constantly prints out one of the vulernable URLs to the Android system log." src="/images/gator04.png"/>
-<h4>Security issues</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" data-caption="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" src="/images/gator03.png"/>The issues I saw was these:
+<h4>Security issues</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" data-caption="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" src="/images/gator03.png"/>The issues I saw were these:
 - <b>Anyone can easily track all Gator watches using a web browser</b>
 - <b>Anyone can download any voice message left by child or grown-up</b>
 - <b>Anyone can spoof the location of a watch</b>
@@ -1774,6 +1774,175 @@ For those of you wanting to go even deeper I would recommend the solid <a href="
                     {
                         "title": "Information leak",
                         "url": "/information-leak"
+                    }
+                ]
+            },
+            { 
+                "title": "Case #12: Insurance company leaking personal data",
+                "published": true,
+                "publishDate": "2017-10-23T08:50:00.000Z",
+                "summary": "One of the biggest insurance companies in Norway leaked personal data and used 4.5 months to fix the issue.",
+                "niceUrl": "/2017/10/gjensidige-leak",
+                "text": `<h4>tl;dr</h4><i>Gjensidige Forsikring</i> - one of Norway's biggest insurance companies - was leaking information about customers' cancelled insurances to other customers. First they used 3.5 months to falsely conclude there was no issue, and then one additional month to fix it. Also, their web site can be abused for sending e-mails.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://gjensidige.no/group/about-us">Gjensidige Forsikring</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>May 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="red-text">Poor</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="orange-text">Partially fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>375 USD worth of gift certificates</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Personal data leak + possibility to spoof e-mails</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>I have had some insurances with Gjensidige for quite some time. Luckily I haven't had much use for them, but from the little contact I have had I must say I'm a happy customer.
+
+As my insurance company I'm logged in at their site from time to time. Back in May I also took a quick peek at their web site in regards of data security.
+
+<h4>Approach (technical stuff)</h4>When I was logged in I opened <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> to inspect the pages and network traffic. There were quite a few <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> calls in the different pages asking for data to display.
+
+<h5>The missing authorization check</h5><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="Some of the data returned for a cancelled insurance." data-caption="Some of the data returned for a cancelled insurance." src="/images/gjensidige01.png"/>As should be,for most calls the browser didn't specify any customer ID or anything like that. Those calls were safe. They do, however, have some calls that include some sort of ID, which is specified on the client side. Most of them seemed to do a proper authorization check, but as shown in the cases presented on this blog, there sometimes are exceptions to this.
+
+<b>The REST endpoint giving back a list of cancelled insurances did not check if the ID sent in by the client. This ID seems to be an auto increment integer and I could just step one number to get another customer's cancelled insurances.</b>
+
+The Curl command copied from the browser looked like this: <pre class="prettyprint">curl 'https://www.gjensidige.no/ip-web/forsikringer/annullerte/&lt;customer ID&gt;' \\
+    -H 'x-klient-lokasjon: Meldingsboks' \\
+    -H 'Applikasjon: INTERNETT' \\
+    -H 'Accept-Language: nb-NO,nb;q=0.8,no;q=0.6,nn;q=0.4,en-US;q=0.2,en;q=0.2' \\
+    -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.97 Safari/537.36 Vivaldi/1.9.818.49' \\
+    -H 'Accept: application/json' \\
+    -H 'Referer: https://www.gjensidige.no/no/1/Din+side/forsikring/administrer-forsikringer/forsikringsdokumenter-new' \\
+    -H 'Accept-Encoding: gzip, deflate, sdch, br' \\
+    -H 'Cookie: JSESSIONID=&lt;session cookie&gt;; &lt;a bunch of more cookies&gt;;' \\
+    -H 'Connection: keep-alive' --compressed \\
+    | python -m json.tool</pre>
+I added <span class="code">| python -m json.tool</span> just to get a "pretty print" of the JSON returned to the command line.
+
+<h5>Faking e-mails</h5>I reported the authorization issue using an online form on their site. <b>When I submitted I noticed that the POST request in fact included the name and e-mail address from the sender, and also the e-mail address to whom it should be sent to.</b>
+
+This, of course, got my attention. I saw that you could craft your own e-mails, choosing your own contents, topic, sender and receiver. I copied the <a href="https://curl.haxx.se/">Curl</a> command from the browser and easily changed it to send a "fake" e-mail.
+
+<a href="https://en.wikipedia.org/wiki/Email_spoofing">E-mail spoofing</a> is nothing new, but there are a few interesting points here. There should be no reason why you would need the send and receiver addresses sent from the client. That's what makes it possible to forge e-mails in this case. Gjensidige uses <a href="https://en.wikipedia.org/wiki/Sender_Policy_Framework">Sender Policy Framework</a> (SPF) for their domain, but that wouldn't help in this case as the server sending the e-mails should be whitelisted. However, the server used in this case is not whitelisted, and Gjensidige has the rule <span class="code">~all</span> set. That rule allows for any servers to send e-mails (with <span class="code">SOFTFAIL</span>) from this domain. So, this again means that you don't really need Gjensidige's server to send spoofed e-mails from Gjensidige. So, maybe this is a feature and not a bug? I hope that they don't think this is all right.
+
+Having this issue opens up for nice opportunities for <a href="https://en.wikipedia.org/wiki/Phishing">phishing</a>, or just abuse their server to send spam.
+
+<img class="materialboxed responsive-img" title="The form that can be abused for spoofing e-mails." data-caption="The form that can be abused for spoofing e-mails." src="/images/gjensidige02.png"/>
+
+<h4>Security issues</h4>The information leaked that I saw for cancelled insurances was this:
+- Customer ID
+- Insurance type
+- Insurance number
+- Price
+- Start date
+- Cancellation date
+- Reason for cancellation:
+  - Missing payments
+  - Missing self-declaration
+  - Need ceased
+  - Insurance converted to other type
+- Depending on insurance type there some extra information:
+  - Full name and year of birth of customer
+  - Full name and year of birth of child
+  - Street address
+  - Car type and plate number
+  - Labour union membership
+
+<b>Some customers, if not most, have several types of insurances which would open for combining information about them.</b> Now, I always minimize the amount of data I access to ensure no one can question my intentions, so I have to <b>make an educated guess that there might even be other types of information on some customers</b>.
+
+Further more - and this is not fixed, so I'm not sure if they consider it a security issue - <b>it's possible to use their own server to send fake e-mails from their own e-mail addresses</b>.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>It wasn't very easy to find the correct contact point, but the closest I got was a general contact form originally to be used for <a href="https://en.wikipedia.org/wiki/Whistleblower">whistle-blowers</a>. I submitted the form Friday night.
+
+It was when submitting this form the first time that I noticed that - as described in more details in the "Approach" part - it was actually possible to use this form as a way to send e-mails from anyone to anyone through their site. So I submitted the form one more time telling them about that as well.
+
+<h5>Day 3</h5>Early Monday morning I got a confirmation that they had received information about the two issues and would inform the right persons. They also asked for me for a phone number where I could be reached.
+
+I wrote back and told them my phone number. I don't think they ever tried to call me.
+
+<h5>Day 80</h5><b>Having not heard anything back and not seeing any fixes I asked them for a status.</b>
+
+<h5>Day 83</h5>In the morning I got a reply telling me that they had "taken care of it" and named another guy who would contact me when he would be back from vacation.
+
+At night I got copied in on an e-mail from that guy where he asked a third guy about giving me feedback.
+
+A couple of minutes later the second guy told me that he knew they had taken this seriously and worked on the issue. I would be contacted by a third guy when he was back from vacation.
+
+<h5>Day 111</h5>I got a response from the Director of Group Security. He thanked me and quoted a security technician saying that the service in question would return an empty list if the logged in user wasn't authorized to get the list from the customer id it used for the request. The director also said that the reason it had taken me so long to get a reply was that they had gone thoroughly through all aspects of this issue.
+
+<b>Gjensidige used more than 3.5 months to "thoroughly" go through "all aspects" of the issue and falsely concluded that the issue was not an issue.</b>
+
+I wrote back and asked if I had misunderstood something and gave concrete examples of customer ids that actually would give data back.
+
+<h5>Day 112</h5>I got a reply back telling me that they had forwarded this information to the person responsibly for the security of gjensidige.no.
+
+<h5>Day 125</h5>I got more feedback telling me that they had confirmed that there was an issue and re-opened the case.
+
+<h5>Day 148</h5>I got a new e-mail telling me that they had fixed and closed the issue in production 9 days earlier.
+
+<h5>Day 163</h5>Writing this post I was surprised to see that the issue with e-mail spoofing remained. I had assumed they closed it earlier on. I sent a new e-mail asking about this.
+
+<h5>Day 164</h5>I got a reply telling that the second report with the e-mail spoofing was stopped before it reached Group Security and the IT department.
+
+<b>It actually Gjensidige 4.5 months to fix an information leak of this severity.</b>
+
+<h4>Conclusion</h4>Gjensidige has been very polite and nice in their communication, and also grateful for getting the reports. <b>I would have said their reception and handling was great, had it not been for my own and other customers' data were accessible for all of 4.5 months after the initial report.</b>
+
+While I understand that not everybody has the flexible server environments like <a href="/2017/08/digipost-leak">Digipost</a> or <a href="/2017/09/skandiabanken-leak">Skandiabanken</a>, even <b>using 4 weeks from the second report before fixing it in production isn't very impressive. This is an insurance company. They need to ensure that their customers' data is safe with them.</b>
+
+
+`,
+                "images": ["/images/gjensidige01.png", "/images/gjensidige02.png"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Authorization",
+                        "url": "/authorization"
+                    },
+                    {
+                        "title": "E-mail spoofing",
+                        "url": "/email-spoofing"
+                    },
+                    {
+                        "title": "OWASP 2013 A7",
+                        "url": "/owasp-2013-a7"
                     }
                 ]
             }
