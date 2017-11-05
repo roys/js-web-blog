@@ -1950,9 +1950,10 @@ While I understand that not everybody has the flexible server environments like 
                 "title": "Add security.txt to your site",
                 "published": true,
                 "publishDate": "2017-11-04T14:35:00.000Z",
+                "updateDate": "2017-11-05T20:15:00.000Z",
                 "summary": "Sometimes it's really difficult and time consuming to find a way to report a security vulnerability. But there is a very simple solution for that.",
                 "niceUrl": "/2017/11/security-txt",
-                "text": `<h4>tl;dr</h4><a href="https://twitter.com/edoverflow">Ed Foudil</a> has proposed <span class="code">security.txt</span> as a standard method for making it easier to report security issues. It's a plain text file with contact info that should be located in the top-level directory of a site. Currently it's a "Internet draft" that has been submitted for <a href="https://en.wikipedia.org/wiki/Request_for_Comments">RFC</a> review.
+                "text": `<h4>tl;dr</h4><a href="https://twitter.com/edoverflow">Ed Foudil</a> has proposed <span class="code">security.txt</span> as a standard method for making it easier to report security issues. It's a plain text file with contact info that should be located in the <span class="code">.well-known</span> directory of a web site (or root of a file system). Currently it's a "Internet draft" that has been submitted for <a href="https://en.wikipedia.org/wiki/Request_for_Comments">RFC</a> review.
                 
 <h4>Why we need security.txt</h4>Over the last three months I have <a href="/category/security">published 12 fresh security issues</a> on my blog. While finding the issues has typically only taken a few minutes, finding somewhere to report the issue sometimes have be a real pain and very time consuming.
 
@@ -1962,32 +1963,33 @@ In most cases I have had to contact first-line customer support and try to write
 
 <h5>Gjensidige</h5>In <a href="/2017/10/gjensidige-leak">the case with the insurance company Gjensidige</a> <b>they managed to lose one of two reports before it reached the IT department</b>. <span class="code">security.txt</span> would have solved this nicely.
 
-<h5>Tryg and Infotorg</h5>In <a href="/2017/08/get-your-ssn-here">the case with 1 million+ Norwegian Social Security numbers etc. available</a> <b>the insurance company Tryg did not read the e-mails sent to the specified contact e-mail address, and Infotorg - who was responsible for the delievering the data - just stopped responding.</b> It was probably a lost case for Infotorg, but at least Tryg would have been notified with a <span class="code">security.txt</span>.
+<h5>Tryg and Infotorg</h5>In <a href="/2017/08/get-your-ssn-here">the case with 1 million+ Norwegian Social Security numbers etc. exposed</a>, <b>the insurance company Tryg did not read the e-mails sent to the specified contact e-mail address, and Infotorg - who was responsible for the delievering the data - just stopped responding.</b> It was probably a lost case for Infotorg, but at least Tryg would have been notified with a <span class="code">security.txt</span>.
 
 <h5>Project site with SQL injection</h5>In <a href="/2017/10/10-years-of-injection">the case with the company vulnerable for for SQL injection for 10 years</a> I did not know if their customer support form worked at all as I never got a reply. Writing to an e-mail address specified in <span class="code">security.txt</span> would've helped here.
 
 <h5>In general</h5>In most cases the info would have been delievered directly to the correct persons instead of being delayed in some kind of first-line of customer support. You want it to make it easy to report a security issue, and you want the report to get to the right destination asap.
 
-<h4>How to write security.txt</h4>It's a really simple standard. And simple is indeed beautiful. <span class="code">security.txt</span> should be a plain text file located in the top-level directory of the site. Just like with <a class="code" href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a>.
+<h4>How to write security.txt</h4>It's a really simple standard. And simple is indeed beautiful. <span class="code">security.txt</span> should be a plain text file located in the <span class="code">.well-known</span> directory of the site, just like <a href="https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml">a bunch of others</a> as per <a href="https://tools.ietf.org/html/rfc5785">RFC 5785</a>.
 
-<h5>Contact directive</h5>The only directive that must be present in <span class="code">security.txt</span> is <span class="code">Contact</span>, which lets you specify either an e-mail address (maybe not very smart considering spam) or a phone number or a URI that provides contact info.
+<h5>Contact directive</h5>The only directive that must be present in <span class="code">security.txt</span> is <span class="code">Contact</span>, which lets you specify either an e-mail address (maybe not very smart considering spam) or a phone number or a URI that provides contact info. The order defines the preferred method of contact.
 
-For my own <a class="code" href="/security.txt">security.txt</a> I have used Google's <a href="https://www.google.com/recaptcha/admin#mailhide">reCAPTCHA Mailhide</a> and a link to <a href="https://twitter.com/roysolberg">my own Twitter account</a>.
+For my own <a class="code" href="/.well-known/security.txt">security.txt</a> I have used Google's <a href="https://www.google.com/recaptcha/admin#mailhide">reCAPTCHA Mailhide</a> and a link to <a href="https://twitter.com/roysolberg">my own Twitter account</a>.
 
-<h5>Disclosure directive</h5>There's also a <span class="code">Disclosure</span> directive where you can specify your disclosure policy. For this one I wish there was either a better specification for what the allowed values actually means or a reference to a standard for this. At least the propsal currently states <i>\"The presence of a disclosure field is NOT permission to disclose vulnerabilities and explicit permission MUST be saught where possible.\"</i>
+<h5>Signature directive</h5>In order to ensure the authenticty of the <span class="code">security.txt</span> one should use the <span class="code">Signature</span> directive to sign it using either an external or internal signature.
 
 <h5>Encryption directive</h5>The <span class="code">Encryption</span> lets you add your key for encrypted communication, like your <a href="https://en.wikipedia.org/wiki/Pretty_Good_Privacy">PGP</a> key or similar.
 
 <h5>Acknowledgement directive</h5>The <span class="code">Acknowledgement</span> allows you to link to a page where security researchers are recognized for their reports.
 
-<h5>It's a proposal</h5>It's a proposal, so be sure to check out <a href="https://securitytxt.org">securitytxt.org</a> for the latest update of the specification.
+<h5>It's a proposal</h5>It's a proposal, so be sure to check out <a href="https://securitytxt.org">securitytxt.org</a> for the latest update of the specification. Also, at the time of writing, you should take a look at <a href="https://github.com/securitytxt/security-txt/tree/draft">the draft branch at https://github.com/securitytxt/</a> for the latest development. There's also some interesting discussions on the <a href="https://github.com/securitytxt/security-txt/issues?q=">issue tracker of the same project</a>.
 
 <h4>Example security.txt</h4><pre class="prettyprint">Contact: https://example.com/security-contact-form/
 Contact: https://example.com/mailhide/security
 Contact: 555-2368
 
+Signature: https://example.com/.well-known/security.txt.sig
 Encryption: https://example.com/pgp-key.txt
-Disclosure: Partial</pre>
+Acknowledgement: https://example.com/security-hall-of-fame.html</pre>
 <h4>Conclusion</h4>This is one is easy. Please add support for <span class="code">security.txt</span> - as soon as you can - to make the web a safer and more secure place for us all.
 `,
                 "images": ["/images/security.png"],
