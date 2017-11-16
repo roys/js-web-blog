@@ -30,15 +30,16 @@ MATCH_OBJECT = PATTERN.search(js_contents)
 if MATCH_OBJECT is not None:
     POSTS = json.loads(MATCH_OBJECT.group(1))
     for post in reversed(POSTS):
-        url = post['niceUrl']
-        title = post['title'].encode('utf-8')
-        summary = post['summary'].encode('utf-8')
-        text = post['text'].encode('utf-8')
         category = post['category']['title'].encode('utf-8')
-        published = post['publishDate']
-        updated = post.get('updateDate', published)
+        if category == 'Security':
+            url = post['niceUrl']
+            title = post['title'].encode('utf-8')
+            summary = post['summary'].encode('utf-8')
+            text = post['text'].encode('utf-8')
+            published = post['publishDate']
+            updated = post.get('updateDate', published)
 
-        entries += ENTRY_TEMPLATE.safe_substitute(id=BASE_URL + url, title=title, url=BASE_URL + url, category=category, summary=summary,
-                                                  published=published, updated=updated, author='Roy Solberg', contents=text.decode('utf-8')).encode('utf-8')
+            entries += ENTRY_TEMPLATE.safe_substitute(id=BASE_URL + url, title=title, url=BASE_URL + url, category=category, summary=summary,
+                                                    published=published, updated=updated, author='Roy Solberg', contents=text.decode('utf-8')).encode('utf-8')
 
 print FEED_TEMPLATE.safe_substitute(entries=entries, feedId=BASE_URL, baseUrl=BASE_URL)

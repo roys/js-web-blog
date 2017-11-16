@@ -89,6 +89,24 @@ a[href*="//blog.roysolberg.com/"]:after, footer a[href*="//"]:after {
 }
 
 /**
+    START Mailchimp
+*/
+#mc_embed_signup{
+    background-color: #F5F2F0;
+    padding: 20px;
+    border-radius: 5px;
+}
+#mc_embed_signup h6{
+    font-weight: bold;
+}
+#mc_embed_signup label{
+    color: #000;
+}
+/**
+    END Mailchimp
+*/
+
+/**
     START Fontello
 */
 @font-face {

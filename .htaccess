@@ -1,5 +1,7 @@
 RewriteEngine on
 # TODO: Why won't it work just $ at the end?
+RewriteCond %{REQUEST_URI} ^/atom-security.*$
+RewriteRule .* atom-security.cgi [L]
 RewriteCond %{REQUEST_URI} ^/atom.*$
 RewriteRule .* atom.cgi [L]
 

@@ -1950,7 +1950,7 @@ While I understand that not everybody has the flexible server environments like 
                 "title": "Add security.txt to your site",
                 "published": true,
                 "publishDate": "2017-11-04T14:35:00.000Z",
-                "updateDate": "2017-11-05T20:15:00.000Z",
+                "updateDate": "2017-11-05T19:15:00.000Z",
                 "summary": "Sometimes it's really difficult and time consuming to find a way to report a security vulnerability. But there is a very simple solution for that.",
                 "niceUrl": "/2017/11/security-txt",
                 "text": `<h4>tl;dr</h4><a href="https://twitter.com/edoverflow">Ed Foudil</a> has proposed <span class="code">security.txt</span> as a standard method for making it easier to report security issues. It's a plain text file with contact info that should be located in the <span class="code">.well-known</span> directory of a web site (or root of a file system). Currently it's a "Internet draft" that has been submitted for <a href="https://en.wikipedia.org/wiki/Request_for_Comments">RFC</a> review.
@@ -2003,6 +2003,109 @@ Acknowledgement: https://example.com/security-hall-of-fame.html</pre>
                     {
                         "title": "security.txt",
                         "url": "/security-txt"
+                    }
+                ]
+            },
+            {
+                "title": "Case #13: Leaking shopping data",
+                "published": true,
+                "publishDate": "2017-11-13T19:40:00.000Z",
+                "niceUrl": "/2017/11/goshopping-leak",
+                "summary": "No one can see what you are shopping online, right?",
+                "text": `<h4>tl;dr</h4><i>GoShopping</i> - a company owning several online stores - let anyone see all your previous orders and order lines using just your e-mail address.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://goshopping.no/">GoShopping</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="green-text">Low</span> to <span class="orange-text">medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>July 2017</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="red-text">Poor</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Leak with all order details</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>I recently returned to <a href="https://www.kitchenone.no/">KitchenOne</a> to buy some accessories to my coffee machine. I didn't have any account (I don't think you can have), but was a bit relieved and surprised when I during checkout could just enter my e-mail address and it would fill out my name, address and phone number.
+
+That made me think. <b>Is it OK that anyone can enter my e-mail address to a service and get back my full name, address and phone number? And maybe there could be more than meets the eye?</b>
+
+<h4>Approach (technical stuff)</h4><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="images/goshopping01.png"/>When I was at the checkout step I opened <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> to inspect the network traffic. There was a <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> call to the mother site GoShopping's CMS (they're using <a href="https://umbraco.com/">the open source ASP.NET CMS Umbraco</a>) returning some JSON with the name, address and phone number. <b>But the JSON contained more. It contained my previous order in full details including all items that I bought. And even my payment information was included.</b>
+
+<br style="clear:left;"/>
+<h4>Security issues</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="images/goshopping02.png"/>The service for looking up the address from the e-mail address leaked the following information:
+ - Seemingly all orders
+ - For an order there was this information:
+   - The date of the purchase
+   - <b>Each and all products ordered</b>
+   - Any discount
+   - <b>Name and address used for payment</b> (in addition to the one used for delievery)
+   - <b>Credit card number with <a href="https://en.wikipedia.org/wiki/PAN_truncation">PAN truncation</a></b>
+
+<b>And then there's the question if the user wants it to be possible to look up his or her name, address and phone number using their e-mail address. What if you have some kind of unlisted address? This part has not been fixed, but is assumingly working as intended.</b>
+
+<h4>Reception and handling</h4><h5>Day zero</h5>Monday night I sent an e-mail telling about the leak.
+
+<h5>Day 3</h5>I got an e-mail back telling that they would look into the issue.
+
+<h5>Day 79</h5><b>Having not heard anything back and not seeing any fixes I asked them for a status. I did not receive any reply on this e-mail.</b>
+
+<h5>Day 91</h5><b>I told them I would write about the case here on my blog that very same day.</b>
+
+<b>10 minutes(!) later I got a reply telling that the issue would be fixed some time the week after. As a believer in <a href="https://en.wikipedia.org/wiki/Responsible_disclosure">responsible disclosure</a> I decided to wait for them to release the fix.</b>
+
+<h5>Day 10X</h5>I tested the leaking endpoint and found that it was fixed.
+
+<b>Would they have relased any fix if I didn't tell them I was going to do a write-up? I'm not so sure about that.</b>
+
+<h4>Similar case</h4>I discovered a similar less severe case with <a href="https://power.no">Power</a> in September. Power is a chain selling consumer electronics. When you check out you can specify your phone number. If you have been shopping there sometime before they can fill out the check out form with name, and address. Seems okay, right?
+
+There's a couple of problems here. The first one is that <b>they also returned the customer's e-mail address</b>. And this was what I complained about in <a href="https://twitter.com/roysolberg/status/913690656257773568">my tweet to Power</a>. They have recently fixed this and removed the e-mail address for the data returned.
+
+<img style="float:right;width:400px;margin-left:20px;" class="materialboxed responsive-img" title="My tweet to the consumer electronics chain Power." data-caption="My tweet to the consumer electronics chain Power." src="images/goshopping03-power.png"/>The second problem is like in this case. <b>Okay, so the company removes the biggest issue, but have you agreed to that it should be possible to look up your name and address using your e-mail address or phone number? What if you have an unlisted phone number? What if you have an unlisted address?</b>
+
+<h4>Conclusion</h4>This case is a classic example of server endpoints returning more data than what is shown to the user - and this time the data really shouldn't be there.
+
+I don't like when it takes more than 3 months to fix something that seemingly is so easy to fix. And I'm not sure they would have fixed this at all if I hadn't been following them up and if I hadn't had this blog. At least now the users' data is more secure.
+`,
+                "images": ["/images/goshopping02.png", "/images/goshopping01.png", "/images/goshopping03-power.png"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
                     }
                 ]
             }
