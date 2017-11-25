@@ -69,6 +69,12 @@ table.summary td{
     padding: 0px 10px 0px 0px;
     vertical-align: top;
 }
+table.checkmarks{
+    font-size:18px;
+}
+table.checkmarks td{
+    padding: 0;
+}
 .collection a.collection-item{
     color: #039be5;
 }

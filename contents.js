@@ -2048,10 +2048,10 @@ Acknowledgement: https://example.com/security-hall-of-fame.html</pre>
 
 That made me think. <b>Is it OK that anyone can enter my e-mail address to a service and get back my full name, address and phone number? And maybe there could be more than meets the eye?</b>
 
-<h4>Approach (technical stuff)</h4><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="images/goshopping01.png"/>When I was at the checkout step I opened <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> to inspect the network traffic. There was a <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> call to the mother site GoShopping's CMS (they're using <a href="https://umbraco.com/">the open source ASP.NET CMS Umbraco</a>) returning some JSON with the name, address and phone number. <b>But the JSON contained more. It contained my previous order in full details including all items that I bought. And even my payment information was included.</b>
+<h4>Approach (technical stuff)</h4><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="/images/goshopping01.png"/>When I was at the checkout step I opened <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> to inspect the network traffic. There was a <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> call to the mother site GoShopping's CMS (they're using <a href="https://umbraco.com/">the open source ASP.NET CMS Umbraco</a>) returning some JSON with the name, address and phone number. <b>But the JSON contained more. It contained my previous order in full details including all items that I bought. And even my payment information was included.</b>
 
 <br style="clear:left;"/>
-<h4>Security issues</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="images/goshopping02.png"/>The service for looking up the address from the e-mail address leaked the following information:
+<h4>Security issues</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="/images/goshopping02.png"/>The service for looking up the address from the e-mail address leaked the following information:
  - Seemingly all orders
  - For an order there was this information:
    - The date of the purchase
@@ -2080,13 +2080,545 @@ That made me think. <b>Is it OK that anyone can enter my e-mail address to a ser
 
 There's a couple of problems here. The first one is that <b>they also returned the customer's e-mail address</b>. And this was what I complained about in <a href="https://twitter.com/roysolberg/status/913690656257773568">my tweet to Power</a>. They have recently fixed this and removed the e-mail address for the data returned.
 
-<img style="float:right;width:400px;margin-left:20px;" class="materialboxed responsive-img" title="My tweet to the consumer electronics chain Power." data-caption="My tweet to the consumer electronics chain Power." src="images/goshopping03-power.png"/>The second problem is like in this case. <b>Okay, so the company removes the biggest issue, but have you agreed to that it should be possible to look up your name and address using your e-mail address or phone number? What if you have an unlisted phone number? What if you have an unlisted address?</b>
+<img style="float:right;width:400px;margin-left:20px;" class="materialboxed responsive-img" title="My tweet to the consumer electronics chain Power." data-caption="My tweet to the consumer electronics chain Power." src="/images/goshopping03-power.png"/>The second problem is like in this case. <b>Okay, so the company removes the biggest issue, but have you agreed to that it should be possible to look up your name and address using your e-mail address or phone number? What if you have an unlisted phone number? What if you have an unlisted address?</b>
 
 <h4>Conclusion</h4>This case is a classic example of server endpoints returning more data than what is shown to the user - and this time the data really shouldn't be there.
 
 I don't like when it takes more than 3 months to fix something that seemingly is so easy to fix. And I'm not sure they would have fixed this at all if I hadn't been following them up and if I hadn't had this blog. At least now the users' data is more secure.
 `,
                 "images": ["/images/goshopping02.png", "/images/goshopping01.png", "/images/goshopping03-power.png"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    }
+                ]
+            },
+            {
+                "title": "Summarizing 13 security vulnerabilities",
+                "published": true,
+                "publishDate": "2017-11-20T05:55:00.000Z",
+                "niceUrl": "/2017/11/summary-13-cases",
+                "summary": "Let me spell out why you should care that I recently so easily found 13 security vulnerabilities.",
+                "text": `<h4>tl;dr</h4>I'm summarizing <a href="/category/security">the 13 security issues I've presented on the blog</a> over the last three months.
+                
+<h4>Crime types</h4><b>In the table below I've tried to show how different types of criminals can directly use the information from the different cases.</b> Of course, combining sources would make you even more vulernable, so I'll get more into that further down in this post.
+
+<table class="checkmarks striped">
+<thead>
+<tr>
+    <th></th>
+    <th></th>
+    <th style="text-align:center;padding-bottom:0px;" colspan="6">Directly applicable for</th>
+</tr>
+<tr>
+    <th style="width:28%">Case</th>
+    <th style="width:12%">Jealous partner</th>
+    <th style="width:12%">Stalker</th>
+    <th style="width:12%">Kid&#8203;napper</th>
+    <th style="width:12%">White-collar crimi&#8203;nal</th>
+    <th style="width:12%">Political hacker</th>
+    <th style="width:12%">Foreign intell&#8203;igence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><a href="/2017/08/get-your-ssn-here">#1 - Tryg + Infotorg</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/08/auth-auth">#2 - Acme</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/08/digipost-leak">#3 - Digipost</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/php-hack">#4 - Acme2</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/skandiabanken-leak">#5 - Sbanken</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/picture-leak">#6 - Orkla + Japan Photo</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/gym-leak">#7 - Energi Treningssenter</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/10-years-of-injection">#8 - Acme3</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/ikea-name-leak">#9 - IKEA</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/hackable-digital-memory-book">#10 - Memoria</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/tracking-kids">#11 - Gator Watch</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/gjensidige-leak">#12 - Gjensidige</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/11/goshopping-leak">#13 - GoShopping</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+</tbody>
+</table>
+
+<h5>Jealous partner</h5>With <i>jealous partner</i> I'm considering persons who have some kind of <a href="https://en.wikipedia.org/wiki/Abusive_power_and_control">abusive power and control</a> or <a href="https://en.wikipedia.org/wiki/Pathological_jealousy">jealousy</a>. They could make use of usage data like the time the partner entered the door at the gym or what he or she bought at the store at what time.
+
+<h5>Stalker</h5>A <a href="https://en.wikipedia.org/wiki/Stalking">stalker</a> is a person with unwanted or obsessive attention towards another person. Using information leaks a stalker would be able to get more personal information (i.e. address, phone number, e-mail address) about the victim. And getting something like the victim's IP address would open for attacks on computer equipment which again can lead to more leaks of personal data (think your mobile phone with all your images, your e-mail, etc.).
+
+<h5>Kidnapper</h5><a href="https://en.wikipedia.org/wiki/Kidnapping">Kidnappers</a> would be able to use location data and other usage information to understand patterns and when it's a fitting time to commit the crime.
+
+<h5>White-collar crimi​nal</h5>In <a href="https://en.wikipedia.org/wiki/White-collar_crime">while-collar crime</a> I include identity theft and other types of finacially motivated crimes. Useful information could be Social Security Numbers (SSN), names, addresses, phone numbers, etc.
+
+<h5>Political hacker</h5>With <i>political hacker</i> I mean individuals or groups that have some kind of political motivation to get access to data about politicians. A list of people's names and IP addresses would be great news for trying to break into a politician's computer network.
+
+<h5>Foreign intelligence</h5>I suppose some foreign intelligence organizations wouldn't mind getting an up to date high quality list of names, Social Security Numbers and addresses for most of the grown population in a nation. And for more targeted operations full names and IP addresses sure helps.
+
+<h4>Information leaks</h4>More often than not the security issues I have found have included some sort of personal information leak. In the table below I'm summarizing the severity and the leaks.
+
+<table class="checkmarks striped">
+<thead>
+<tr>
+    <th style="width:28%">Case</th>
+    <th style="width:18%">Severity</th>
+    <th style="width:30%">Data leaked</th>
+    <th style="width:12%">Enum&#8203;eration vulvner&#8203;ability</th>
+    <th style="width:12%">Privacy threat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><a href="/2017/08/get-your-ssn-here">#1 - Tryg + Infotorg</a></td>
+    <td><span class="green-text">Low</span> to <span class="orange-text">medium</span></td>
+    <td>SSN, names, addresses, birthdays, etc.</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/08/auth-auth">#2 - Acme</a></td>
+    <td><span class="green-text">Very low</span></td>
+    <td>-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/08/digipost-leak">#3 - Digipost</a></td>
+    <td><span class="orange-text">Medium</span></td>
+    <td>Names and IP addresses</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/php-hack">#4 - Acme2</a></td>
+    <td><span class="red-text">Critical</span></td>
+    <td>-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/skandiabanken-leak">#5 - Sbanken</a></td>
+    <td><span class="red-text">High</span></td>
+    <td>Bank account balances</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/picture-leak">#6 - Orkla + Japan Photo</a></td>
+    <td><span class="green-text">Low</span></td>
+    <td>Pictures and first names</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/gym-leak">#7 - Energi Treningssenter</a></td>
+    <td><span class="red-text">High</span></td>
+    <td>Names, visit logs, e-mail addresses, phone numbers, bank account numbers, pictures</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/10-years-of-injection">#8 - Acme3</a></td>
+    <td><span class="red-text">Critical</span></td>
+    <td>A lot of different company data</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/ikea-name-leak">#9 - IKEA</a></td>
+    <td><span class="green-text">Low</span> to <span class="orange-text">medium</span></td>
+    <td>Names and locations</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/hackable-digital-memory-book">#10 - Memoria</a></td>
+    <td><span class="red-text">High</span></td>
+    <td>Private messages</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/tracking-kids">#11 - Gator Watch</a></td>
+    <td><span class="red-text">Critical</span></td>
+    <td>Kids' location, voice messages, phone numbers</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/gjensidige-leak">#12 - Gjensidige</a></td>
+    <td><span class="orange-text">Medium</span></td>
+    <td>Names, addresses, insurance details</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+<tr>
+    <td><a href="/2017/11/goshopping-leak">#13 - GoShopping</a></td>
+    <td><span class="green-text">Low</span> to <span class="orange-text">medium</span></td>
+    <td>Names, addresses, order details</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+</tr>
+</tbody>
+</table>
+
+<h5>Data leaked</h5><b>A lot</b> of different personal data has been leaked. And looking at the cases you'll see that you can use data from one source to look up data in another.
+
+<h5>Enum​eration vulvner​ability</h5>The checkmark for <i>enum​eration vulvner​ability</i> indicates if it was possible to access all the data systematically or not. Only a few of them needed knowledge like a bank account number or e-mail address, so this is bad news for you as an end user.
+
+<h5>Privacy threat</h5>While not all cases are directly applicable for criminals, almost every single one of them poses a threat to your privacy. This threat goes from you not surfing anonymously on the Internet to your home network being vulnerable for further attacks to your kids being tracked to your online shopping being exposed etc.
+
+<h4>Combining sources</h4>While the vulnerabilities alone are bad, combining them may make them more severe. So which of the 13 could have been used together?
+
+In the table below I've marked the the cases in which there are some overlapping data that will make it possible to get retrieve more data or increase the <a href="https://en.wikipedia.org/wiki/Attack_surface">attack surface</a>.
+<table class="checkmarks striped">
+<thead>
+<tr>
+    <th style="width:28%">Case</th>
+    <td style="width:5%;text-align:center;">#1</td>
+    <td style="width:5%;text-align:center;">#2</td>
+    <td style="width:5%;text-align:center;">#3</td>
+    <td style="width:5%;text-align:center;">#4</td>
+    <td style="width:5%;text-align:center;">#5</td>
+    <td style="width:5%;text-align:center;">#6</td>
+    <td style="width:5%;text-align:center;">#7</td>
+    <td style="width:5%;text-align:center;">#8</td>
+    <td style="width:5%;text-align:center;">#9</td>
+    <td style="width:5%;text-align:center;">#10</td>
+    <td style="width:5%;text-align:center;">#11</td>
+    <td style="width:5%;text-align:center;">#12</td>
+    <td style="width:5%;text-align:center;">#13</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><a href="/2017/08/get-your-ssn-here">#1 - Tryg + Infotorg</a></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/08/auth-auth">#2 - Acme</a></td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/08/digipost-leak">#3 - Digipost</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/php-hack">#4 - Acme2</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/skandiabanken-leak">#5 - Sbanken</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/picture-leak">#6 - Orkla + Japan Photo</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/09/gym-leak">#7 - Energi Treningssenter</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/10-years-of-injection">#8 - Acme3</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/ikea-name-leak">#9 - IKEA</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/hackable-digital-memory-book">#10 - Memoria</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/tracking-kids">#11 - Gator Watch</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/10/gjensidige-leak">#12 - Gjensidige</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+    <td style="text-align:center;">-</td>
+</tr>
+<tr>
+    <td><a href="/2017/11/goshopping-leak">#13 - GoShopping</a></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;background-color:#4CAF50;">&#x2714;</td>
+    <td></td>
+    <td style="text-align:center;">-</td>
+</tr>
+</tbody>
+</table>
+
+<h4>Conclusion</h4><b>I wanted to write this post to try to make it clear on why you should care about these issues. When I can find all this data with very little time and effort then this sure must be the tip of a very small iceberg in an ocean with a lot of very big icebergs.</b>
+`,
+                "images": ["/images/summary01.png"],
                 "links": [
                     {
                         "title": "Background: Purpose of these posts",
