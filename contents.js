@@ -1967,7 +1967,7 @@ In most cases I have had to contact first-line customer support and try to write
 
 <h5>Project site with SQL injection</h5>In <a href="/2017/10/10-years-of-injection">the case with the company vulnerable for for SQL injection for 10 years</a> I did not know if their customer support form worked at all as I never got a reply. Writing to an e-mail address specified in <span class="code">security.txt</span> would've helped here.
 
-<h5>In general</h5>In most cases the info would have been delievered directly to the correct persons instead of being delayed in some kind of first-line of customer support. You want it to make it easy to report a security issue, and you want the report to get to the right destination asap.
+<h5>In general</h5>In most cases the info would have been delivered directly to the correct persons instead of being delayed in some kind of first-line of customer support. You want it to make it easy to report a security issue, and you want the report to get to the right destination asap.
 
 <h4>How to write security.txt</h4>It's a really simple standard. And simple is indeed beautiful. <span class="code">security.txt</span> should be a plain text file located in the <span class="code">.well-known</span> directory of the site, just like <a href="https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml">a bunch of others</a> as per <a href="https://tools.ietf.org/html/rfc5785">RFC 5785</a>.
 
@@ -2638,6 +2638,126 @@ In the table below I've marked the the cases in which there are some overlapping
                     {
                         "title": "Information leak",
                         "url": "/information-leak"
+                    }
+                ]
+            },
+            {
+                "title": "From the archive #1: Kindergarten leaking data",
+                "published": true,
+                "publishDate": "2017-11-27T06:45:00.000Z",
+                "summary": "This one my of my regrets. This is one of those cases I should have told the world about. But now it's such a long time ago that naming anyone won't do any good.",
+                "niceUrl": "/2017/11/kindergarten-leak",
+                "text": `<h4>tl;dr</h4>An online kindergarten service used by a lot of kindergartens was leaking a lot of data about all of the kids and their parents.
+                
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><i>It's too long ago, so I won't tell</i></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="red-text">High</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>2013</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Very good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>iPad mini with engraved thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Information leak with data about kids and parents</td>
+</tr>
+</table>
+<h4>Background</h4>Early 2013 they started using an online system in my kid's kindergarten. The system contained personal info about kids as well as parents and was used for pictures and messages.
+
+I really liked the system. It was very easy to do stuff like notifying if your kid was home sick, to see pictures of everyday life or to see if the sleep schedule was followed as it should. It also seemed pretty user friendly for the staff who had an iPad where they could easily click and register when a child was delivered in the morning and do all other communication with the parents. It was supposed to replace all post-it notes and paperwork.
+
+<b>When we were told about the system and got logins for it we also got a brochure telling <i>"All data in &lt;the system&gt; is handled with a very high degree of security"</i>. Of course, a statement like that works pretty much as a cue for me to look into the security of the system.</b>
+
+<h4>Approach (technical stuff)</h4>It's hard to recall all the details years afterwards and this was before I kept any notes about my findings, so the technical description isn't very long or deep. I started out as I normally do; I was using the site while having <a href="https://en.wikipedia.org/wiki/Web_development_tools">the browser development tools</a> open. In general stuff looked pretty good. There seemed to be proper encryption, authentication and authorization all over the place. But one of the challenges with web application security is that authorization is off by default and you have to actively add it and implement it correctly.
+
+Even if the authorization seems okay, there is almost always this one place or function where it's forgotten about. Often it's that one functionality that was added later or that one that no one uses that much. <b>The kindergarten system had a function for exporting all the data they had stored about your child. It was some sort of background job that ran asynchronously and was kickstarted by some URL. The URL contained an incremental integer ID named <span class="code">childId</span>. The scope of the ID was the entire kindergarten (though the online system was running many, many kindergartens).</b>
+
+<b>As you might have guessed, one could just change the ID and you started the background job for another child in the same kindergarten. When the job was done you got a downloadable ZIP file will all of the contents.</b>
+
+<h4>Security issue</h4><img style="float:left;width:350px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from the frontpage of the generated downloadable pages." data-caption="Screenshot from the frontpage of the generated downloadable pages." alt="Screenshot from security issue." src="/images/kindergarten01.png"><img style="clear:left;float:left;width:350px;margin-right:20px;margin-top:20px;" class="materialboxed responsive-img" title="Screenshot from some of the personal data of the generated downloadable pages." data-caption="Screenshot from some of the personal data of the generated downloadable pages." alt="Screenshot from security issue." src="/images/kindergarten02.png">The URL for creating a downloadable archive with all of the contents belonging to the child didn't have an authorization check. <b>It was possible to systematically download all contents for all children within the same kindergarten.</b>
+
+<b>This is the data that was available:
+- Full name of the child
+- Birthday of the child
+- Address of the child
+- Full name of the parents
+- Phone numbers of the parents
+- E-mail address of the parents
+- General practitioner (GP) of the child
+- Info about the child following the govnerment vaccination program or not
+- Potenial other health information like allergies
+- The child's sleep needs
+- Pictures of the child
+- Pictures of other children in the same kindergarten department
+- Messages sent between parents and kindergarten</b>
+
+<h4>Reception and handling</h4><h5>Day zero</h5>Pretty late at night I sent an e-mail to both the manager of our kindergarten and the CEO of the whole kindergarten system.
+
+<b>Just 30 minutes later that night I got a reply from the CEO thanking for the report and saying that they would look into it immediately.</b>
+
+<h5>Day 1</h5>Early at night I got a new longer reply from the CEO. <b>They had already closed the issue for all customers.</b> While this was a classical programming error, the description of the system structure, storage and access control was pretty satisfying. And <b>supposedly the kindergartens are not allowed to store any information that is regarded as sensitive (as defined by law), though I assume all parents feel that all that data about their child is pretty sensitive.</b>
+
+A couple of hours later <b>I also got a reply from the manager of the kindergarten. It was a bit more "light" than what I would have wished for, with no critical voicing towards the vendor of the system, but he thanked me and said he was sorry for the incident.</b>
+
+<h5>Day 15</h5>Out of the blue the CEO sent me an e-mail asking if he had found the correct address on me as they wanted to send me a little something.
+
+<b>I have to admit that receiving an iPad mini and their general tone through the process probably was enough to hold me back from telling the media back then.</b>
+
+<h4>Another kindergarten system with vulnerabilities</h4>After I started this blog I noticed <a href="https://twitter.com/FixInTheWild/status/882853395203330049">a tweet about a talk about vulnerabilities in an online kindergarten system</a>. It's a great talk given by Halvor Sakshaug at <a href="https://ndcoslo.com/">NDC Oslo</a> earlier this year.
+
+<b>From the screenshots I could see that this is a completely different kindergarten service than the one I used. So this means even more kids' security and information was vulnerable.</b>
+
+<h4>Conclusion</h4><b>This issue has always been bothering me a bit. It was pretty serious, but I didn't disclose it publicly. It's one of many examples of serious issues that has absolutely no consequences for the company doing the harm and the users jeopardized are never informed about it.</b>
+
+<b>With this issue as a backdrop it was one of the reasons I decided to start disclose security issues on my blog. People need to know that all their personal data is in the hands of anyone who wants it.</b>
+
+And with the mentioned other kindergarten system with vulnerabilities, and <a href="/2017/10/tracking-kids">the security issues in the smart watch for kids that I discovered</a> late this summer, I really feel even more that we need more disclosure and give more attention to IT security.
+`,
+                "images": ["/images/kindergarten02.png", "/images/kindergarten01.png"],
+                "links": [
+                    {
+                        "title": "Background: Purpose of these posts",
+                        "url": "/2017/08/security-vulnerability-disclosures"
+                    }
+                ],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Authorization",
+                        "url": "/authorization"
+                    },
+                    {
+                        "title": "OWASP 2013 A7",
+                        "url": "/owasp-2013-a7"
                     }
                 ]
             }
