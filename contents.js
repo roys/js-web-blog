@@ -2760,6 +2760,51 @@ And with the mentioned other kindergarten system with vulnerabilities, and <a hr
                         "url": "/owasp-2013-a7"
                     }
                 ]
+            },
+            {
+                "title": "Hack my hackable website",
+                "published": true,
+                "publishDate": "2017-12-19T22:10:00.000Z",
+                "summary": "I created a \"hackable\" web app for a presentation I gave about web app security. Now you can try it out yourself.",
+                "niceUrl": "/2017/12/hack-my-site",
+                "text": `<h4>tl;dr</h4>Try to "hack" <a href="https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site">https://ra.gl/</a> . You can see the rules and goal on that site.
+
+<h4>Hack my site</h4>I give a few talks every year. The last years I've mostly talked about different mobile development topics, but because of this blog I have recently had the opportunity to talk about web application security.
+
+Last week I gave a talk at <a href="http://gdgbergen.no">Google Developer Group Bergen, Norway</a>. The talk was about <a href="https://www.meetup.com/GDGBergen/events/245558721/">hacking web apps</a>.
+
+After the talk itself we had a session with some hands-on "hacking" of a web app. For this I had created a web site that had intentional "security vulnerabilities".
+
+<h4>The goal</h4><b>The goal of the assignment is simple: Just log in on the administrator page at <a href="https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site">ra.gl</a> and get hold of your unique keyword that proves your accomplishment.</b>
+
+<h4>The rules</h4>I have some rules so that the site isn't ruined completely. It is after all hosted in a shared hosting environment and I don't want anyone else harmed.
+
+<h5>Please stay away from doing this:</h5>- DOS attacks
+- Port scanning
+- Attacks on any other sites or domains hosted on the same server
+- Attacks on network infrastructure
+- Attacks on server software (OS, app server, programming frameworks)
+- Any interference or attacks on the web host company
+- Anything you think might not be okay
+
+<h5>Please do this:</h5>- Try to find any logical errors and/or information leaks in the web pages within this domains
+
+<h4>The tools</h4><b>You don't really need anything else then your <a href="https://en.wikipedia.org/wiki/Web_development_tools">browser's development tools</a>.</b> Personally I like to frequently use its <i>"Copy as <a href="https://curl.haxx.se/">cURL</a>"</i> menu option and tweak the HTTP requests in a simple text editor.
+
+<h4>The vulnerabilities</h4>The security vulnerabilities are the typical ones that <a href="http://blog.roysolberg.com/tag/security-monday">I have found and presented on my blog</a>. I you have read some of those posts you might have some clues on what it could be.
+
+It's isn't a very hard task to break in. But that is actually part of the point. There are some many weaknesses with so many web apps today. With some knowledge and open eyes you can get far. If you are able to hit gold all the way you can solve it within some minutes, but most people seem to need more time.
+
+<h4>Happy hacking!</h4>I hope you enjoy this small assignment! Don't hesitate to give me feedback or if you have any ideas for improvements or other cool stuff that should be included. :-)
+
+<a href="https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site">Start hacking!</a>
+`,
+                "images": ["/images/ra.gl.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                }
             }
         ];
 }(window.SpaBlog));
