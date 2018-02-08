@@ -2814,7 +2814,7 @@ It's isn't a very hard task to break in. But that is actually part of the point.
                 "niceUrl": "/2018/02/crack-android-apps",
                 "text": `<h4>tl;dr</h4>This tutorial for how to crack Android apps is one of my more technical posts. If you aren't a developer you might want to skip this one. :) I'm assuming some basic knowledge of UN*X, Android and Java.
 
-<h4>Why crack an app?</h4>Sometimes I like to check if online services I use really are secure. <a href="/category/security">I've shown quite a few cases to prove that they very often are not.</a> Mostly I can use very simple techniques to check the security as there are so many basic security vulnerabilities out there. When it comes to apps I often use a HTTP proxy like <a href="https://www.charlesproxy.com/">Charles</a> to take a look at the HTTP and HTTPS traffic. However, once in a while there are apps that use e.g. <a href="https://en.wikipedia.org/wiki/HTTP_tunnel">HTTP tunneling</a> or <a href="https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning">certificate pinning</a>. In those cases you need to go one step further to be able to read the traffic.
+<h4>Why crack an app?</h4>Sometimes I like to check if online services I use really are secure. <a href="/category/security">I've shown quite a few cases to prove that they very often are not.</a> Mostly I can use very simple techniques to check the security as there are so many basic security vulnerabilities out there. When it comes to apps I often use a HTTP proxy like <a href="https://www.charlesproxy.com/">Charles</a> to take a look at the HTTP and HTTPS traffic. However, <b>once in a while there are apps that use e.g. <a href="https://en.wikipedia.org/wiki/HTTP_tunnel">HTTP tunneling</a> or <a href="https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning">certificate pinning</a>. In those cases you need to go one step further to be able to listen to the network traffic.</b>
 
 Other reasons to decompile apps could be to recover lost source code, to inject language translations or even fix a bug. But hey, remember, don't do anything you are not allowed to. Don't break the law. This guide is just for educational purposes when you have legal reasons to do what you do.
 
@@ -2830,7 +2830,7 @@ Other reasons to decompile apps could be to recover lost source code, to inject 
 - Changing the app
 - Repackaging and replacing the app
 
-<h4>Online alternatives</h4>Very often you don't have to get your hands too dirty getting the hands of a decompiled app. There are some good services out there that can provide you with most Android APKs.
+<h4>Online alternatives</h4><b>Very often you don't have to get your hands too dirty getting the hands of a decompiled app. There are some good services out there that can provide you with most Android APKs.</b>
 
 <h5>Online APK archives</h5>To get hold of an APK you can typically just google the package name. There's quite a few sites where to download them from. Some are more frequently updated and others. Note that you can get hold of different versions and the APK for different architectual platforms.
 
@@ -2842,11 +2842,38 @@ A word of wisdom: Don't download and run some random APK out there (at least do 
 
 <h5>Online decompiler</h5>The quickest and easiest way to decompile an APK is to just use an online service. You just upload the APK and get an archive with all the resource and decompiled files. <a href="http://www.javadecompilers.com/apk">javadecompilers.com</a> is the one I have used, and I have been pretty happy with it.
 
+As you might know, the <a href="https://en.wikipedia.org/wiki/Android_application_package">APK file is really just a ZIP file</a>, so you can typically just rename it to <span class="code">.zip</span> and double click it or run <span class="code">unzip</span> and you can start investigating the app. If it's a <a href="https://en.wikipedia.org/wiki/Web_application#Definition_and_similar_terms">hybrid app</a> you might not have to decompile it at all to get access to everything.
+
 <h4>Setting up an environment</h4><h6>(optional)</h6>You don't need to set up your own environment to do some cracking of a few APKs. However, if you either don't fully trust the tools or don't want to clutter up your computer with the Android SDK etc. it can be nice to run everything in a separate computer or virtual machine.
 
-You really want a 64-bit enviroment or else you might end up hitting too many hurdles. Working with security in general it can be nice to use a distro like <a href="https://www.kali.org/">Kali Linux</a>. There a <a href="https://www.kali.org/downloads/">complete images</a> that you can download and either run on a USB stick, do a full normal install, or using a virtual machine for e.g. <a href="https://www.vmware.com/">VMware</a>, <a href="https://www.virtualbox.org/">VirtualBox</a> or <a href="http://www.microsoft.com/hyper-v">Hyper-V</a>. Personally I mostly use VirtualBox.
+You really want a 64-bit environment or else you might end up hitting too many hurdles. Working with security in general it can be nice to use a distro like <a href="https://www.kali.org/">Kali Linux</a>. There are <a href="https://www.kali.org/downloads/">complete images</a> that you can download and either run on a USB stick, do a full normal install, or using a virtual machine for e.g. <a href="https://www.vmware.com/">VMware</a>, <a href="https://www.virtualbox.org/">VirtualBox</a> or <a href="http://www.microsoft.com/hyper-v">Hyper-V</a>. Personally I mostly use VirtualBox when using a virtual environment.
 
-<h4>Getting the tools</h4><h5>Apktool - disassembling and reassembling APKs</h5><a href="https://ibotpeaches.github.io/Apktool/install/">Apktool can be installed manually</a>, or if its available via your package manager you can just install it using the command <span class="code">apt-get install apktool</span>.
+<h4>Getting the tools</h4><h5>Android - SDK, tools and emulators</h5>You need to have at least the Android tools and SDK, but for most people I would recommend <a href="https://developer.android.com/studio/index.html">to just install Android Studio</a> and follow the instructions to set it up as normal (but skip stuff like the SDK for Android TV and other stuff that will slow down your download).
+
+<h5>Apktool - disassembling and reassembling APKs</h5><a href="https://ibotpeaches.github.io/Apktool/install/">Apktool can be installed manually</a>, or if its available via your package manager you can just install it using the command <span class="code">apt-get install apktool</span>.
+
+<h5>Getting the APK</h5>The first step of the reverse engeineering is to get hold of the APK. I'll use my own Android app <a href="https://play.google.com/store/apps/details?id=com.roysolberg.android.developertools">Developer Tools</a> as an example app. It's open source and if you want you <a href="https://github.com/roys/java-android-developertools">get the source code and APKs from GitHub</a>.
+
+The command-line tool <a href="https://developer.android.com/studio/command-line/adb.html">adb (Android Debug Bridge)</a> is used for all communication with the device or emulator. You can find the tool in the Android's installation folder <span class="code">Android/Sdk/platform-tools</span>.
+
+<pre class="prettyprint lang-bsh">&gt; # Lists all packages:
+&gt; adb shell pm list packages
+&lt;loong list of apps /&gt;
+
+&gt; # Simple way of searching for packages:
+&gt; adb shell pm list packages |grep roysolberg
+package:com.roysolberg.android.smarthome
+package:com.roysolberg.android.datacounter
+package:com.roysolberg.android.developertools
+
+&gt; # Get the path of a package:
+&gt; adb shell pm path com.roysolberg.android.developertools
+package:/data/app/com.roysolberg.android.developertools-1/base.apk
+
+&gt; # Get hold of the APK actual APK file:
+&gt; adb pull /data/app/com.roysolberg.android.developertools-1/base.apk
+/data/app/com.roysolberg.android.developertools-...file pulled. 25.2 MB/s (2035934 bytes in 0.077s)</pre>
+
 
 TODO: Continue here
 `,
