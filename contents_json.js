@@ -14,10 +14,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 "text": "<h4>tl;dr</h4>This blog is created with <i>Knockout</i> and <i>Materialize</i>, and have all blog posts in a single <i>JavaScript array</i>. All static.\n                \n<h4>Medium</h4>I wanted a blog. A plain and simple blog. More often than not I read blog posts hosted by <a href=\"https://medium.com/\">medium.com</a>. It seems like they are really dominating these days (at least for tech blogs). And I understand why; the layout is so simple yet attractive and easy to read.\n                \nI expected to settle with a medium.com blog. However, it isn't possible to have ads in the blog posts. And I wanted that.\n\n<h4>Wordpress</h4>Wordpress has ruled the world for quite a long time. <a href=\"https://wordpress.com\">wordpress.com</a> of course costs money if you want to make any money using ads. I don't expect many dollars in income, so I'd like to avoid any fixed costs. Then there is <a href=\"https://wordpress.org\">wordpress.org</a>, but I don't really want to host it myself and stay up to date with <a href=\"https://www.cvedetails.com/product/4096/Wordpress-Wordpress.html\">security issues</a> and all.\n\n<h4>Blogger</h4>I looked at Google's <a href=\"https://blogger.com\">blogger.com</a>. Customizing the layout and templates I thought I was getting there. They have some really nice features. But I couldn't make it look and feel exactly right. And it felt cumbersome to do all the adjustments to get where I wanted.\n\n<h4>Good old days</h4>I knew I didn't want to reinvent the wheel. If this had been somewhere from 2000 to 2007 I probably would have mashed something together using PHP and MySQL. But the thought of doing that in 2017 repelled me. I didn't want any database setup, SQLs or stuff that takes time from creating the actual product.\n\n<h4>Cloud hosting</h4>Further on I didn't want some hosting at one of the big companies offering \"free\" (they tend to end up costing a few bucks) backend hosting with all the hassle of setting up a new environment and installing some SDKs that needs to be constantly updated or suddenly removes support for some version of whatever you use.\n\n<h4>Requirements</h4>Basically I had the following requirements.\n<ul><li> - High readability and ok design</li><li> - Ad support</li><li> - Simple hosting</li><li> - Easy, but advanced customization</li><li> - Quick to set up with no hassle (no database setup, easy development, no unecessary heavy build systems)</li><li> - SEO friendly</li></ul>\n<h4>Solution</h4>I was wondering about using just static HTML files. That would indeed answer most of my requirements. But then I thought about having a simple JavaScript SPA.\n\n<h5>JavaScript framework</h5>I suppose <a href=\"https://angular.io/\">Angular 2</a> or <a href=\"https://facebook.github.io/react/\">React</a> would be among the most logical choices of JavaScript frameworks in 2017. But I wanted productivity and not use a lot of time to learn yet another framework when all I want is a quick and simple blog, so I went for good old <a href=\"http://knockoutjs.com/\">Knockout</a> which I have used quite a lot as earlier on as an IT consultant.\n\n<img class=\"materialboxed responsive-img\" title=\"Knockout js dead? Not the Google auto completion you want.\" data-caption=\"Knockout js dead? Not the Google auto completion you want.\" alt=\"Is Knockout JS dead?\" src=\"/images/knockout-js_dead.png\">\n\nWhile one might argue that Knockout is beyond its prime time, it sure works great and it is mature. And no matter which newer JavaScript framework I would go for it would soon be considered \"old\". If you haven't read the article <a href=\"https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f\">How it feels to learn JavaScript in 2016</a> by Jose Aguinaga, you really should. It's painful to read, but so true.\n\n<h5>Design</h5>I'm no designer. So I like to use UI frameworks that ensures that I can't get it completely wrong. I really like Google's <a href=\"https://material.io/guidelines/\">Material Design</a> and is used to using it on Android. I quickly found <a href=\"http://materializecss.com\">Materialize</a> and haven't looked back. It has great features and is a joy to use. I just wish it didn't depend on jQuery.\n\n<h4>GitHub project</h4>If you're interested you can have a look at the source code for this blog at <a href=\"https://github.com/roys/js-web-blog\">https://github.com/roys/js-web-blog</a>. The project itself is licenced under the MIT License, but for the contents (posts and images) I reserve all rights.\n",
                 "images": ["/images/knockout-js_dead.png"],
                 "category":
-                {
-                    "title": "Software development",
-                    "url": "/software-development"
-                },
+                    {
+                        "title": "Software development",
+                        "url": "/software-development"
+                    },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -37,10 +37,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 "niceUrl": "/2017/08/security-vulnerability-disclosures",
                 "text": "<h4>tl;dr</h4>Over the years I've discovered so many security holes and information leaks on the Internet. Earlier I've only notified the involved parties, but I think it's time to go public doing \"responsible disclosure\".\n                \n<h4>The purpose</h4>Working with preparing these posts I've asked myself repeatedly if I should go public with my findings or not.\n\nI'm still not entirely sure what the right answer is. What I do know is that <b>I want increased focus on web security</b> and that I feel a <a href=\"https://en.wikipedia.org/wiki/Social_responsibility\">social responsibility</a> to do so.\n\nThe purpose of posting these vulnerabilities is fivefold:\n - Make people aware that close to all their personal information is already in the hands of anyone who wants it.\n - I want computer security to be a (bigger) part of the IT education and training.\n - I want computer security to be a natural part of any developer's mindset.\n - I want businesses to know that there might be consequences of being sloppy with people's data.\n - Make your and my own data more safe.\n\n<b>Hopefully the issues presented on this site can be a small part of getting some kind of discussion on how to deal with computer security and personal data.</b>\n\n<h4>What I have done</h4>While looking for security vulnerabilities I have followed a few simple rules.\n\n<h5>What I have done:</h5> - Only looked at webapps (frontends and APIs) and mobile apps\n - Only looked at Norwegian services (though some are internationally available)\n - Immediately reported any security concerns and given reasonably time to fix any problems\n - Only spent minutes until I found some security hole or information leak\n\n<h5>What I have not done:</h5> - Not hid my identity:\n   - I have worked from my home IP\n   - When logged in I have used my own personal account\n   - I have not tried to fly under the radar in regards of staying out of logs etc.\n - Not looked for or used security holes in operating systems, app servers, networking equipment, etc.\n - Not interferred with the operation of the webapps or companies\n - Not altered or deleted any data\n - Not stored any personal data or even tried accessing anything beyond proving the weakness\n\n<h4>Information sensitivity</h4>The levels of the sensitivity in the information leaks I found vary. They go all the way from <i>\"Nah, I dont really care\"</i> to <i>\"0hly shit, this is not cool\"</i>. But I think they all represent some unique points in respect of vulnerabilities and in respect of type of personal information.\n\n<h4>Reponsible disclosure</h4>I'm all for <a href=\"https://en.wikipedia.org/wiki/Responsible_disclosure\">responsible disclosure</a> and have immediately reported my findings. Generally I'm not publishing any details the problem has been confirmed fixed. However, sadly, in some cases there's just no interest or response from the other party.\n\nIf you want more thoughts about responsible disclosure I would recommand reading <a href=\"https://www.troyhunt.com/kids-pass-just-reminded-us-how-hard-responsible-disclosure-is/\">Troy Hunt's site</a> (and maybe especially the video in that link).\n",
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Background article",
@@ -64,10 +64,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -106,10 +106,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -149,10 +149,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -187,10 +187,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Smart home",
-                    "url": "/smart-home"
-                },
+                    {
+                        "title": "Smart home",
+                        "url": "/smart-home"
+                    },
                 "tags": [
                     {
                         "title": "HDL Buspro",
@@ -212,10 +212,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -273,10 +273,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -311,10 +311,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 "text": "<h4>tl;dr</h4>I've uploaded all the HTML files from a Norwegian Internet Service Provider's Internet demo diskette so you can (almost) surf like it's 1995.\n\n<h4>Background</h4><img style=\"float:left;width:400px;margin-right:20px;\" class=\"materialboxed responsive-img\" title=\"The diskette containing the browser and demo pages.\" data-caption=\"The diskette containing the browser and demo pages.\" src=\"/images/floppy02.jpg\">\nBack in 1995 - one year before I tried the Internet for the first time, and two years before I got Internet access at home - my mother brought me this floppy disk from work. She thought I might be interested in checking it out. <b>It was a demo of the Internet!</b>\n\nI didn't really know what the <a href=\"https://en.wikipedia.org/wiki/World_Wide_Web\">World Wide Web</a> was about. The diskette contained the web browser <a href=\"https://en.wikipedia.org/wiki/Mosaic_(web_browser)\">Mosaic</a>. And it actually gave a feel of what the Internet was like.\n\n<h4>Demo</h4>Below is the demo itself. It's nice to see the HTML pages still working the same 22 years later. You can also <a href=\"https://blog.roysolberg.com/stuff/sol/initial.htm\">open demo in full screen</a>.\n<input type=\"button\" value=\" < \" onclick=\"window.parent.frames[1].history.back()\"/> <input type=\"button\" value=\" > \" onclick=\"window.parent.frames[1].history.forward()\"/>\n<iframe style=\"margin: none;padding: none;border:1px solid #000;line-height: 0;\" src=\"https://blog.roysolberg.com/stuff/sol/initial.htm\" width=\"600\" height=\"600\" />\n\n<h4>First lines of HTML</h4>When I tried the demo disk I remember being curious about how those pages worked. I found the source code and from there I wrote my first lines of HTML. It was pretty cool to see how the markup was rendered in the browser from the floppy disk. Little did I know I would code web pages for a living 10 years later. :)\n\n<h4>References</h4>- <a href=\"https://www.nrk.no/trondelag/hun-lanserte-internett-i-norge-1.11078996\">– Folk syntes internett var for raringer</a>\n- <a href=\"http://www.oslo.net/historie/CW/utg/9510/cw951033.html\">\"Scandinavia online\" på lufta</a>\n",
                 "images": ["/images/floppy01.jpg", "/images/floppy02.jpg"],
                 "category":
-                {
-                    "title": "Internet archive",
-                    "url": "/internet-archive"
-                },
+                    {
+                        "title": "Internet archive",
+                        "url": "/internet-archive"
+                    },
                 "tags": [
                     {
                         "title": "1990s",
@@ -337,10 +337,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -379,10 +379,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -430,10 +430,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -479,10 +479,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 "images": [],
                 "links": [],
                 "category":
-                {
-                    "title": "Software development",
-                    "url": "/software-development"
-                },
+                    {
+                        "title": "Software development",
+                        "url": "/software-development"
+                    },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -513,10 +513,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -551,10 +551,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -594,10 +594,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -624,10 +624,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -662,10 +662,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 "images": ["/images/security.png"],
                 "links": [],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "security.txt",
@@ -688,10 +688,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -718,10 +718,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -748,10 +748,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -780,10 +780,38 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 "text": "<h4>tl;dr</h4>Try to \"hack\" <a href=\"https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site\">https://ra.gl/</a> . You can see the rules and goal on that site.\n\n<h4>Hack my site</h4>I give a few talks every year. The last years I've mostly talked about different mobile development topics, but because of this blog I have recently had the opportunity to talk about web application security.\n\nLast week I gave a talk at <a href=\"http://gdgbergen.no\">Google Developer Group Bergen, Norway</a>. The talk was about <a href=\"https://www.meetup.com/GDGBergen/events/245558721/\">hacking web apps</a>.\n\nAfter the talk itself we had a session with some hands-on \"hacking\" of a web app. For this I had created a web site that had intentional \"security vulnerabilities\".\n\n<h4>The goal</h4><b>The goal of the assignment is simple: Just log in on the administrator page at <a href=\"https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site\">ra.gl</a> and get hold of your unique keyword that proves your accomplishment.</b>\n\n<h4>The rules</h4>I have some rules so that the site isn't ruined completely. It is after all hosted in a shared hosting environment and I don't want anyone else harmed.\n\n<h5>Please stay away from doing this:</h5>- DOS attacks\n- Port scanning\n- Attacks on any other sites or domains hosted on the same server\n- Attacks on network infrastructure\n- Attacks on server software (OS, app server, programming frameworks)\n- Any interference or attacks on the web host company\n- Anything you think might not be okay\n\n<h5>Please do this:</h5>- Try to find any logical errors and/or information leaks in the web pages within this domains\n\n<h4>The tools</h4><b>You don't really need anything else then your <a href=\"https://en.wikipedia.org/wiki/Web_development_tools\">browser's development tools</a>.</b> Personally I like to frequently use its <i>\"Copy as <a href=\"https://curl.haxx.se/\">cURL</a>\"</i> menu option and tweak the HTTP requests in a simple text editor.\n\n<h4>The vulnerabilities</h4>The security vulnerabilities are the typical ones that <a href=\"http://blog.roysolberg.com/tag/security-monday\">I have found and presented on my blog</a>. I you have read some of those posts you might have some clues on what it could be.\n\nIt's isn't a very hard task to break in. But that is actually part of the point. There are some many weaknesses with so many web apps today. With some knowledge and open eyes you can get far. If you are able to hit gold all the way you can solve it within some minutes, but most people seem to need more time.\n\n<h4>Happy hacking!</h4>I hope you enjoy this small assignment! Don't hesitate to give me feedback or if you have any ideas for improvements or other cool stuff that should be included. :-)\n\n<a href=\"https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site\">Start hacking!</a>\n",
                 "images": ["/images/ra.gl.png"],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                }
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    }
+            },
+            {
+                "title": "Guide: How to crack Android apps",
+                "published": true,
+                "publishDate": "2018-02-09T20:40:00.000Z",
+                "summary": "Learn how to reverse engineer Android apps, alter them, and put them back together.",
+                "niceUrl": "/2018/02/crack-android-apps",
+                "text": "<h4>tl;dr</h4>This tutorial for how to crack Android apps is one of my more technical posts. If you aren't a developer you might want to skip this one. :) I'm assuming some basic knowledge of UN*X, Java and Android.\n\n<h4>Why crack an app?</h4>Sometimes I like to check if online services I use really are secure. <a href=\"/category/security\">I've presented quite a few cases to prove that they very often are not.</a> Mostly I can use very simple techniques to check the security as there are so many basic security vulnerabilities out there. When it comes to apps I often use a HTTP proxy like <a href=\"https://www.charlesproxy.com/\">Charles</a> to take a look at the HTTP and HTTPS traffic. However, <b>once in a while there are apps that use e.g. <a href=\"https://en.wikipedia.org/wiki/HTTP_tunnel\">HTTP tunneling</a> or <a href=\"https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning\">certificate pinning</a>. In those cases you need to go one step further to be able to listen to the network traffic.</b>\n\nOther reasons to decompile apps could be to recover lost source code, to inject language translations or even fix a bug. But hey, remember, don't do anything you are not allowed to. Don't break the law. This guide is just for educational purposes when you have legitimate reasons to do what you do.\n\n<h4>Contents</h4>These are the topics that I'll cover.\n\n- Online alternatives\n- Getting the tools\n- Getting the APK\n- Decompiling the app\n- Altering the app\n- Getting the app back together\n\n<h4>Online alternatives</h4><b>Very often you don't have to get your hands too dirty getting the hands of a decompiled app. There are some good services out there that can provide you with most Android APKs, and then even some to decompile them.</b>\n\n<h5>Online APK archives</h5>To get hold of an APK you can typically just google the package name. There are quite a few sites where to download them from. Some are more frequently updated and others. Note that you can get hold of different versions and the APK for different architectual platforms.\n\nA word of wisdom: <b>Don't download and run some random APK out there (at least do it in a sandboxed and/or emulated environment). There's quite a few sites that serves bogus or altered APKs. The app might look allright, but still have some malware injected. Don't blindly trust the ones that I recommend either.</b> If the APK is signed with the same key as an APK that you got from Play Store you should be able to trust its origin (though there have been cases of private keys in the wild (even repackaged APKs uploaded to the vendor's own web site)).\n\nHere's a few you might want to try out:\n - <a href=\"https://apkmirror.com\">APKMirror</a>\n - <a href=\"https://apkpure.com/\">APKPure</a>\n - <a href=\"https://www.apkmonk.com/\">APKMonk</a>\n\n<h5>Online decompiler</h5>The quickest and easiest way to decompile an APK is to just use an online service. You just upload the APK and get an archive with all the resource and decompiled files. <b><a href=\"http://www.javadecompilers.com/apk\">javadecompilers.com</a> is the one I have used, and I have been pretty happy with it.</b>\n\nAs you might know, the <a href=\"https://en.wikipedia.org/wiki/Android_application_package\">APK file is really just a ZIP file</a>, so you can typically just rename it to <span class=\"code\">.zip</span> and double click it or run <span class=\"code\">unzip</span> and you can start investigating the app. If it's a <a href=\"https://en.wikipedia.org/wiki/Web_application#Definition_and_similar_terms\">hybrid app</a> you might not have to decompile it at all to get access to everything. Actually, the <a href=\"/2017/10/tracking-kids\">Gator Watch app</a> was a hybrid app and gave away everything with little effort.\n\n<h4>Getting the tools</h4><h5>Android - SDK, tools and emulators</h5>You need to have at least the Android tools and SDK, but <b>for most people I would recommend <a href=\"https://developer.android.com/studio/index.html\">to just install Android Studio</a></b> and follow the instructions to set it up as normal (but skip stuff like the SDK for Android TV and other stuff that will slow down your download).\n\n<h5>Apktool - disassembling and reassembling APKs</h5><a href=\"https://ibotpeaches.github.io/Apktool/install/\">Apktool can be installed manually</a>, or if it's available via your package manager you can just install it using a command like <span class=\"code\">apt-get install apktool</span>.\n\n<h4>Getting the APK</h4>The first step of the reverse engineering is to get hold of the APK. I'll use my own Android app <a href=\"https://play.google.com/store/apps/details?id=com.roysolberg.android.developertools\">Developer Tools</a> as an example app. It's open source and if you want you can <a href=\"https://github.com/roys/java-android-developertools\">get the source code and APKs from GitHub</a>.\n\nThe command-line tool <a href=\"https://developer.android.com/studio/command-line/adb.html\">adb (Android Debug Bridge)</a> is used for all communication with the device or emulator. You can find the tool in the Android's installation folder <span class=\"code\">platform-tools</span>.\n\n<pre class=\"prettyprint lang-bsh\"> $ # Lists all packages:\n $ adb shell pm list packages\n &lt;loong list of apps /&gt;\n\n $ # Simple way of searching for packages:\n $ adb shell pm list packages |grep roysolberg\n package:com.roysolberg.android.smarthome\n package:com.roysolberg.android.datacounter\n package:com.roysolberg.android.developertools\n\n $ # Get the path of a package:\n $ adb shell pm path com.roysolberg.android.developertools\n package:/data/app/com.roysolberg.android.developertools-1/base.apk\n\n $ # Get hold of the APK actual APK file:\n $ adb pull /data/app/com.roysolberg.android.developertools-1/base.apk\n /data/app/com.roysolberg.android.developertools-...file pulled. 25.2 MB/s (2035934 bytes in 0.077s)</pre>\n<h4>Decoding the APK</h4>The next step is to unzip and decompile the APK. Apktool does this for us.\n <pre class=\"prettyprint lang-bsh\"> $ # Decode the pulled APK into a directory named base:\n $ apktool decode base.apk\n \n $ # d works as an alias for decode:\n $ apktool d base.apk\n</pre>\n<h4>Altering the app</h4>This is where the hard work starts. <b>The resource files are now fully readable, but the code is now in the <a href=\"https://github.com/JesusFreke/smali\">smali format</a>.</b> You can think of smali as a sort of assembly language.\n\nAs an example we'll first change the language string <span class=\"code\">app_name</span> to <span class=\"code\">Hacker Tools</span>.\n<pre class=\"prettyprint lang-bsh\"> $ # Edit the main language file:\n $ vi base/res/values/strings.xml\n</pre>\nThen we'll change some hard coded text so that we have changed both resources and actual code.\n<pre class=\"prettyprint lang-bsh\"> $ # Search for file we want to change:\n $ grep -nr 'originally' base/smali\n base/smali/com/roysolberg/android/developertools/ui/activity/MainActivity.smali:651:    const-string v4, \"This app was originally just created for myself to make some developement tasks a bit easier. I've released it to Play Store hoping that someone else might find it useful.\\n\\nIf you want to get in touch me, please send me a mail at dev-null@example.com.\\n\\nPlease note that I take no credit for the third party apps.\"\n\n $ # Edit the smali file and change the string value:\n $ vi base/smali/com/roysolberg/android/developertools/ui/activity/MainActivity.smali\n</pre>\n\n<h4>Getting the app back together</h4>There are quite a few steps getting everything together. <b>We need to rebuild the app, sign it, zipalign it, and then install it.</b> If the properly signed app is still installed it needs to first be uninstalled as our signature violates the existing one.\n\nThe command-line tool <a href=\"https://developer.android.com/studio/command-line/zipalign.html\">zipalign</a> is needed to align the contents of the APK for Android to be able to run it. You can find the tool in the Android's installation folder <span class=\"code\">build-tools/&lt;some version number&gt;</span>.\n<pre class=\"prettyprint lang-bsh\"> $ # First build a new APK with the changes:\n $ apktool build base -o base.unaligned.apk\n\n $ # Sign the app using the Android debug certificate generated from Android Studio installation:\n $ jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore ~/.android/debug.keystore -storepass android base.unaligned.apk androiddebugkey\n \n $ # Align APK:\n $ zipalign -v 4 base.unaligned.apk base.aligned.apk\n\n $ # If original app (with different signature) is installed it must be uninstalled:\n $ adb uninstall com.roysolberg.android.developertools\n Success\n\n $ # Final step is to install the newly altered app (-r for reinstall (keeping the app's data)):\n $ adb install -r base.aligned.apk\n Success\n\n $ # To keep an eye on the log and what's going on you can use logcat:\n $ adb logcat\n</pre>\n<b>That's it! :-)</b>\n\n<h4>A few addtional tips</h4><h5>Reading smali</h5>It might take a little bit of getting used to, but reading smali isn't all too bad. If you have any concrete problems you'll find the answer with some googling. But <b>a good tip is to create some small very simple Java classes yourself and check out what they look like in the smali format.</b>\n\nIf you are having trouble navigating the smali code and understand the flow of an app you can use the following smali code. It will call <a href=\"https://developer.android.com/reference/java/lang/Thread.html#dumpStack()\"><span class=\"code\">Thread.dumpStack()</span></a> which logs the current thread's call stack.\n<pre class=\"prettyprint lang-bsh\"> invoke-static {}, Ljava/lang/Thread;->dumpStack()V</pre>\n<h5>jadx - Dex to Java decompiler</h5><b><a href=\"https://github.com/skylot/jadx\">jadx</a> is a command-line and GUI tool for converting <a href=\"https://source.android.com/devices/tech/dalvik/dex-format\">dex</a> to Java.</b> Reading Java is after all easier than reading the smali format.\n\n<h5>Proguard</h5>Very often - but no in the case of my Developer Tools app - the code will be shrinked and obfuscated using <a href=\"https://developer.android.com/studio/build/shrink-code.html\">ProGuard</a>. This makes the code a lot harder do read and understand. There aren't really any good ways around it, but doing the thread dump trick and taking your time to follow the code will eventually get you where you want to be.\n\n<h4>Wrapping it up</h4><img style=\"float:left;width:550px;margin-right:20px;\" class=\"materialboxed responsive-img\" title=\"The regular Developer Tools app on the left and the cracked one on the right.\" data-caption=\"The regular Developer Tools app on the left and the cracked one on the right.\" alt=\"The regular Developer Tools app on the left and the cracked one on the right.\" src=\"/images/cracked_app.jpg\"/>If you have followed along the guide you would see the app change from the version on the left to something like the one on the right. One of the reasons I wrote this guide was for my own sake to have something to easily copy and paste from when doing some reverse engineering myself, but I thought this might be useful one for others as well. :)",
+                "images": ["/images/cracked_app.jpg"],
+                "category":
+                    {
+                        "title": "Software development",
+                        "url": "/software-development"
+                    },
+                "tags": [
+                    {
+                        "title": "Reverse engineering",
+                        "url": "/reverse-engineering"
+                    },
+                    {
+                        "title": "Cracking",
+                        "url": "/cracking"
+                    },
+                    {
+                        "title": "Android",
+                        "url": "/android"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
