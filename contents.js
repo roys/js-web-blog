@@ -39,10 +39,10 @@ While one might argue that Knockout is beyond its prime time, it sure works grea
 `,
                 "images": ["/images/knockout-js_dead.png"],
                 "category":
-                {
-                    "title": "Software development",
-                    "url": "/software-development"
-                },
+                    {
+                        "title": "Software development",
+                        "url": "/software-development"
+                    },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -99,10 +99,10 @@ The purpose of posting these vulnerabilities is fivefold:
 If you want more thoughts about responsible disclosure I would recommand reading <a href="https://www.troyhunt.com/kids-pass-just-reminded-us-how-hard-responsible-disclosure-is/">Troy Hunt's site</a> (and maybe especially the video in that link).
 `,
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Background article",
@@ -233,10 +233,10 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -353,10 +353,10 @@ curl 'https://example.com/UpdateTask' \\
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -467,10 +467,10 @@ The first URL apparently returned the number of unpaid invoices you have. Not so
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -543,10 +543,10 @@ For the ones of you trusting on your local network security I want to quote a gr
                     }
                 ],
                 "category":
-                {
-                    "title": "Smart home",
-                    "url": "/smart-home"
-                },
+                    {
+                        "title": "Smart home",
+                        "url": "/smart-home"
+                    },
                 "tags": [
                     {
                         "title": "HDL Buspro",
@@ -648,10 +648,10 @@ This is only speculation as I didn't look further after finding the file inclusi
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -711,10 +711,10 @@ Secondly the different social media sites need to start doing what Google has be
 `,
                 "images": ["/images/linkedin_preview.png"],
                 "category":
-                {
-                    "title": "Software development",
-                    "url": "/software-development"
-                },
+                    {
+                        "title": "Software development",
+                        "url": "/software-development"
+                    },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -815,10 +815,10 @@ I feel confident that this issue would've been discovered relatively quickly by 
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -868,10 +868,10 @@ I didn't really know what the <a href="https://en.wikipedia.org/wiki/World_Wide_
 `,
                 "images": ["/images/floppy01.jpg", "/images/floppy02.jpg"],
                 "category":
-                {
-                    "title": "Internet archive",
-                    "url": "/internet-archive"
-                },
+                    {
+                        "title": "Internet archive",
+                        "url": "/internet-archive"
+                    },
                 "tags": [
                     {
                         "title": "1990s",
@@ -972,10 +972,10 @@ If companies choose to store images like in this case, they should indeed mentio
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1097,10 +1097,10 @@ And to start connecting the dots between the cases I'm representing; <b>do you r
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1239,10 +1239,10 @@ From public financial information I see that they have had 1-2 million USD in an
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1304,10 +1304,10 @@ Oh, and the name? Since this game is all about <a href="https://en.wikipedia.org
                 "images": [],
                 "links": [],
                 "category":
-                {
-                    "title": "Software development",
-                    "url": "/software-development"
-                },
+                    {
+                        "title": "Software development",
+                        "url": "/software-development"
+                    },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -1452,10 +1452,10 @@ I also hope that we'll soon see most websites switch to secure communications on
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1591,10 +1591,10 @@ However, in this case there seems to be a big lack of understanding how to - and
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1762,10 +1762,10 @@ For those of you wanting to go even deeper I would recommend the solid <a href="
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1919,10 +1919,10 @@ While I understand that not everybody has the flexible server environments like 
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1995,10 +1995,10 @@ Acknowledgement: https://example.com/security-hall-of-fame.html</pre>
                 "images": ["/images/security.png"],
                 "links": [],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "security.txt",
@@ -2094,10 +2094,10 @@ I don't like when it takes more than 3 months to fix something that seemingly is
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -2626,10 +2626,10 @@ In the table below I've marked the the cases in which there are some overlapping
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -2738,10 +2738,10 @@ And with the mentioned other kindergarten system with vulnerabilities, and <a hr
                     }
                 ],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                },
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -2801,88 +2801,148 @@ It's isn't a very hard task to break in. But that is actually part of the point.
 `,
                 "images": ["/images/ra.gl.png"],
                 "category":
-                {
-                    "title": "Security",
-                    "url": "/security"
-                }
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    }
             },
             {
                 "title": "Guide: How to crack Android apps",
-                "published": false,
-                "publishDate": "2018-02-28T22:10:00.000Z",
+                "published": true,
+                "publishDate": "2018-02-09T21:40:00.000Z",
                 "summary": "Learn how to reverse engineer Android apps, alter them, and put them back together.",
                 "niceUrl": "/2018/02/crack-android-apps",
-                "text": `<h4>tl;dr</h4>This tutorial for how to crack Android apps is one of my more technical posts. If you aren't a developer you might want to skip this one. :) I'm assuming some basic knowledge of UN*X, Android and Java.
+                "text": `<h4>tl;dr</h4>This tutorial for how to crack Android apps is one of my more technical posts. If you aren't a developer you might want to skip this one. :) I'm assuming some basic knowledge of UN*X, Java and Android.
 
-<h4>Why crack an app?</h4>Sometimes I like to check if online services I use really are secure. <a href="/category/security">I've shown quite a few cases to prove that they very often are not.</a> Mostly I can use very simple techniques to check the security as there are so many basic security vulnerabilities out there. When it comes to apps I often use a HTTP proxy like <a href="https://www.charlesproxy.com/">Charles</a> to take a look at the HTTP and HTTPS traffic. However, <b>once in a while there are apps that use e.g. <a href="https://en.wikipedia.org/wiki/HTTP_tunnel">HTTP tunneling</a> or <a href="https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning">certificate pinning</a>. In those cases you need to go one step further to be able to listen to the network traffic.</b>
+<h4>Why crack an app?</h4>Sometimes I like to check if online services I use really are secure. <a href="/category/security">I've presented quite a few cases to prove that they very often are not.</a> Mostly I can use very simple techniques to check the security as there are so many basic security vulnerabilities out there. When it comes to apps I often use a HTTP proxy like <a href="https://www.charlesproxy.com/">Charles</a> to take a look at the HTTP and HTTPS traffic. However, <b>once in a while there are apps that use e.g. <a href="https://en.wikipedia.org/wiki/HTTP_tunnel">HTTP tunneling</a> or <a href="https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning">certificate pinning</a>. In those cases you need to go one step further to be able to listen to the network traffic.</b>
 
-Other reasons to decompile apps could be to recover lost source code, to inject language translations or even fix a bug. But hey, remember, don't do anything you are not allowed to. Don't break the law. This guide is just for educational purposes when you have legal reasons to do what you do.
+Other reasons to decompile apps could be to recover lost source code, to inject language translations or even fix a bug. But hey, remember, don't do anything you are not allowed to. Don't break the law. This guide is just for educational purposes when you have legitimate reasons to do what you do.
 
-<h4>Contents</h4>These are the topics that I'll cover. You may skip the ones that are marked as optional.
+<h4>Contents</h4>These are the topics that I'll cover.
 
 - Online alternatives
-- Setting up an environment (optional)
 - Getting the tools
-- My painful start (optional)
 - Getting the APK
 - Decompiling the app
-- Making sense of the source code
-- Changing the app
-- Repackaging and replacing the app
+- Altering the app
+- Getting the app back together
 
-<h4>Online alternatives</h4><b>Very often you don't have to get your hands too dirty getting the hands of a decompiled app. There are some good services out there that can provide you with most Android APKs.</b>
+<h4>Online alternatives</h4><b>Very often you don't have to get your hands too dirty getting the hands of a decompiled app. There are some good services out there that can provide you with most Android APKs, and then even some to decompile them.</b>
 
-<h5>Online APK archives</h5>To get hold of an APK you can typically just google the package name. There's quite a few sites where to download them from. Some are more frequently updated and others. Note that you can get hold of different versions and the APK for different architectual platforms.
+<h5>Online APK archives</h5>To get hold of an APK you can typically just google the package name. There are quite a few sites where to download them from. Some are more frequently updated and others. Note that you can get hold of different versions and the APK for different architectual platforms.
 
-A word of wisdom: Don't download and run some random APK out there (at least do it in a sandboxed and/or emulated environment). There's quite a few sites that serves fake APKs or APKs that is some sort of downloader for the original one. The app might look allright, but still have some malware injected. Don't blindly trust the ones that I recommend either. If the APK is signed with the same key as an APK that you got from Play Store you should be able to trust its origin (though there have been cases of private keys in the wild (even repackaged APK uploaded to the vendor's own web site)).
+A word of wisdom: <b>Don't download and run some random APK out there (at least do it in a sandboxed and/or emulated environment). There's quite a few sites that serves bogus or altered APKs. The app might look allright, but still have some malware injected. Don't blindly trust the ones that I recommend either.</b> If the APK is signed with the same key as an APK that you got from Play Store you should be able to trust its origin (though there have been cases of private keys in the wild (even repackaged APKs uploaded to the vendor's own web site)).
 
+Here's a few you might want to try out:
  - <a href="https://apkmirror.com">APKMirror</a>
  - <a href="https://apkpure.com/">APKPure</a>
  - <a href="https://www.apkmonk.com/">APKMonk</a>
 
-<h5>Online decompiler</h5>The quickest and easiest way to decompile an APK is to just use an online service. You just upload the APK and get an archive with all the resource and decompiled files. <a href="http://www.javadecompilers.com/apk">javadecompilers.com</a> is the one I have used, and I have been pretty happy with it.
+<h5>Online decompiler</h5>The quickest and easiest way to decompile an APK is to just use an online service. You just upload the APK and get an archive with all the resource and decompiled files. <b><a href="http://www.javadecompilers.com/apk">javadecompilers.com</a> is the one I have used, and I have been pretty happy with it.</b>
 
-As you might know, the <a href="https://en.wikipedia.org/wiki/Android_application_package">APK file is really just a ZIP file</a>, so you can typically just rename it to <span class="code">.zip</span> and double click it or run <span class="code">unzip</span> and you can start investigating the app. If it's a <a href="https://en.wikipedia.org/wiki/Web_application#Definition_and_similar_terms">hybrid app</a> you might not have to decompile it at all to get access to everything.
+As you might know, the <a href="https://en.wikipedia.org/wiki/Android_application_package">APK file is really just a ZIP file</a>, so you can typically just rename it to <span class="code">.zip</span> and double click it or run <span class="code">unzip</span> and you can start investigating the app. If it's a <a href="https://en.wikipedia.org/wiki/Web_application#Definition_and_similar_terms">hybrid app</a> you might not have to decompile it at all to get access to everything. Actually, the <a href="/2017/10/tracking-kids">Gator Watch app</a> was a hybrid app and gave away everything with little effort.
 
-<h4>Setting up an environment</h4><h6>(optional)</h6>You don't need to set up your own environment to do some cracking of a few APKs. However, if you either don't fully trust the tools or don't want to clutter up your computer with the Android SDK etc. it can be nice to run everything in a separate computer or virtual machine.
+<h4>Getting the tools</h4><h5>Android - SDK, tools and emulators</h5>You need to have at least the Android tools and SDK, but <b>for most people I would recommend <a href="https://developer.android.com/studio/index.html">to just install Android Studio</a></b> and follow the instructions to set it up as normal (but skip stuff like the SDK for Android TV and other stuff that will slow down your download).
 
-You really want a 64-bit environment or else you might end up hitting too many hurdles. Working with security in general it can be nice to use a distro like <a href="https://www.kali.org/">Kali Linux</a>. There are <a href="https://www.kali.org/downloads/">complete images</a> that you can download and either run on a USB stick, do a full normal install, or using a virtual machine for e.g. <a href="https://www.vmware.com/">VMware</a>, <a href="https://www.virtualbox.org/">VirtualBox</a> or <a href="http://www.microsoft.com/hyper-v">Hyper-V</a>. Personally I mostly use VirtualBox when using a virtual environment.
+<h5>Apktool - disassembling and reassembling APKs</h5><a href="https://ibotpeaches.github.io/Apktool/install/">Apktool can be installed manually</a>, or if it's available via your package manager you can just install it using a command like <span class="code">apt-get install apktool</span>.
 
-<h4>Getting the tools</h4><h5>Android - SDK, tools and emulators</h5>You need to have at least the Android tools and SDK, but for most people I would recommend <a href="https://developer.android.com/studio/index.html">to just install Android Studio</a> and follow the instructions to set it up as normal (but skip stuff like the SDK for Android TV and other stuff that will slow down your download).
+<h4>Getting the APK</h4>The first step of the reverse engineering is to get hold of the APK. I'll use my own Android app <a href="https://play.google.com/store/apps/details?id=com.roysolberg.android.developertools">Developer Tools</a> as an example app. It's open source and if you want you can <a href="https://github.com/roys/java-android-developertools">get the source code and APKs from GitHub</a>.
 
-<h5>Apktool - disassembling and reassembling APKs</h5><a href="https://ibotpeaches.github.io/Apktool/install/">Apktool can be installed manually</a>, or if its available via your package manager you can just install it using the command <span class="code">apt-get install apktool</span>.
+The command-line tool <a href="https://developer.android.com/studio/command-line/adb.html">adb (Android Debug Bridge)</a> is used for all communication with the device or emulator. You can find the tool in the Android's installation folder <span class="code">platform-tools</span>.
 
-<h5>Getting the APK</h5>The first step of the reverse engeineering is to get hold of the APK. I'll use my own Android app <a href="https://play.google.com/store/apps/details?id=com.roysolberg.android.developertools">Developer Tools</a> as an example app. It's open source and if you want you <a href="https://github.com/roys/java-android-developertools">get the source code and APKs from GitHub</a>.
+<pre class="prettyprint lang-bsh"> $ # Lists all packages:
+ $ adb shell pm list packages
+ &lt;loong list of apps /&gt;
 
-The command-line tool <a href="https://developer.android.com/studio/command-line/adb.html">adb (Android Debug Bridge)</a> is used for all communication with the device or emulator. You can find the tool in the Android's installation folder <span class="code">Android/Sdk/platform-tools</span>.
+ $ # Simple way of searching for packages:
+ $ adb shell pm list packages |grep roysolberg
+ package:com.roysolberg.android.smarthome
+ package:com.roysolberg.android.datacounter
+ package:com.roysolberg.android.developertools
 
-<pre class="prettyprint lang-bsh">&gt; # Lists all packages:
-&gt; adb shell pm list packages
-&lt;loong list of apps /&gt;
+ $ # Get the path of a package:
+ $ adb shell pm path com.roysolberg.android.developertools
+ package:/data/app/com.roysolberg.android.developertools-1/base.apk
 
-&gt; # Simple way of searching for packages:
-&gt; adb shell pm list packages |grep roysolberg
-package:com.roysolberg.android.smarthome
-package:com.roysolberg.android.datacounter
-package:com.roysolberg.android.developertools
+ $ # Get hold of the APK actual APK file:
+ $ adb pull /data/app/com.roysolberg.android.developertools-1/base.apk
+ /data/app/com.roysolberg.android.developertools-...file pulled. 25.2 MB/s (2035934 bytes in 0.077s)</pre>
+<h4>Decoding the APK</h4>The next step is to unzip and decompile the APK. Apktool does this for us.
+ <pre class="prettyprint lang-bsh"> $ # Decode the pulled APK into a directory named base:
+ $ apktool decode base.apk
+ 
+ $ # d works as an alias for decode:
+ $ apktool d base.apk
+</pre>
+<h4>Altering the app</h4>This is where the hard work starts. <b>The resource files are now fully readable, but the code is now in the <a href="https://github.com/JesusFreke/smali">smali format</a>.</b> You can think of smali as a sort of assembly language.
 
-&gt; # Get the path of a package:
-&gt; adb shell pm path com.roysolberg.android.developertools
-package:/data/app/com.roysolberg.android.developertools-1/base.apk
+As an example we'll first change the language string <span class="code">app_name</span> to <span class="code">Hacker Tools</span>.
+<pre class="prettyprint lang-bsh"> $ # Edit the main language file:
+ $ vi base/res/values/strings.xml
+</pre>
+Then we'll change some hard coded text so that we have changed both resources and actual code.
+<pre class="prettyprint lang-bsh"> $ # Search for file we want to change:
+ $ grep -nr 'originally' base/smali
+ base/smali/com/roysolberg/android/developertools/ui/activity/MainActivity.smali:651:    const-string v4, "This app was originally just created for myself to make some developement tasks a bit easier. I\'ve released it to Play Store hoping that someone else might find it useful.\\n\\nIf you want to get in touch me, please send me a mail at dev-null@example.com.\\n\\nPlease note that I take no credit for the third party apps."
 
-&gt; # Get hold of the APK actual APK file:
-&gt; adb pull /data/app/com.roysolberg.android.developertools-1/base.apk
-/data/app/com.roysolberg.android.developertools-...file pulled. 25.2 MB/s (2035934 bytes in 0.077s)</pre>
+ $ # Edit the smali file and change the string value:
+ $ vi base/smali/com/roysolberg/android/developertools/ui/activity/MainActivity.smali
+</pre>
 
+<h4>Getting the app back together</h4>There are quite a few steps getting everything together. <b>We need to rebuild the app, sign it, zipalign it, and then install it.</b> If the properly signed app is still installed it needs to first be uninstalled as our signature violates the existing one.
 
-TODO: Continue here
-`,
-                "images": [],
+The command-line tool <a href="https://developer.android.com/studio/command-line/zipalign.html">zipalign</a> is needed to align the contents of the APK for Android to be able to run it. You can find the tool in the Android's installation folder <span class="code">build-tools/&lt;some version number&gt;</span>.
+<pre class="prettyprint lang-bsh"> $ # First build a new APK with the changes:
+ $ apktool build base -o base.unaligned.apk
+
+ $ # Sign the app using the Android debug certificate generated from Android Studio installation:
+ $ jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore ~/.android/debug.keystore -storepass android base.unaligned.apk androiddebugkey
+ 
+ $ # Align APK:
+ $ zipalign -v 4 base.unaligned.apk base.aligned.apk
+
+ $ # If original app (with different signature) is installed it must be uninstalled:
+ $ adb uninstall com.roysolberg.android.developertools
+ Success
+
+ $ # Final step is to install the newly altered app (-r for reinstall (keeping the app's data)):
+ $ adb install -r base.aligned.apk
+ Success
+
+ $ # To keep an eye on the log and what's going on you can use logcat:
+ $ adb logcat
+</pre>
+<b>That's it! :-)</b>
+
+<h4>A few addtional tips</h4><h5>Reading smali</h5>It might take a little bit of getting used to, but reading smali isn't all too bad. If you have any concrete problems you'll find the answer with some googling. But <b>a good tip is to create some small very simple Java classes yourself and check out what they look like in the smali format.</b>
+
+If you are having trouble navigating the smali code and understand the flow of an app you can use the following smali code. It will call <a href="https://developer.android.com/reference/java/lang/Thread.html#dumpStack()"><span class="code">Thread.dumpStack()</span></a> which logs the current thread's call stack.
+<pre class="prettyprint lang-bsh"> invoke-static {}, Ljava/lang/Thread;->dumpStack()V</pre>
+<h5>jadx - Dex to Java decompiler</h5><b><a href="https://github.com/skylot/jadx">jadx</a> is a command-line and GUI tool for converting <a href="https://source.android.com/devices/tech/dalvik/dex-format">dex</a> to Java.</b> Reading Java is after all easier than reading the smali format.
+
+<h5>Proguard</h5>Very often - but no in the case of my Developer Tools app - the code will be shrinked and obfuscated using <a href="https://developer.android.com/studio/build/shrink-code.html">ProGuard</a>. This makes the code a lot harder do read and understand. There aren't really any good ways around it, but doing the thread dump trick and taking your time to follow the code will eventually get you where you want to be.
+
+<h4>Wrapping it up</h4><img style="float:left;width:550px;margin-right:20px;" class="materialboxed responsive-img" title="The regular Developer Tools app on the left and the cracked one on the right." data-caption="The regular Developer Tools app on the left and the cracked one on the right." alt="The regular Developer Tools app on the left and the cracked one on the right." src="/images/cracked_app.jpg"/>If you have followed along the guide you would see the app change from the version on the left to something like the one on the right. One of the reasons I wrote this guide was for my own sake to have something to easily copy and paste from when doing some reverse engineering myself, but I thought this might be useful one for others as well. :)`,
+                "images": ["/images/cracked_app.jpg"],
                 "category":
-                {
-                    "title": "Software development",
-                    "url": "/software-development"
-                }
+                    {
+                        "title": "Software development",
+                        "url": "/software-development"
+                    },
+                "tags": [
+                    {
+                        "title": "Reverse engineering",
+                        "url": "/reverse-engineering"
+                    },
+                    {
+                        "title": "Cracking",
+                        "url": "/cracking"
+                    },
+                    {
+                        "title": "Android",
+                        "url": "/android"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
