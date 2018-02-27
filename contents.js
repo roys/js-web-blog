@@ -113,6 +113,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
             {
                 "title": `Case #1: Get your Social Security numbers here!`,
                 "published": true,
+                "hot": true,
                 "publishDate": "2017-08-14T05:30:00.000Z",
                 "updateDate": "2017-08-17T16:50:00.000Z",
                 "summary": `Using only the plate number of a Norwegian car you can find the name, address, Social Security number, etc. of the owners.`,
@@ -729,6 +730,7 @@ Secondly the different social media sites need to start doing what Google has be
             {
                 "title": "Case #5: Tell me your bank account no. and I'll tell you how rich you are",
                 "published": true,
+                "hot": true,
                 "publishDate": "2017-09-11T05:00:00.000Z",
                 "summary": "I'm sure you expect your bank accounts to be safe from prying eyes. For a while other customers knowing my bank account number could check my account balance.",
                 "niceUrl": "/2017/09/skandiabanken-leak",
@@ -1621,6 +1623,7 @@ However, in this case there seems to be a big lack of understanding how to - and
             {
                 "title": "Case #11: Tracking tens of thousands of kids worldwide",
                 "published": true,
+                "hot": true,
                 "publishDate": "2017-10-18T12:55:00.000Z",
                 "updateDate": "2017-10-19T11:11:00.000Z",
                 "summary": "Tens of thousands - possibly several hundred thousands - of kids can be tracked via their Gator and Caref watches.",
