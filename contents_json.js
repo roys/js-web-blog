@@ -813,6 +813,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     {
                         "title": "Android",
                         "url": "/android"
+                    },
+                    {
+                        "title": "Guide",
+                        "url": "/guide"
                     }
                 ]
             }

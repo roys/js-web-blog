@@ -2944,6 +2944,10 @@ If you are having trouble navigating the smali code and understand the flow of a
                     {
                         "title": "Android",
                         "url": "/android"
+                    },
+                    {
+                        "title": "Guide",
+                        "url": "/guide"
                     }
                 ]
             }
