@@ -13,6 +13,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         self.tag = ko.observable();
         self.isTransitioning = ko.observable(true);
         self.pageNotFound = ko.observable(false);
+        self.numOfLatestPosts = ko.observable(3);
         self.changingUrl = false;
         self.commentsTimer;
         processCategoriesAndTags();
@@ -142,6 +143,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
 
         self.goToFrontpage = function () {
             if (self.changeUrl(null, 'My blog', '/')) {
+                self.numOfLatestPosts(3);
                 self.post(null);
                 self.tag(null);
                 self.category(null);

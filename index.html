@@ -17,7 +17,7 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/materialize.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/jqcloud.min.js"></script>
-  <script type="text/javascript" src="/js/app.js?v=3"></script>
+  <script type="text/javascript" src="/js/app.js?v=4"></script>
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({
@@ -177,7 +177,7 @@
   </footer>
   <script type="text/html" id="frontpage-template">
     <h4>Latest posts</h4>
-    <div class="flex-row row" data-bind="foreach: {data: posts.slice(0).reverse(), as: 'post'}">
+    <div class="flex-row row latest-posts" data-bind="foreach: {data: posts.slice(0).reverse().slice(0,numOfLatestPosts()), as: 'post'}">
       <!-- ko if: post.published -->
       <div class="flex-col col s12 m12 l6 xl4">
         <div class="card">
@@ -193,6 +193,7 @@
       </div>
       <!-- /ko -->
     </div>
+    <a href="#" data-bind="if: numOfLatestPosts() < posts.length, click: function(){ numOfLatestPosts(posts.length); }">Show all posts</a>
     <h4>Categories</h4>
     <div class="row">
       <div class="col s12 m6 l4">
