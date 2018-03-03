@@ -167,7 +167,7 @@
       <div class="container grey-text text-lighten-4">
         © 2017-2018 <a class="grey-text text-lighten-4" href="https://roysolberg.com/">Roy Solberg</a>
         <a class="grey-text text-lighten-4 right" href="/atom" title="Atom feed"><i class="icon-rss"></i></a>
-        <a class="grey-text text-lighten-4 right" href="https://www.google.com/recaptcha/mailhide/d?k=01Z_D2EadqicowX66pRky9dw==&amp;c=-v22ZSXTNUQpeb5RKgMrMG_vUW-tue2CWjehMf2S7HQ=" onclick="window.open('https://www.google.com/recaptcha/mailhide/d?k\x3d01Z_D2EadqicowX66pRky9dw\x3d\x3d\x26c\x3d-v22ZSXTNUQpeb5RKgMrMG_vUW-tue2CWjehMf2S7HQ\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Click to reveal the e-mail address"><i class="icon-mail-alt"></i></a>
+        <a class="grey-text text-lighten-4 right" href="https://www.google.com/recaptcha/mailhide/d?k=01Z_D2EadqicowX66pRky9dw==&amp;c=-v22ZSXTNUQpeb5RKgMrMG_vUW-tue2CWjehMf2S7HQ=" onclick="window.open('https://www.google.com/recaptcha/mailhide/d?k\x3d01Z_D2EadqicowX66pRky9dw\x3d\x3d\x26c\x3d-v22ZSXTNUQpeb5RKgMrMG_vUW-tue2CWjehMf2S7HQ\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Click to reveal my e-mail address"><i class="icon-mail-alt"></i></a>
         <a class="grey-text text-lighten-4 right" href="https://stackoverflow.com/users/467650/roy-solberg" title="Stack Overflow"><i class="icon-stackoverflow"></i></a>
         <a class="grey-text text-lighten-4 right" href="https://github.com/roys" title="GitHub"><i class="icon-github-circled"></i></a>
         <a class="grey-text text-lighten-4 right" href="https://linkedin.com/in/roysolberg" title="LinkedIn"><i class="icon-linkedin"></i></a>
@@ -211,29 +211,17 @@
       </div>
       <!-- /ko -->
     </div>
-    <h4>Categories</h4>
     <div class="row">
-      <div class="col s12 m6 l4">
+      <div class="col s12 m5 l4">
+        <h4>Categories</h4>
         <div class="collection" data-bind="foreach: {data: categories, as: 'category'}">
           <a href="#" class="collection-item" data-bind="attr: { href: category.url}, text: category.title, click: function(){$root.goToCategory(category)}">Category</a>
         </div>
       </div>
-    </div>
-    <!--
-    <div class="row" data-bind="foreach: {data: categories, as: 'category'}">
-      <div class="col s12 m3 l4">
-        <div class="card">
-          <div class="card-content waves-effect" data-bind="click: function(){$root.goToCategory(category)}">
-            <span class="card-title" data-bind="text: category.title"></span>
-          </div>
+      <div class="col s12 m7 l8">
+          <h4>Tags</h4>
+          <div id="tag-cloud" style="height:200px;"></div>
         </div>
-        <a href="#" data-bind="attr: { href: category.url}"></a>
-      </div>
-    </div>
-    -->
-    <h4>Tags</h4>
-    <div class="row">
-      <div id="tag-cloud" class="col s12 m8 l6" style="height:200px;"></div>
     </div>
   </script>
 
