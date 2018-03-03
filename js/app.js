@@ -142,7 +142,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         }
 
         self.goToFrontpage = function () {
-            if (self.changeUrl(null, 'My blog', '/')) {
+            if (self.changeUrl(null, 'Roy Solberg - blog.roysolberg.com', '/')) {
                 self.numOfLatestPosts(3);
                 self.post(null);
                 self.tag(null);
@@ -155,6 +155,17 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     colors: ['#01579B', '#0277BD', '#0288D1', '#039BE5', '#03A9F4', '#29B6F6', '#4FC3F7', '#81D4FA', '#B3E5FC'],//, '#E1F5FE'],
                     fontSize: ['36px', '33px', '30px', '27px', '24px', '21px', '18px', '15px', '12px']
                 });
+                $('.carousel').carousel({ duration: 200, fullWidth: false, dist: -100, indicators: true, noWrap: false });
+                if (self.frontpageTimer) {
+                    clearTimeout(self.frontpageTimer);
+                }
+                self.frontpageTimer = setTimeout(function nextCarouselImage() {
+                    var carousel = $('.carousel');
+                    if (carousel.length) {
+                        carousel.carousel('next');
+                        setTimeout(nextCarouselImage, 5000);
+                    }
+                }, 5000);
             }
         }
         self.goToPost = function (post) {

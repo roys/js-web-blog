@@ -15,9 +15,9 @@
   <script type="text/javascript" src="/contents_json.js?v=30"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/materialize.min.js"></script>
+  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/e6a5037/js/materialize.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/jqcloud.min.js"></script>
-  <script type="text/javascript" src="/js/app.js?v=4"></script>
+  <script type="text/javascript" src="/js/app.js?v=13"></script>
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({
@@ -222,6 +222,19 @@
           <h4>Tags</h4>
           <div id="tag-cloud" style="height:200px;"></div>
         </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <h4>Gallery</h4>
+        <p>Screenshots, illustrations and pictures from posts. Click on image to go to post.</p>
+        <div class="carousel" data-bind="foreach: {data: posts.slice(0).reverse(), as: 'post'}">
+          <!-- ko if: post.published && post.images -->
+            <!-- ko foreach: { data: post.images, as: 'image' }-->
+            <a class="carousel-item" href="#" data-bind="attr: { href: post.niceUrl}, click: function(){$root.goToPost(post)}"><img data-bind="attr: { src: image }"></a>
+            <!-- /ko -->
+          <!-- /ko -->
+        </div>
+      </div>
     </div>
   </script>
 

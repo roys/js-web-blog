@@ -47,6 +47,10 @@ ul {
 .card .card-title {
     font-size: 20px;
 }
+.carousel .carousel-item{
+    height: 350px;
+    width: 350px;
+}
 .page-footer {
     padding-top: 0px;
 }
