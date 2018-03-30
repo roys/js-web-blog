@@ -195,7 +195,7 @@ When I provided more details with an example Curl command for them to try I got 
 
 <h5>Day 186</h5>I'm publishing this post. So is this responsible disclosure? Yes, I tried hard to get an answer. But on the other hand, it seems to me that the involved parties don't think that this is a disclosure to begin with, and that it isn't a problem.
 
-<div style="background-color:#ffecb3;padding:10px 10px 15px 10px;" class=""><h4 id="udpate">Update</h4><h5>Day 187 - Tuesday - post publish day 1</h5>Tryg's user at Infotorg's service got closed (as far as I understand, after Tryg contacted Infotorg).
+<div style="background-color:#ffecb3;padding:10px 10px 15px 10px;" class=""><h4 id="update">Update</h4><h5>Day 187 - Tuesday - post publish day 1</h5>Tryg's user at Infotorg's service got closed (as far as I understand, after Tryg contacted Infotorg).
 
 <h5>Day 188 - Wednesday - post publish day 2</h5>Tryg reached out to me. They thanked for the help finding the issue, said they were sorry for it being there in the first place, and told me it had been resolved.
 
@@ -1625,7 +1625,7 @@ However, in this case there seems to be a big lack of understanding how to - and
                 "published": true,
                 "hot": true,
                 "publishDate": "2017-10-18T12:55:00.000Z",
-                "updateDate": "2017-10-19T11:11:00.000Z",
+                "updateDate": "2018-03-30T07:30:00.000Z",
                 "summary": "Tens of thousands - possibly several hundred thousands - of kids can be tracked via their Gator and Caref watches.",
                 "niceUrl": "/2017/10/tracking-kids",
                 "text": `<h4>tl;dr</h4><i>Gator Watch</i> - a GPS watch for kids - is leaking data in all ends and anyone on the Internet can live track your kid. We're not talking about a security vulnerability, we're talking about non-existing security.
@@ -1728,7 +1728,7 @@ What's more is that the app and server used an incremental integer as ID for the
 
 <h5>Android system log</h5>Being an Android developer I work most days with the phone's system log on the screen. What I didn't see until after I found out of everything, is that <b>the Gator app actually constantly logs the URL which you can just open in your browser and change the integer ID in and get the position of any child wearing the watch</b>.
 
-<img class="materialboxed responsive-img" title="The Gator app constantly prints out one of the vulernable URLs to the Android system log." data-caption="The Gator app constantly prints out one of the vulernable URLs to the Android system log." src="/images/gator04.png"/>
+<img class="materialboxed responsive-img" title="The Gator app constantly prints out one of the vulnerable URLs to the Android system log." data-caption="The Gator app constantly prints out one of the vulnerable URLs to the Android system log." src="/images/gator04.png"/>
 <h4>Security issues</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" data-caption="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" src="/images/gator03.png"/>The issues I saw were these:
 - <b>Anyone can easily track all Gator watches using a web browser</b>
 - <b>Anyone can download any voice message left by child or grown-up</b>
@@ -1756,6 +1756,8 @@ As a developer I just cannot understand how a product like this can end up on th
 If your child is using Gator Watch I would recommend you stop him or her from doing that. Now.</b>
 
 For those of you wanting to go even deeper I would recommend the solid <a href="https://fil.forbrukerradet.no/wp-content/uploads/2017/10/watchout-rapport-october-2017.pdf">report by Norwegian Consumer Council and mnemonic</a> (PDF, English, 49 pages). They also cover some other brands, go into more privacy issues and show how they did the technical tests.
+
+<div style="background-color:#ffecb3;padding:10px 10px 15px 10px;" class=""><h4 id="update">Update</h4><a href="/2018/03/gator-watch-revisited">Read my follow-up on the Gator Watch</a> almost half a year later.</div>
 `,
                 "images": ["/images/gator01.png", "/images/gator02.png", "/images/gator03.png", "/images/gator04.png"],
                 "links": [
@@ -1777,6 +1779,10 @@ For those of you wanting to go even deeper I would recommend the solid <a href="
                     {
                         "title": "Information leak",
                         "url": "/information-leak"
+                    },
+                    {
+                        "title": "#WatchOut",
+                        "url": "/watchout"
                     }
                 ]
             },
@@ -2120,7 +2126,7 @@ I don't like when it takes more than 3 months to fix something that seemingly is
                 "summary": "Let me spell out why you should care that I recently so easily found 13 security vulnerabilities.",
                 "text": `<h4>tl;dr</h4>I'm summarizing <a href="/category/security">the 13 security issues I've presented on the blog</a> over the last three months.
                 
-<h4>Crime types</h4><b>In the table below I've tried to show how different types of criminals can directly use the information from the different cases.</b> Of course, combining sources would make you even more vulernable, so I'll get more into that further down in this post.
+<h4>Crime types</h4><b>In the table below I've tried to show how different types of criminals can directly use the information from the different cases.</b> Of course, combining sources would make you even more vulnerable, so I'll get more into that further down in this post.
 
 <table class="checkmarks striped">
 <thead>
@@ -2923,7 +2929,7 @@ If you are having trouble navigating the smali code and understand the flow of a
 <pre class="prettyprint lang-bsh"> invoke-static {}, Ljava/lang/Thread;->dumpStack()V</pre>
 <h5>jadx - Dex to Java decompiler</h5><b><a href="https://github.com/skylot/jadx">jadx</a> is a command-line and GUI tool for converting <a href="https://source.android.com/devices/tech/dalvik/dex-format">dex</a> to Java.</b> Reading Java is after all easier than reading the smali format.
 
-<h5>Proguard</h5>Very often - but no in the case of my Developer Tools app - the code will be shrinked and obfuscated using <a href="https://developer.android.com/studio/build/shrink-code.html">ProGuard</a>. This makes the code a lot harder do read and understand. There aren't really any good ways around it, but doing the thread dump trick and taking your time to follow the code will eventually get you where you want to be.
+<h5>Proguard</h5>Very often - but not in the case of my Developer Tools app - the code will be shrinked and obfuscated using <a href="https://developer.android.com/studio/build/shrink-code.html">ProGuard</a>. This makes the code a lot harder do read and understand. There aren't really any good ways around it, but doing the thread dump trick and taking your time to follow the code will eventually get you where you want to be.
 
 <h4>Wrapping it up</h4><img style="float:left;width:550px;margin-right:20px;" class="materialboxed responsive-img" title="The regular Developer Tools app on the left and the cracked one on the right." data-caption="The regular Developer Tools app on the left and the cracked one on the right." alt="The regular Developer Tools app on the left and the cracked one on the right." src="/images/cracked_app.jpg"/>If you have followed along the guide you would see the app change from the version on the left to something like the one on the right. One of the reasons I wrote this guide was for my own sake to have something to easily copy and paste from when doing some reverse engineering myself, but I thought this might be useful one for others as well. :)`,
                 "images": ["/images/cracked_app.jpg"],
@@ -2948,6 +2954,81 @@ If you are having trouble navigating the smali code and understand the flow of a
                     {
                         "title": "Guide",
                         "url": "/guide"
+                    }
+                ]
+            },
+            {
+                "title": "Gator Watch revisted",
+                "published": true,
+                "publishDate": "2018-03-30T07:30:00.000Z",
+                "summary": "Gator Watch had a complete lack of security which made it possible to track kids all over the world and listen to private voice messages. This is supposedly fixed, at least in Norway. But is it really?",
+                "niceUrl": "/2018/03/gator-watch-revisited",
+                "text": `<h4>tl;dr</h4><i>Gator Watch</i> had the worst security I've seen in an online service in a long time. Now, at least the company selling Gator Watch in Norway, has released new watch firmware and new mobile apps to tackle all the issues. And what they have done is actually really impressive.
+
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>Early August 2017 <a href="/2017/10/tracking-kids">I found out that the Gator watches could be tracked, locations could be spoofed, and private voice messages was openly available on the Internet</a>.
+
+Shortly after, <a href="https://www.forbrukerradet.no/side/significant-security-flaws-in-smartwatches-for-children/">the Norwegian Consumer Council (NCC) also did a check on Gator Watch and a few other brands</a> and found the same issues + illegal or non-existent terms and conditions.
+
+The whole so-called #WatchOut campaign led to a hectic and probably stressful few months for the companies Gator Norge, GPS for barn, Tinitell and PepCall (Xplora). <a href="https://www.datatilsynet.no/aktuelt/2017/palegger-stans-i-behandlingen-av-personopplysninger-i-smartklokker/">The Norwegian Data Protection Authority (Datatilsynet) even forced Gator, PepCall and GPS for barn to stop all processing of personal information</a> (Norwegian link) until they had fixed issues regarding their information security.
+
+The Norwegian company sellling Gator Watch - <b>Gator Norge - has since <a href="https://www.gatornorge.no/blog/2017/12/22/denne-gang-har-vi-gjort-alt-selv/">released new watch firmware and created completely new client apps</a>. I wanted to know if the security was in order before using the watch for my own family.</b>
+
+<h4>Approach (technical stuff)</h4><h5>New firmware</h5>The old firmware for the Gator Watch was pretty bad. The communication between the watch and the server was in clear text with out any encryption at any level. Also, there was no authentication or verification of the user. There was no session identifier, only the always fixed IMEI number. You can't really make it much worse than that.
+
+<a href="https://www.gatornorge.no/encryption-of-gator-clocks-2/">Gator Norge has released new watch firmware and a description on how to do the upgrade</a> (Norwegian link only, sorry). <b>The process for upgrading the firmware for Gator 2 and Gator 3 is pretty complex. It's 34 long steps that could scare most people.</b> Even me with some tech background met one issue due to me misunderstanding one of the steps. Also, the upgrade must be done using Windows. But one has do to do what one has to do, so I did the upgrade twice - once for a Gator 2 watch and once for a Gator 3 watch.
+
+Using the old firmware I could just change the server the watch used to learn how the watch communicated. Then I could use that knowledge to try the communication with the server pretending to be a watch. With the new firmware I don't know how to do that. Also, reading or reverse engineer the firmware is out of my expertise. <b>This means I haven't been able to look at the communication between the server and watch. I have to trust Gator Norge when they say it now is encrypted. I also hope that it isn't possible to easily spoof other watches. Hopefully someone will take the time to analyze <a href="https://gatornorge.no/KrypteringGatorNorge.zip">the new firmware that can be downloaded from Gator Norge</a>.</b>
+
+<h5>New apps</h5>The old apps and server APIs for the Gator Watch was some of the worst product I've seen in a long while - security wise.
+
+Gator Norge trashed the old apps and server and replaced it with brand new software. I did an analyze of <a href="https://play.google.com/store/apps/details?id=com.teleg.iotapp">the Android app</a> and also took a look at the server.
+
+What is interesting is that this new Gator watch app - called TeleGAPP -  isn't a new concept from Gator Norge. <b>They actually released this app in September 2017, but as a app-to-app-only way of tracking friends and family. I took a brief look at the security later that fall, and I found multiple security holes. However, I never got around finishing my work or even reporting them. Shortly after I learnt that this app would soon become the new Gator watch app. So I postponed the rest of the testing - and reporting - awaiting this new version of the app. In retrospect I see that I should have reported my findings - even though it was unfinished work - I had back then because of the delays of the new app. I will probably write another post on that matter as it does have some interesting points. They have now seem to have taken down the server used back then.</b>
+
+<b>TeleGAPP - utilizes a custom-made <a href="https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning">certificate pinning</a>. This meant that I couldn't just use a regular HTTP proxy out of the box.</b> While I see the upside of having such pinning it sure makes it much harder to simply check if an app or service is secure. The chances that a good guy will skip testing is very high, while a bad guy would go ahead anyways. In total this typically leads makes Internet less secure.
+
+I recently posted a <a href="/2018/02/crack-android-apps">guide on how to crack Android apps</a> which explains exactly what is needed for cases like this. A simple <a href="https://www.quora.com/What-is-smali-in-Android">smali</a> one-liner like <span class="code">return-void</span> was all that was needed to get around the pinning.
+
+After rebuilding the app I could use the HTTP proxy <a href="https://www.charlesproxy.com/">Charles</a> to see what the encryption, authentication and data looked like. And I have to say; <b>this new app is a whole different ball game. This app has exactly the security measures I would've expected to find in the first place.</b>
+
+I could try to go through all security features and what makes the app less vulnerable, but I suppose I wouldn't be able to make a complete list. All HTTP calls are of course encrypted. The authentication ends up with a bearer authorization token. The token is short lived (though even as short lived as it makes the app a bit buggy with HTTP calls failing and without proper automatic re-authentication (which in ends up as a bad user experience with error messages popping up too often (though I actually think they now have fixed in a later version))). The authorization seems to be in order. I wasn't able to access to resources or data that I wasn't supposed to have. In general the API seemed clean, secure and made by people that know what they are doing.
+
+<b>What I did not test, was making <span class="code">PUT</span> that I should not be authorized to do. Too often I see that developers properly secure getting data, but not checking if others are allowed to update it.</b> I typically do this if it's real quick and easy to create another user for me to test on or if I know someone else with an account that I'm allowed to test with. So I'll just assume that they have that in order as well. At least they have a good base here.
+
+<h4>The user experience</h4><img style="float:left;width:240px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from Gator Norge's new watch app - TeleGAPP." data-caption="Screenshot from Gator Norge's new watch app - TeleGAPP." src="/images/gator-revisited01.png"/>If we look past the bad user experience it was to manually upgrade the firmware (which is not needed for people buying new watches today of course), the new app is pretty different from the old one. Since they started from scratch they haven't added all the features back in, but my understanding is that they are working on it.
+
+One of the features that isn't in the new app is the mode where you could listen in on the watch without anyone knowing it. This made the old watch in to a listenting device. I really doubt that we will see that feature coming back.
+
+Another one of the features not available is the one to - from parent to kid or the other way around - leave a voice message if you are unable to get hold of the other.
+
+A third feature now missing is the one where you could set up <a href="https://en.wikipedia.org/wiki/Geo-fence">geo-fences</a> for areas like home, school, football field.
+
+Personally it annoys me that the map where you can see the watch now doesn't have a satellite mode.
+
+The latter two features I hope to see back in a coming version of the app.
+
+<h4>My verdict</h4>I will never understand how a company can buy a product like this from China and not offer data security one single thought before releasing it into the market. That being said, <b>from what I can see, Gator Norge now has put a lot of effort to make the watch, apps and server properly secure. I'm impressed by how they have handled the criticism, pressure and technical challenges.</b> This has not been cheap and have also cost a lot of time and effort.
+
+Judging from what Gator Norge has said they have had third party companies developing the app and doing security testing of it. As I understand it they will keep having regular audits of the products - and that is really the only serious way of handling security in such a product.
+
+<h4>Conclusion</h4>In Norway we are very fortunate to have watch dogs like the Norwegian Consumer Council (NCC) and Norwegian Data Protection Authority (Datatilsynet). I think they do a great job. It's so good to see them put the focus on IT security and to force through changes. It makes us all more safe and secure.
+
+And I'm also happy to see - at least the Norwegian version of - Gator taking this seriously, being humble and saying sorry, and to return with a much more secure product. I for one, will let my kids wear this watch now.
+`,
+                "images": ["/images/gator-revisited01.png", "/images/gator-revisited02.png"],
+                "category":
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
+                "tags": [
+                    {
+                        "title": "#WatchOut",
+                        "url": "/watchout"
+                    },
+                    {
+                        "title": "Follow-up",
+                        "url": "/follow-up"
                     }
                 ]
             }

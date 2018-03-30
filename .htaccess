@@ -14,9 +14,9 @@ RewriteCond %{HTTP_USER_AGENT} ^.*Twitterbot.*$ [OR]
 RewriteCond %{HTTP_USER_AGENT} ^.*bing.*$
 RewriteCond %{REQUEST_URI} !^/$
 RewriteCond %{REQUEST_URI} !^/stuff/.*$
-RewriteCond %{REQUEST_URI} !.\.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico|txt|htm|html|txt|eot|svg|ttf)$
+RewriteCond %{REQUEST_URI} !.\.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico|txt|htm|html|txt|eot|svg|ttf|cgi)$
 RewriteRule ^(.+)$ preview.cgi?page=$1 [L]
 
 RewriteCond %{REQUEST_URI} !^/stuff/.*$
-RewriteCond %{REQUEST_URI} !.\.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico|txt|htm|html|txt|eot|svg|ttf)$
+RewriteCond %{REQUEST_URI} !.\.(gif|jpg|jpeg|png|css|js|woff|woff2|xml|ico|txt|htm|html|txt|eot|svg|ttf|cgi)$
 RewriteRule .* index.html [L]
