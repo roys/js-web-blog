@@ -6,7 +6,7 @@
 	<link rel="self" href="/atom" />
 	<author>
 		<name>Roy Solberg</name>
-		<uri>http://roysolberg.com</uri>
+		<uri>https://roysolberg.com</uri>
 	</author>
     <category term="blog"/>
     <category term="security"/>
