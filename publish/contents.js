@@ -2963,6 +2963,7 @@ If you are having trouble navigating the smali code and understand the flow of a
                 "title": "Gator Watch revisited",
                 "published": true,
                 "publishDate": "2018-03-30T07:30:00.000Z",
+                "updateDate": "2018-04-05T14:30:00.000Z",
                 "summary": "Gator Watch had a complete lack of security which made it possible to track kids all over the world and listen to private voice messages. This is supposedly fixed, at least in Norway. But is it really?",
                 "niceUrl": "/2018/03/gator-watch-revisited",
                 "text": `<h4>tl;dr</h4><i>Gator Watch</i> had the worst security I've seen in an online service in a long time. Now, at least the company selling Gator Watch in Norway, has released new watch firmware and new mobile apps to tackle all the issues. And what they have done is actually really impressive.
@@ -2971,13 +2972,13 @@ If you are having trouble navigating the smali code and understand the flow of a
 
 Shortly after, <a href="https://www.forbrukerradet.no/side/significant-security-flaws-in-smartwatches-for-children/">the Norwegian Consumer Council (NCC) also did a check on Gator Watch and a few other brands</a> and found the same issues + illegal or non-existent terms and conditions.
 
-The whole so-called #WatchOut campaign led to a hectic and probably stressful few months for the companies Gator Norge, GPS for barn, Tinitell and PepCall (Xplora). <a href="https://www.datatilsynet.no/aktuelt/2017/palegger-stans-i-behandlingen-av-personopplysninger-i-smartklokker/">The Norwegian Data Protection Authority (Datatilsynet) even forced Gator, PepCall and GPS for barn to stop all processing of personal information</a> (Norwegian link) until they had fixed issues regarding their information security.
+The whole so-called <i>#WatchOut</i> campaign led to a hectic and probably stressful few months for the companies Gator Norge, GPS for barn, Tinitell and PepCall (Xplora). <a href="https://www.datatilsynet.no/aktuelt/2017/palegger-stans-i-behandlingen-av-personopplysninger-i-smartklokker/">The Norwegian Data Protection Authority (Datatilsynet) even forced Gator, PepCall and GPS for barn to stop all processing of personal information</a> (Norwegian link) until they had fixed issues regarding their information security.
 
 The Norwegian company sellling Gator Watch - <b>Gator Norge - has since <a href="https://www.gatornorge.no/blog/2017/12/22/denne-gang-har-vi-gjort-alt-selv/">released new watch firmware and created completely new client apps</a>. I wanted to know if the security was in order before using the watch for my own family.</b>
 
 <h4>Approach (technical stuff)</h4><h5>New firmware</h5>The old firmware for the Gator Watch was pretty bad. The communication between the watch and the server was in clear text with out any encryption at any level. Also, there was no authentication or verification of the user. There was no session identifier, only the always fixed IMEI number. You can't really make it much worse than that.
 
-<a href="https://www.gatornorge.no/encryption-of-gator-clocks-2/">Gator Norge has released new watch firmware and a description on how to do the upgrade</a> (Norwegian link only, sorry). <b>The process for upgrading the firmware for Gator 2 and Gator 3 is pretty complex. It's 34 long steps that could scare most people.</b> Even me with some tech background met one issue due to me misunderstanding one of the steps. Also, the upgrade must be done using Windows. But one has do to do what one has to do, so I did the upgrade twice - once for a Gator 2 watch and once for a Gator 3 watch.
+<img style="float:left;width:480px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Screenshot from the firmware flashing process." data-caption="Screenshot from the firmware flashing process." src="/images/gator-revisited03.png"/><a href="https://www.gatornorge.no/encryption-of-gator-clocks-2/">Gator Norge has released new watch firmware and a description on how to do the upgrade</a> (Norwegian link only, sorry). <b>The process for upgrading the firmware for Gator 2 and Gator 3 is pretty complex. It's 34 long steps that could scare most people.</b> Even me with some tech background met one issue due to me misunderstanding one of the steps. Also, the upgrade must be done using Windows. But one has do to do what one has to do, so I did the upgrade twice - once for a Gator 2 watch and once for a Gator 3 watch.
 
 Using the old firmware I could just change the server the watch used to learn how the watch communicated. Then I could use that knowledge to try the communication with the server pretending to be a watch. With the new firmware I don't know how to do that. Also, reading or reverse engineer the firmware is out of my expertise. <b>This means I haven't been able to look at the communication between the server and watch. I have to trust Gator Norge when they say it now is encrypted. I also hope that it isn't possible to easily spoof other watches. Hopefully someone will take the time to analyze <a href="https://gatornorge.no/KrypteringGatorNorge.zip">the new firmware that can be downloaded from Gator Norge</a>.</b>
 
@@ -3003,13 +3004,13 @@ One of the features that isn't in the new app is the mode where you could listen
 
 Another one of the features not available is the one to - from parent to kid or the other way around - leave a voice message if you are unable to get hold of the other.
 
-A third feature now missing is the one where you could set up <a href="https://en.wikipedia.org/wiki/Geo-fence">geo-fences</a> for areas like home, school, football field.
+<img style="float:left;width:240px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Screenshot from the old Gator watch app that had geo-fencing." data-caption="Screenshot from the old Gator watch app that had geo-fencing." src="/images/gator-revisited02.png"/>A third feature now missing is the one where you could set up <a href="https://en.wikipedia.org/wiki/Geo-fence">geo-fences</a> for areas like home, school, football field.
 
 Personally it annoys me that the map where you can see the watch now doesn't have a satellite mode.
 
 The latter two features I hope to see back in a coming version of the app.
 
-<h4>My verdict</h4>I will never understand how a company can buy a product like this from China and not offer data security one single thought before releasing it into the market. That being said, <b>from what I can see, Gator Norge now has put a lot of effort to make the watch, apps and server properly secure. I'm impressed by how they have handled the criticism, pressure and technical challenges.</b> This has not been cheap and have also cost a lot of time and effort.
+<h4 style="clear:left;">My verdict</h4>I will never understand how a company can buy a product like this from China and not offer data security one single thought before releasing it into the market. That being said, <b>from what I can see, Gator Norge now has put a lot of effort to make the watch, apps and server properly secure. I'm impressed by how they have handled the criticism, pressure and technical challenges.</b> This has not been cheap and have also cost a lot of time and effort.
 
 Judging from what Gator Norge has said they have had third party companies developing the app and doing security testing of it. As I understand it they will keep having regular audits of the products - and that is really the only serious way of handling security in such a product.
 
@@ -3017,7 +3018,7 @@ Judging from what Gator Norge has said they have had third party companies devel
 
 And I'm also happy to see - at least the Norwegian version of - Gator taking this seriously, being humble and saying sorry, and to return with a much more secure product. I for one, will let my kids wear this watch now.
 `,
-                "images": ["/images/gator-revisited01.png", "/images/gator-revisited02.png"],
+                "images": ["/images/gator-revisited01.png", "/images/gator-revisited02.png", "/images/gator-revisited03.png"],
                 "category":
                     {
                         "title": "Security",
