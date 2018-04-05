@@ -13,7 +13,7 @@ print 'Content-type: text/html\r\n'
 
 BASE_URL = 'https://blog.roysolberg.com'
 PATTERN = re.compile(
-    r'(?:SpaBlog\.posts =)(.*)(?:;.*}\(window\.SpaBlog\))', re.DOTALL)
+    r'(?:SpaBlog\.posts=)(.*)(.*}\(window\.SpaBlog\))', re.DOTALL)
 
 PAGE = os.environ.get('REQUEST_URI', '')
 with open('./contents_json.js') as contents_file:

@@ -874,4 +874,4 @@ window.SpaBlog=window.SpaBlog||{};(function(SpaBlog){SpaBlog.posts=
         ]
     }
 ]
-;}(window.SpaBlog));
+}(window.SpaBlog));

@@ -11,7 +11,7 @@ print 'Content-type: application/atom+xml\r\n'
 
 BASE_URL = 'https://blog.roysolberg.com'
 PATTERN = re.compile(
-    r'(?:SpaBlog\.posts =)(.*)(?:;.*}\(window\.SpaBlog\))', re.DOTALL)
+    r'(?:SpaBlog\.posts=)(.*)(.*}\(window\.SpaBlog\))', re.DOTALL)
 
 with open('./contents_json.js') as contents_file:
     js_contents = contents_file.read()
