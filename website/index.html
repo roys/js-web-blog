@@ -12,7 +12,7 @@
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="/css/blog.css?v=6" />
   <!--link type="text/css" rel="stylesheet" href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css"-->
-  <script type="text/javascript" src="/contents_json.js?v=30"></script>
+  <script type="text/javascript" src="/contents_json.js?v=31"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/e6a5037/js/materialize.min.js"></script>
@@ -39,7 +39,7 @@
     };
 
     if (location.protocol === 'file:') {
-      var scripts = ['js/app.js', 'contents.js'];
+      var scripts = ['js/app.js', '../publish/contents.js'];
       var i = 0;
       function loadScript(src) {
         return new Promise(function (resolve, reject) {
@@ -117,7 +117,7 @@
       "@context": "http://schema.org",
       "@type": "Person",
       "name": "Roy Solberg",
-      "url": "http://roysolberg.com",
+      "url": "https://roysolberg.com",
       "sameAs": [
         "https://twitter.com/roysolberg",
         "https://linkedin.com/in/roysolberg",
@@ -142,7 +142,6 @@
   <nav>
     <div class="nav-wrapper">
       <div class="container">
-        <!-- a href="/blog/" class="brand-logo left" data-bind="click: function(){$root.goToFrontpage()}">My blog</a -->
         <ul id="nav-mobile" class="left">
           <li><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">blog.roysolberg.com</a></li>
         </ul>
@@ -152,6 +151,7 @@
       </div>
     </div>
   </nav>
+  <noscript><center><h5>Seriously, are you able to surf the web with JavaScript disabled? I'm, sorry, but that doesn't work on this site.</h5></center></noscript>
   <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: function(){ !$data.post() && !$data.category() && !$data.tag() }}, fadeVisible: $data.shouldDisplayFrontpage">
   </div>
   <div id="article" style="display: none" class="container" data-bind="template: { name: 'article-template', if: $data.post}, fadeVisible: $data.shouldDisplayArticle">

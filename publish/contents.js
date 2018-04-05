@@ -1,3 +1,5 @@
+var window = window || {}; // Not defined when run on command-line
+
 window.SpaBlog = window.SpaBlog || {}; // Our namespace
 
 (function (SpaBlog) {
@@ -2958,7 +2960,7 @@ If you are having trouble navigating the smali code and understand the flow of a
                 ]
             },
             {
-                "title": "Gator Watch revisted",
+                "title": "Gator Watch revisited",
                 "published": true,
                 "publishDate": "2018-03-30T07:30:00.000Z",
                 "summary": "Gator Watch had a complete lack of security which made it possible to track kids all over the world and listen to private voice messages. This is supposedly fixed, at least in Norway. But is it really?",
@@ -3034,3 +3036,7 @@ And I'm also happy to see - at least the Norwegian version of - Gator taking thi
             }
         ];
 }(window.SpaBlog));
+
+if (typeof module != 'undefined') {
+    module.exports = window.SpaBlog.posts;
+}
