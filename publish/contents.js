@@ -2984,7 +2984,7 @@ Using the old firmware I could just change the server the watch used to learn ho
 
 <h5>New apps</h5>The old apps and server APIs for the Gator Watch was some of the worst product I've seen in a long while - security wise.
 
-Gator Norge trashed the old apps and server and replaced it with brand new software. I did an analyze of <a href="https://play.google.com/store/apps/details?id=com.teleg.iotapp">the Android app</a> and also took a look at the server.
+Gator Norge trashed the old apps and server and replaced it with brand new software. I did an analysis of <a href="https://play.google.com/store/apps/details?id=com.teleg.iotapp">the Android app</a> and also took a look at the server.
 
 What is interesting is that this new Gator watch app - called TeleGAPP -  isn't a new concept from Gator Norge. <b>They actually released this app in September 2017, but as a app-to-app-only way of tracking friends and family. I took a brief look at the security later that fall, and I found multiple security holes. However, I never got around finishing my work or even reporting them. Shortly after I learnt that this app would soon become the new Gator watch app. So I postponed the rest of the testing - and reporting - awaiting this new version of the app. In retrospect I see that I should have reported my findings - even though it was unfinished work - I had back then because of the delays of the new app. I will probably write another post on that matter as it does have some interesting points. They have now seem to have taken down the server used back then.</b>
 
