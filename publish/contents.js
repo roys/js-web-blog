@@ -3034,6 +3034,138 @@ And I'm also happy to see - at least the Norwegian version of - Gator taking thi
                         "url": "/follow-up"
                     }
                 ]
+            }, {
+                "title": "Case #14: Power company leaking personal info and usage data",
+                "published": true,
+                "publishDate": "2018-04-10T06:25:00.000Z",
+                "summary": `Information about thousands - theoretically maybe hundreds of thousands - of customers could be stolen.`,
+                "niceUrl": "/2018/04/power-company-leak",
+                "text": `<h4>tl;dr</h4>The electric power company <i>Norgesnett</i> had a security vulnerability that made it possible to get access to thousands of customers' personal info + their usage data. This was probably also the case for quite a few of the hundreds of customers of the company <i>Enoro</i> - the creators behind the vulnerable software.
+
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://norgesnett.no/">Norgesnett</a> and <a href="http://enoro.no/">Enoro</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>February 2018</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Information leak with personal information, power usage data, audit reports, meter number</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>All electricity consumers in Norway will receive smart meters by January 1st 2019. There has been a little bit of controversy in regards of the meters. The most extreme skeptics are afraid of the radiation from the new meters as they typically communicate back to the so-called distribution system operators (DSO) via radio or the mobile network. Then you have the ones that are afraid that the electricity will become more expensive - at least for families that don't have that much flexibility in regards of when they need to use electricity. And then thirdly, <b>you have those concerned about data security and privacy because of the frequent readings done by the power companies.</b>
+
+<b><a href="https://www.datatilsynet.no/rettigheter-og-plikter/overvaking-og-sporing/strommaling/">The Norwegian Data Protection Authority (Datatilsynet) has written a bit about the new smart meters</a> (Norwegian only) and how they can in theory be used to track individuals and both reveal and predict if people are and will be home at a certain point in time.</b>
+
+I also think the <a href="https://www.tu.no/artikler/norske-nettselskap-er-enige-ams-utgjor-en-risiko-for-datasikkerheten/275560">article from tu.no about smart meter security</a> (Norwegian only) is pretty interesting in this context.
+
+The new smart meters come with a <a href="https://en.wikipedia.org/wiki/Home_network">Home Area Network</a> (HAN) interface where you can get more details about your power usage. <a href="https://blog.roysolberg.com/2017/08/my-dumb-smart-home">My house is a smart home</a> and I want to integrate and use the data available through the HAN interface (which sends <a href="https://en.wikipedia.org/wiki/IEC_62056">OBIS</a> messages via <a href="https://en.wikipedia.org/wiki/Meter-Bus">M-Bus</a>). So, around the time I got the new meter I logged into Norgesnett's site to get more information and see what kind of meter data that was available. <b>I used this opportunity to check if Norgesnett protects my data..</b>
+                           
+<h4>Approach (technical stuff)</h4><img style="float:left;width:450px;margin-right:20px;" class="materialboxed responsive-img" title="Profile form at Norgesnett. For some reason the customer ID is posted as part of the data." data-caption="Profile form at Norgesnett. For some reason the customer ID is posted as part of the data." src="/images/norgesnett01.png"/>When logged in to Norgesnett's site I had the <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> open and took the regular look at source code, network calls etc. Most of it looked pretty good.
+
+<b>Norgesnett has this feature where you can add other "customer relationships" to your main account.</b> Using that feature you can easily switch between your different accounts. <b>To add another customer you need their customer ID and 4 digit PIN. The customer IDs seem to be just an incremental integer.</b> Maybe one could get hold of other users' PIN?
+
+They have also have this online form where one can change one's own personal data. For some reason the customer ID is posted as part of the form. I asked for a friend's customer ID and quickly found out that <b>I could post with his customer ID and an e-mail address of mine.</b>
+
+<img style="float:left;width:450px;margin-right:20px;" class="materialboxed responsive-img" title="The automatic e-mail sent when changing the e-mail address - including the customer ID and PIN code." data-caption="The automatic e-mail sent when changing the e-mail address - including the customer ID and PIN code." src="/images/norgesnett02.png"/><b>After that was done an e-mail was automatically sent with both my friend's PIN and a direct link to finish the connection between the e-mail address and customer ID. The link didn't work for some reason, but with the PIN I could add the account as a "customer relationship" to my own account.</b>
+
+If the other user had specified the e-mail address for getting alerts, one could even change back the e-mail address and no one would ever notice that the account was accessed. Of course, one can hope there is some kind of logging in place that potentially could catch up on this.
+
+<b>Using some of the wordings and URLs used for the login page it's easy to find other of Enoro's customers who have the same customer system in place. And there's a quite a few.</b>
+
+<img style="float:left;width:450px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Overview and forms for customer relationships at Norgesnett." data-caption="Overview and forms for customer relationships at Norgesnett." src="/images/norgesnett03.png"/>
+                           
+<h4 style="clear:left;">Security issues</h4><b>One could systematically go through all customers and retrieve the following information:
+- Customer ID
+- Customer PIN
+- Meter number ("målernummer")
+- Meter ID ("målepunkt-ID")
+- Full name
+- Full address
+- Date of birth
+- Phone numbers
+- E-mail address
+- Historical power usage
+- Invoices
+- Audit reports</b>
+
+I hope they don't have unlisted and secret addresses available.
+
+The power usage is not reported at near realtime on Norgesnett's customer faced website, but rather weekly + start of month. Hopefully they would have noticed that something was going on if this was to be taken advantage of in a large scale.
+
+<b>This is speculation as I have not tried to confirm the vulnerability for other Enoro customers than Norgesnett (and not more than one other customer), but a quick Google search makes me believe at least the following 14 power companies have the vulnerability:
+ - Norgesnett (96,000 customers)
+ - Agder Energi Nett? (195,000 customers)
+ - Eidsiva Nett? (159,000 customers)
+ - Los? (150,000 customers?)
+ - Gudbrandsdal Energi? (&gt;100,000 customers)
+ - Glitre Energi? (90,000 customers?)
+ - Oppdal Everk?
+ - Orkdal Energi?
+ - Smart Energi?
+ - Polar Kraft?
+ - Akraft?
+ - Hålogaland Kraft?
+ - Agder Energi Nett?
+ - Hjemkraft?</b>
+
+There could absolutely be more companies than these as well.
+
+In Norway we can have separate companies for electricity distribution ("nettselskap") and electricity retailing ("kraftselskap") which makes <b>some persons appear multiple times in those numbers</b>.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>I wrote an e-mail to Norgesnett's customer support in the evening telling about the issue. I immediately got an automatic response.
+
+<h5>Day 1</h5>Around noon I got a reply back thanking me and telling me they had relayed the message to their system vendor (Enoro) and that it should be fixed shortly.
+
+<b>I never heard back after that, not even when I told them I was going to post this, but I got a confirmation from a journalist that Enoro said the issue was fixed.</b>
+
+<h4>Conclusion</h4><b>I don't really want this to be a discussion about smart meter security. Unless someone hacks the firmware on your meter no one should externally be able to track individuals.</b> In the case of Norgesnett it also would be hard to track if someone in a house is on vacation.
+
+<b>I think of this as yet another case showing that your personal data is not safe; it's long gone. Close to all your personal information is already in the hands of anyone who wants it. But I do hope that power companies in general have their security in order.</b>
+`,
+                "images": ["/images/norgesnett01.png", "/images/norgesnett02.png", "/images/norgesnett03.png"],
+                "category":
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Smart meter",
+                        "url": "/smart-meter"
+                    },
+                    {
+                        "title": "OWASP 2017 A5",
+                        "url": "/owasp-2017-a5"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
