@@ -3034,7 +3034,8 @@ And I'm also happy to see - at least the Norwegian version of - Gator taking thi
                         "url": "/follow-up"
                     }
                 ]
-            }, {
+            },
+            {
                 "title": "Case #14: Power company leaking personal info and usage data",
                 "published": true,
                 "publishDate": "2018-04-10T06:25:00.000Z",
@@ -3164,6 +3165,130 @@ In Norway we can have separate companies for electricity distribution ("nettsels
                     {
                         "title": "OWASP 2017 A5",
                         "url": "/owasp-2017-a5"
+                    }
+                ]
+            },
+            {
+                "title": "Case #15: Leaked hotel reservations",
+                "published": true,
+                "publishDate": "2018-04-23T21:55:00.000Z",
+                "summary": `Information about as many as maybe 1.5 million past, current and future hotel stays were openly accessible on the Internet.`,
+                "niceUrl": "/2018/04/hotel-leak",
+                "text": `<h4>tl;dr</h4>The company <i>Ariane</i> had a leak in one of their newsletter software installations causing an exposure of something like 1.5 million hotel reservations with hotel name, reservation number, dates of stay, customer name, customer e-mail address and possibly room number. A number of hotels were affected and the data went for like two years back in time and also included future stays.
+
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://ariane.com">Ariane</a> (and therefore some of their customers)</td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>April 2018</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A gift card for 1 night for 2 persons at a Thon hotel (provided by Thon which was the hotel chain I reported the leak to)</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Information leak with personal information related to hotel reservations</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>I had a talk at <a href="https://www.meetup.com/OWASP-Norway/events/248655998/">OWASP Norway's meetup</a> in Oslo and therefore stayed the night at <a href="https://www.thonhotels.no/hoteller/norge/oslo/thon-hotel-rosenkrantz-oslo/">Thon Hotel Rosenkrantz Oslo</a>. 
+
+I did the reservation online directly with the hotel as it was cheaper than via <a href="https://hotels.com/">hotels.com</a>. And because of the direct booking the hotel started sending me different e-mails regarding my stay. Some of those e-mails led me to an unprotected website.
+
+<h4>Approach (technical stuff)</h4>All the e-mails from the hotel had links named <i>"View in browser"</i>. The e-mails directly regarding my stay linked to a <a href="https://azure.microsoft.com">Microsoft Azure</a> application at some "random" <span class="code">cloudapp.net</span> subdomain.
+
+What hit me first was that <b>the links were served over http and not https</b>. And instead of a nice shorter URL pointing to Thon, it was a long one with a path signaling that site was used for more than my hotel chain. <b>The query parameters contained a big integer as an ID and my e-mail address. So the natural thing to try was to remove the e-mail address from the query parameters. To my surprise I still got my details back.</b>
+
+<b>Then I tried my ID - 1 and got another person's booking.</b> I never download a lot of data as I don't want anyone to question my motives, but I do like to get an idea of the scope of a data leak, so I did a few tests to see if I could see how many bookings this was. My ID was past 2.37 million and the lowest that I saw working was around 865 thousand, so <b>I estimate that more than 1.5 million records were available.</b>
+
+<b>It was possible to traverse the URL path and get to a generator/preview function of a lot of different types of e-mail templates (for check-in details, receipts, room number reminder, etc.) for a long list of hotels.</b>
+
+<b>By changing the templates it was possible to retrieve different information about a booking.</b> E.g. one template would include the room number, while another would include dates and the customer's name and e-mail address. Judging from the e-mails I received it would in some cases be possible to check some people in or out.
+
+Just by doing a google search with the subdomain I got a page that looked like a login page for the whole system. That page was also served over http.
+
+<h4 style="clear:left;">Security issues</h4><b>One could very easily iterate over - what I estimate to be - 1.5 million bookings and get some or all of the following information:
+- Customer's full name
+- Customer's e-mail address
+- Reservation number
+- Date of arrival
+- Date of departure
+- Hotel name
+- Room number</b>
+
+<b>The bookings seem to range back from 2016 and also include future stays.</b>
+
+Also everything was served over an unencrypted connection so someone could potentially listen in and get the information.
+
+The list of hotels affected by this security vulnerability in Ariane's system is longer, but as I only did a few tests so I only observed these:
+- <a href="https://www.radissonblu.com/en">Radisson Blu</a> in England
+- <a href="https://www.lindner.de/en.html">Lindner Hotels & Resorts</a> in Germany
+- <a href="https://www.mcdreamshotels.de/home-en.html">McDreams</a> in Germany
+- <a href="https://www.nordicchoicehotels.com/">Nordic Choice Hotels</a> in Norway
+- <a href="https://www.thonhotels.com/">Thon Hotels</a> in Norway
+- <a href="https://www.radissonred.com/">Radisson RED</a> in South Africa
+ 
+Ariane has stated that <a href="https://nrkbeta.no/2018/04/19/gjester-ved-to-norske-hotellkjeder-kan-ha-fatt-sine-bookingdetaljer-eksponert/">most affected hotels are in Germany and France</a> (Norwegian link). In the same article they are quoted saying that they cannot be sure that this issue has already been taken advantage of.
+
+<img style="float:left;width:450px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Screenshot from one of the bookings." data-caption="creenshot from one of the bookings." src="/images/hotel01.png"/>
+
+<h4 style="clear:left;">Reception and handling</h4><h5>Day zero</h5>I couldn't immediately see who was responsible for the whole system so in the afternoon I sent an e-mail to Thon Hotels' customer service. I got an automatic response giving me a hint that they would not read that e-mail until the day after, so I also sent them a direct message on Twitter saying that they probably wanted to check out the issue right away.
+
+<b>Just two hours later I got a reply thanking me and saying that the information was past on to the web development department.</b>
+
+<h5>Day 5ish</h5><b>I tested the URL in question and saw that they had fixed the issue where one could access anyone's booking without also knowing the e-mail address.</b>
+
+<h5>Day 7</h5>I got an e-mail from the chief of security in the group owning the Thon Hotels where he thanked me and asked for my details to send a reward - a gift card which I received just a few days after that.
+
+<h4>Media coverage</h4>For once I did things a bit differently and worked with the media before I published the case here myself. <a href="https://nrkbeta.no/2018/04/19/gjester-ved-to-norske-hotellkjeder-kan-ha-fatt-sine-bookingdetaljer-eksponert/">NRKbeta covered the story less than a week ago</a> (Norwegian link only, sorry). NRK is the Norwegian government-owned radio and television public broadcasting company, and the largest media organisation in Norway. They also featured it as as the top story on <a href="https://nrk.no">nrk.no</a> of their frontpage for some time. I'm happy to see that big media companies like NRK cares about online security and our personal data.
+
+<h4>Conclusion</h4>Is this leak so bad? Most people can handle having their name, e-mail address and reservation stolen or being open on the Internet forever. This is still a pretty bad leak. The number of reservations was pretty big. Maybe someone was already taking advantage of it? It would be possible to regularly check the bookings for public persons or other individuals. It could also be circumstantial evidence for some person being at a certain place at a certain time.
+
+Also, with information like this it would be pretty easy to do some kind of <a href="https://en.wikipedia.org/wiki/Phishing#Spear_phishing">spear phishing</a> - to use the information to target and deceive a hotel customer.
+
+I think we all expect our hotel to keep our personal details safe and secured.
+`,
+                "images": ["/images/hotel01.png", "/images/hotel02.png"],
+                "category":
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "OWASP 2017 A3",
+                        "url": "/owasp-2017-a3"
+                    },
+                    {
+                        "title": "OWASP 2017 A5",
+                        "url": "/owasp-2017-a5"
+                    },
+                    {
+                        "title": "OWASP 2017 A10",
+                        "url": "/owasp-2017-a10"
                     }
                 ]
             }
