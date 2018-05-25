@@ -3300,7 +3300,19 @@ I think we all expect our hotel to keep our personal details safe and secured.
                 "niceUrl": "/2018/XX/title",
                 "text": ``,
                 "hot": false,
-                "author": "Roy Solberg"
+                "author": "Roy Solberg",
+                "images": [],
+                "category":
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    }
+                ]
             }
         ];
 }(window.SpaBlog));
