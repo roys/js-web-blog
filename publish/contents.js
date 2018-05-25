@@ -3291,6 +3291,16 @@ I think we all expect our hotel to keep our personal details safe and secured.
                         "url": "/owasp-2017-a10"
                     }
                 ]
+            },
+            {
+                "title": "Case #X: ",
+                "published": false,
+                "publishDate": "2018-01-01T04:30:00.000Z",
+                "summary": ``,
+                "niceUrl": "/2018/XX/title",
+                "text": ``,
+                "hot": false,
+                "author": "Roy Solberg"
             }
         ];
 }(window.SpaBlog));
