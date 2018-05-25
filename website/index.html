@@ -265,6 +265,10 @@
           <!-- /ko -->
         </td>
       </tr>
+      <tr data-bind="with: post().author">
+        <td style="width:5%;">Author:</td>
+        <td data-bind="text: $data"></td>
+      </tr>
     </table>
     <div class="row prepare-print" style="min-height:200px;margin-top:20px;">
       <div class="col s12">
