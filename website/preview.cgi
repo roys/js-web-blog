@@ -38,5 +38,5 @@ if MATCH_OBJECT is not None:
             if len(post.get('images', [])):
                 imageUrl = BASE_URL + post['images'][0]
 
-            print PREVIEW_TEMPLATE.safe_substitute(escapedTitle=escapedTitle, imageUrl=imageUrl, escapedSummary=escapedSummary, url=url, title=title, summary=summary, text=text.decode('utf-8')).encode('utf-8')
+            print PREVIEW_TEMPLATE.safe_substitute(escapedTitle=escapedTitle, imageUrl=imageUrl, escapedSummary=escapedSummary.decode('utf-8'), url=url, title=title, summary=summary.decode('utf-8'), text=text.decode('utf-8')).encode('utf-8')
             break

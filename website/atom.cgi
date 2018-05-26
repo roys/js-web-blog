@@ -7,9 +7,10 @@ from string import Template
 
 #sys.stderr = sys.stdout
 
-print 'Content-type: application/atom+xml\r\n'
+print 'Content-type: application/atom+xml; charset=utf-8\r\n'
 
 BASE_URL = 'https://blog.roysolberg.com'
+FEED_URL = BASE_URL + '/'
 PATTERN = re.compile(
     r'(?:SpaBlog\.posts=)(.*)(.*}\(window\.SpaBlog\))', re.DOTALL)
 
@@ -30,15 +31,19 @@ MATCH_OBJECT = PATTERN.search(js_contents)
 if MATCH_OBJECT is not None:
     POSTS = json.loads(MATCH_OBJECT.group(1))
     for post in reversed(POSTS):
-        url = post['niceUrl']
-        title = post['title'].encode('utf-8')
-        summary = post['summary'].encode('utf-8')
-        text = post['text'].encode('utf-8')
-        category = post['category']['title'].encode('utf-8')
-        published = post['publishDate']
-        updated = post.get('updateDate', published)
+        if 'published' in post and post['published']:
+            url = post['niceUrl']
+            title = post['title'].encode('utf-8')
+            summary = post['summary'].encode('utf-8')
+            text = post['text'].encode('utf-8')
+            category = post['category']['title'].encode('utf-8')
+            published = post['publishDate']
+            updated = post.get('updateDate', published)
+            author = 'Roy Solberg'
+            if 'author' in post:
+                author = post['author']
 
-        entries += ENTRY_TEMPLATE.safe_substitute(id=BASE_URL + url, title=title, url=BASE_URL + url, category=category, summary=summary,
-                                                  published=published, updated=updated, author='Roy Solberg', contents=text.decode('utf-8')).encode('utf-8')
+            entries += ENTRY_TEMPLATE.safe_substitute(id=BASE_URL + url, title=title, url=BASE_URL + url, category=category, summary=summary.decode('utf-8'),
+                                                      published=published, updated=updated, author=author, contents=text.decode('utf-8')).encode('utf-8')
 
-print FEED_TEMPLATE.safe_substitute(entries=entries, feedId=BASE_URL, baseUrl=BASE_URL)
+print FEED_TEMPLATE.safe_substitute(entries=entries, feedId=FEED_URL, baseUrl=BASE_URL)

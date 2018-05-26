@@ -8,10 +8,10 @@
 		<author>
 			<name>$author</name>
 		</author>
-		<summary>$summary</summary>
+		<summary type="html"><![CDATA[$summary]]></summary>
 		<content type="html">
 			<![CDATA[
-$contents
+				<span style="white-space:pre-wrap;">$contents</span>
 			]]>
 		</content>
 	</entry>
