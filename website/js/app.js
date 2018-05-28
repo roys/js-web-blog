@@ -11,6 +11,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         self.post = ko.observable();
         self.category = ko.observable();
         self.tag = ko.observable();
+        self.yearMonth = ko.observable();
         self.isTransitioning = ko.observable(true);
         self.pageNotFound = ko.observable(false);
         self.numOfLatestPosts = ko.observable(4);
@@ -53,7 +54,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         }
         self.shouldDisplayFrontpage = ko.computed(function () {
             console.log('shouldDisplayFrontpage: return ' + !this.post());
-            return !this.isTransitioning() && !this.post() && !this.category() && !this.tag() && !this.pageNotFound();
+            return !this.isTransitioning() && !this.post() && !this.category() && !this.tag() && !this.yearMonth() && !this.pageNotFound();
         }, self);
         self.shouldDisplayArticle = ko.computed(function () {
             console.log('shouldDisplayArticle()');
@@ -66,6 +67,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         self.shouldDisplayTag = ko.computed(function () {
             console.log('shouldDisplayTag()');
             return !this.isTransitioning() && this.tag();
+        }, self);
+        self.shouldDisplayYearMonth = ko.computed(function () {
+            console.log('shouldDisplayYearMonth()');
+            return !this.isTransitioning() && this.yearMonth();
         }, self);
         self.shouldDisplayPageNotFound = ko.computed(function () {
             console.log('shouldDisplayPageNotFound()');
@@ -92,6 +97,12 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             console.log(parts);
             if (path.length === 0) {
                 self.goToFrontpage();
+            } else if (parts.length === 1) {
+                if(isInt(parts[0]) && parts[0] >= 2017) {
+                    self.goToYearMonth(parts[0], null);
+                }else{
+                    self.goToNotFoundPage();
+                }
             } else if (parts.length === 2) {
                 if (parts[0] === 'category') {
                     var categoryUrl = '/' + parts[1];
@@ -111,8 +122,8 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     console.log('tagUrl:' + tagUrl);
                     var foundTag = false;
                     tags.forEach(function (tag, index) {
-                        console.log(tag);
                         if (!foundTag && tag.link === tagUrl) {
+                            console.log(tag);
                             foundTag = true;
                             self.goToTag({ title: tag.text, url: '/' + parts[1] });
                         }
@@ -120,6 +131,8 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     if (!foundTag) {
                         self.goToNotFoundPage();
                     }
+                } else if(isInt(parts[0]) && isInt(parts[1]) && parts[0] >= 2017 && parts[1] >= 1 && parts[1] <= 12 && parts[1].length == 2) {
+                    self.goToYearMonth(parts[0], parts[1]);
                 } else {
                     self.goToNotFoundPage();
                 }
@@ -147,6 +160,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 self.post(null);
                 self.tag(null);
                 self.category(null);
+                self.yearMonth(null);
                 self.pageNotFound(false);
                 self.isTransitioning(false);
                 $('#tag-cloud').jQCloud(self.tags, {
@@ -164,6 +178,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.post(post);
                     self.tag(null);
                     self.category(null);
+                    self.yearMonth(null);
                     self.pageNotFound(false);
                     self.isTransitioning(false);
                     setTimeout(function () {
@@ -196,6 +211,27 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.post(null);
                     self.tag(tag);
                     self.category(null);
+                    self.yearMonth(null);
+                    self.pageNotFound(false);
+                    self.isTransitioning(false);
+                    self.loadAds();
+                }, 250);
+            }
+        }
+        self.goToYearMonth = function (year, month) {
+            var title = year;
+            var url = year;
+            if (month != null){
+                title = new Date(year + '-' + month + '-01').toLocaleString('en-US', { year: 'numeric', month: 'long' });
+                url += '/' + month;
+            }
+            if (self.changeUrl(null, title, url)) {
+                self.isTransitioning(true);
+                setTimeout(function () {
+                    self.post(null);
+                    self.tag(null);
+                    self.category(null);
+                    self.yearMonth({title: title, url: '/' + url});
                     self.pageNotFound(false);
                     self.isTransitioning(false);
                     self.loadAds();
@@ -208,6 +244,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             self.post(null);
             self.tag(null);
             self.category(null);
+            self.yearMonth(null);
             self.isTransitioning(false);
         }
         self.changeUrl = function (state, title, url) {
@@ -245,6 +282,10 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     return true;
                 }
             }
+        }
+
+        function isInt(value) {
+            return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value));
         }
 
         function processCategoriesAndTags() {
