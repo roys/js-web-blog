@@ -3293,9 +3293,142 @@ I think we all expect our hotel to keep our personal details safe and secured.
                 ]
             },
             {
-                "title": "Case #X: ",
+                "title": "Millions of customer records exposed through unused API fields",
+                "published": true,
+                "publishDate": "2018-05-25T21:55:00.000Z",
+                "updateDate": "2018-05-27T20:30:00.000Z",
+                "author": "Hallvard Nygård",
+                "summary": `<i>Guest blog post by <a href="https://twitter.com/hallny">Hallvard Nygård</a></i>`,
+                "niceUrl": "/2018/05/postnord-api-leak",
+                "text": `<h4>tl;dr</h4>Possibly millions of customer records (name, address, e-mail and phone number) from PostNord was exposed through unused API fields in a parcel tracking page used in Norway. The API has been online at least since 2013. The security issue was discovered after a parcel delivery from Komplett.no (Komplett Group AS, Norway) and the issue was also reported and handled through Komplett.no.
+
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://www.postnord.no/en">PostNord</a>. Confirmed, but maybe not limited to, PostNord Norway. Reported to <a href="https://www.komplett.no/">Komplett.no</a>.</td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>May 2018</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>Thanks and a gift card at Komplett.no for 500 NOK (60 USD). Issue was reported to and handled by Komplett.no.</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Page showing tracking information about parcels was leaking name, full address, phone number and e-mail. Parcel tracking code was guessable. At least Norwegian parcels affected.</td>
+</tr>
+</table>
+
+<h4>Background</h4><img style="float:left;width:450px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from PostNord's website for tracking parcels." data-caption="Screenshot from PostNord's website for tracking parcels." src="/images/postnord02.png"/>I had just bought a new phone from Komplett.no. The phone was sent with PostNord to my local store. When Komplett.no sent the package, I was e-mailed a link to a page with tracking information (minside.postnord.no, "min side" = "my page"). When it arrived at the local store, I was sent an SMS from PostNord with the pickup code and the same link to the tracking page. 
+
+The tracking page contained more information in the backend call to get parcel and tracking information than what was displayed on the page.
+
+PostNord delivers, among other postal and shipping services, parcels in the Nordics. Norway was affected. It is possible that the parcel service in Sweden, Denmark, Finland and Germany also was affected. Norwegian tracking number can be checked on other PostNord tracking pages (e.g. international and Swedish page) so I find it likely but unconfirmed.
+
+According to privacy policy of Komplett.no the client data is stored up to 36 months in PostNord's databases.
+
+PostNord AB had according to <a href="https://www.postnord.com/globalassets/global/sverige/dokument/rapporter/arsredovisningar/2017/postnord-2017-eng.pdf">2017 numbers</a>, 17.2 million parcels delivered in Norway, 97.7 millions in Sweden, 47.2 millions in Denmark, 8.3 millions in Finland, 15.5 millions in Germany. 154 million parcels in 2017 and 142 million parcels in <a href="https://www.postnord.com/contentassets/28039a622d0c4dd0872fc57c7778ecd2/postnord-annual-report.pdf">2016</a>. At least 450 millions parcels over 36 months. It's unknown to me how many of these have tracking numbers that can be viewed on the tracking page. At least Norwegian tracking numbers can. A good guess for number of parcels in Norway is around 50 million parcels within 36 months. Number of affected customers should be in the millions.
+
+Komplett.no is part of The Komplett Group and is the largest e-commerce player in the Nordic countries. Head quarters in Sandefjord, Norway. Reporting revenue was MNOK 8,100 in 2017. 1,600,000 active customers with one or more orders the last year. Numbers <a href="http://canica.no/investment/komplett/">according to Canica</a> (owner). They pick and send packages 24/7 with a average of 3 per second i 2017. Should be around 95,000,000 (95 mill) packages per year. Komplett.no sends package with Posten Norge (state-owner company, owned by Norway) and the Norwegian parcel service of PostNord AB (state-owned company, owned Sweden and Denmark).
+
+<i>Small curiosity: No more information than Komplett.no have declared in their <a href="https://www.komplett.no/kundeservice/om-komplett/personvern/">privacy policy</a> (Norwegian text) was exposed. I am confident that the privacy policy is telling the truth in the chapter about sharing information with PostNord. Thumbs up!</i>
+
+<h4>Approach (technical stuff)</h4><img style="float:left;width:450px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from Chrome Developer Tools showing the excess data returned by the API." data-caption="Screenshot from Chrome Developer Tools showing the excess data returned by the API." src="/images/postnord03.png"/>The page had a <b>URL like https://minside.postnord.no/public-services/tracking/7070205547XXXXXXX</b> (where X was all digits in the tracking code). The tracking codes are GSIN tracking numbers. They have a prefix and a checksum as last digit. They are not far from auto increment. See update below for details. The tracking number is displayed on labels that are printed and put on the packages. They are also sent to the client by the shipping company or the e-commerce company.
+
+The GUI on the tracking page contained information like city of origin, city of destination, opening hours of pick up point, weight, tracking information. It does not show name og the full address of origin or destination.
+
+Inspecting this page in Chrome Developer Tools I found that the REST response contained more information than in GUI. In addition to more detailed information about the package, it contained name, full address, phone number and e-mail for the recipient. It also contained the name and address of origin.
+
+I looked at 3 IDs around the tracking ID I got from my Komplett.no package. They where all Komplett.no packages containing 6 identifiable names (e-mail/phone contained one name and name on package was a different one). On my phone I had an SMS for a package from the company Forbruksimport.no AS back in 2016. The link was still active and my full name, address, company e-mail and phone number was present in REST service. Changing tracking codes around this number I found another package from two other parties (a school and a printing company). <b>This confirmed that both old tracking codes was active</b> and that <b>other PostNord customers was affected</b> (not Komplett.no). I did not confirm any foreign tracking numbers (don't have any).
+
+All checking of tracking numbers was done manually in the GUI in Chrome. Unless PostNord had mass download protection, I think <b>scripting a download of the whole database would be trivial.</b>
+
+<b>26th of May - Update regarding tracking number (Thanks, Jonas!):</b>
+
+The tracking numbers are <a href="https://en.wikipedia.org/wiki/GS1">G1</a> numbers and are detected as <a href="https://www.gs1.org/standards/id-keys/gsin">Global Shipment Identification Number</a> [<a href="http://www.gs1.no/sites/gs1/files/user/Dokumenter/Brukerveiledninger/transportguiden.pdf">Norway specific info</a>, in Norwegian] by <a href="https://www.gs1.org/services/check-digit-calculator">GS1's check digit calculator</a>. They have a "company" prefix and shipper reference starting at variable positions and have variable length [<a href="https://www.gs1.org/docs/idkeys/GS1_GSIN_Executive_Summary.pdf">ref executive summary</a>]. The last digit is a check sum.
+
+These are some of my GSIN tracking numbers:
+- 70702055479245968, PostNord - Komplett.no (2018)
+- 70713750137378380, PostNord - Forbrukerimport.no (2016)
+- 70722150148854589, Posten Norge - Verktøy4u.no (2018)
+
+The 707 prefix is Norway according to <a href="https://en.wikipedia.org/wiki/List_of_GS1_country_codes">List of GS1 country codes on Wikipedia</a> (700-709 = Norway). Both my PostNord tracking codes and the one from Posten Norge have the same 707 prefix. Other tracking codes I have in e-mails from Posten Norge seems to have 707 prefix. I had one with 704 and Roy found one with 705 prefix.
+
+I have not been able to identify what prefixes PostNord uses, if large e-commerce companies like Komplett have their own prefix or what prefix Posten Norge have. I still belive the tracking number are largly auto increments.
+
+<b>27th of May - Update regarding time frame:</b>
+
+After a bit of searching on Google for keywords in the JSON output of the service, I was able to find <b>two paste bins from 2013 and 2014</b>. Both outputs had tracking information plus name and full address. They did not have e-mail and phone number. Both were packages from Komplett.no.
+
+The URL was present in the one from 2013. It is still active on tollpost.no and I could check my on tracking numbers there:
+- http://www.tollpost.no/XMLServer/rest/trackandtrace?q=70702055479245968
+
+The tollpost.no domain redirects to postnord.no, but not for this service. Tollpost Global AS was accuired by PostNord AB some years back. Testing the same thing on postnord.no, the same API service returned
+- http://www.postnord.no/XMLServer/rest/trackandtrace?q=70702055479245968
+
+I think it's fair to say that the <b>service has been online for above 5 years</b>.
+
+<h4>Security issues</h4><img style="float:left;width:450px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from Chrome showing the excess data returned by the API." data-caption="Screenshot from Chrome showing the excess data returned by the API." src="/images/postnord01.png"/>- <b>Personal data secured by predictable tracking number (ID)</b>
+
+The combination is a leak of estimated millions of customers name, full address, phone number and e-mail address.
+
+The solution with guessable tracking numbers have both advantages and disadvantages. A number with a checksum is easier to write than something in the length and complexity of UUID. The guessable/predictable part of the number (autoincrement + checksum) makes it insecure. Everybody can find valid numbers.
+
+Given that they don't switch to something more secure, they can't give out personal data based on this tracking number. PostNord seems to be aware of this, as they have texts like "Due to security reasons we cannot show the recipient's full name and address. This is the postal code and city to where we will deliver the parcel." on <a href="https://tracking.postnord.com/">another tracking solution</a> they provide.
+
+<h4>Reception and handling</h4>The handling was fast, so I'll give the numbers in hours instead of days. Komplett did exactly what they should when notified. They gave a preliminary reply within a short time frame and responding in more detail the morning after. The issue was fixed faster than I expected. The reception was also good as it seemed that they were happy to get the notification.
+
+<h5>Hour 0 (20:16) - Notification</h5><b>Notification was sent to PostNord</b> (Data Protection Officer), <b>Komplett.no</b> (CEO, Data Protection Officer and a contact e-mail regarding personal data) and a copy to The Norwegian Data Protection Authority. The notification contain details about me plus 3 identified Komplett.no customers as example. The 3 customer profiles identified 6 persons (name identified one, e-mail identified another). I also included my 2016 parcel and example which identified a school sending a package to a printing company. I felt that this was enough to get the attention of somebody at top management level to get it fixed in a rush.
+
+I did not think I had found good addresses to contact in PostNord, but I had a better feeling about addresses in Komplett. Smaller company, usually responsive to customers. I also asked the Komplett Chat for an address to notify about security issues. They had none. I did manage to find the name of and get the e-mail confirmed for the security chief, but the e-mail bounced.
+
+Neither PostNord or Komplett had <a href="https://securitytxt.org/">security.txt</a> on the domains I looked at.
+
+<h5>Hour 1.5 (21:40) - Confirmation</h5><b>Komplett thanks for the notification and confirmed that the message was received. This is a good sign that the message was sharp enough that people read it in the evening and sent to the right people.</b> Really important to answer quickly, like Komplett did, if you get a message about security issues. Often the problem is that nobody answers.
+
+<h5>Hour 13 (09:49) - 2nd confirmation</h5>The next morning, I got a friendly call from Komplett. They thanked me again and <b>confirmed that they were in contact with PostNord and that they were on the case.</b>
+
+GDPR is launch in Europe on this day (25th of May 2018). Not active in Norway until 1st of July, but active for all EU citizens in our databases. A lot of privacy policies have already been updated i Norway. <b>Happy GDPR Day!</b>
+
+<h5>Hour 19 (15:03) - Fixed</h5>Phone call from Komplett again. Again thanking me for the notification. I was told that the <b>issue is fixed</b>. I quickly verify it after the conversation.
+
+Just a few minutes later, the Data Protection Officer from Komplett confirms <b>the mandatory incident report to The Norwegian Data Protection Authority was sent</b>. In Norway any authorized disclosure of personal data (e.g. data leak or client report sent to the wrong address) must be reported. The reports will be public (a few details might be withheld).
+
+<h4>Conclusion</h4>This is quite a large number of affected customers with their name, e-mail, phone number and full address neatly displayed along with their last parcel delivery. The leak is bad.
+
+PostNord know about the issue of displaying names and other information based on tracking number.`,
+                "images": ["/images/postnord02.png", "/images/postnord01.png", "/images/postnord03.png"],
+                "category":
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
+                "tags": [
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    }
+                ]
+            },
+            {
+                "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2018-01-01T04:30:00.000Z",
+                "updateDate": "2018-01-01T05:30:00.000Z",
                 "summary": ``,
                 "niceUrl": "/2018/XX/title",
                 "text": ``,
