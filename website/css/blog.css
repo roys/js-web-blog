@@ -40,6 +40,9 @@ ul {
         width: 100%;
     }
 }
+html {
+    font-size: 100%;
+}
 .card.waves-effect,
 .card .waves-effect {
     display: block;
