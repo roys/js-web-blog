@@ -2819,6 +2819,7 @@ It's isn't a very hard task to break in. But that is actually part of the point.
                 "title": "Guide: How to crack Android apps",
                 "published": true,
                 "publishDate": "2018-02-09T21:40:00.000Z",
+                "updateDate": "2018-06-02T17:40:00.000Z",
                 "summary": "Learn how to reverse engineer Android apps, alter them, and put them back together.",
                 "niceUrl": "/2018/02/crack-android-apps",
                 "text": `<h4>tl;dr</h4>This tutorial for how to crack Android apps is one of my more technical posts. If you aren't a developer you might want to skip this one. :) I'm assuming some basic knowledge of UN*X, Java and Android.
@@ -2927,6 +2928,9 @@ The command-line tool <a href="https://developer.android.com/studio/command-line
 
 If you are having trouble navigating the smali code and understand the flow of an app you can use the following smali code. It will call <a href="https://developer.android.com/reference/java/lang/Thread.html#dumpStack()"><span class="code">Thread.dumpStack()</span></a> which logs the current thread's call stack.
 <pre class="prettyprint lang-bsh"> invoke-static {}, Ljava/lang/Thread;->dumpStack()V</pre>
+If you need to know the value of a string - e.g. a parameter - you can use <a href="https://developer.android.com/reference/android/util/Log.html#d(java.lang.String,%20java.lang.String)"><span class="code">Log.d(String tag, String message)</span></a> to log it to the system log.
+<pre class="prettyprint lang-bsh"> const-string/jumbo v0, "YourTag"
+ invoke-static {v0, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I</pre>
 <h5>jadx - Dex to Java decompiler</h5><b><a href="https://github.com/skylot/jadx">jadx</a> is a command-line and GUI tool for converting <a href="https://source.android.com/devices/tech/dalvik/dex-format">dex</a> to Java.</b> Reading Java is after all easier than reading the smali format.
 
 <h5>Proguard</h5>Very often - but not in the case of my Developer Tools app - the code will be shrinked and obfuscated using <a href="https://developer.android.com/studio/build/shrink-code.html">ProGuard</a>. This makes the code a lot harder do read and understand. There aren't really any good ways around it, but doing the thread dump trick and taking your time to follow the code will eventually get you where you want to be.
