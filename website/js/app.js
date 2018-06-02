@@ -220,7 +220,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         }
         self.goToYearMonth = function (year, month) {
             var title = year;
-            var url = year;
+            var url = '/' + year;
             if (month != null){
                 title = new Date(year + '-' + month + '-01').toLocaleString('en-US', { year: 'numeric', month: 'long' });
                 url += '/' + month;
@@ -231,7 +231,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.post(null);
                     self.tag(null);
                     self.category(null);
-                    self.yearMonth({title: title, url: '/' + url});
+                    self.yearMonth({title: title, url: url});
                     self.pageNotFound(false);
                     self.isTransitioning(false);
                     self.loadAds();

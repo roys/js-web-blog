@@ -1919,8 +1919,6 @@ I wrote back and asked if I had misunderstood something and gave concrete exampl
 <h4>Conclusion</h4>Gjensidige has been very polite and nice in their communication, and also grateful for getting the reports. <b>I would have said their reception and handling was great, had it not been for my own and other customers' data were accessible for all of 4.5 months after the initial report.</b>
 
 While I understand that not everybody has the flexible server environments like <a href="/2017/08/digipost-leak">Digipost</a> or <a href="/2017/09/skandiabanken-leak">Skandiabanken</a>, even <b>using 4 weeks from the second report before fixing it in production isn't very impressive. This is an insurance company. They need to ensure that their customers' data is safe with them.</b>
-
-
 `,
                 "images": ["/images/gjensidige01.png", "/images/gjensidige02.png"],
                 "links": [
@@ -2840,16 +2838,16 @@ Other reasons to decompile apps could be to recover lost source code, to inject 
 
 <h4>Online alternatives</h4><b>Very often you don't have to get your hands too dirty getting the hands of a decompiled app. There are some good services out there that can provide you with most Android APKs, and then even some to decompile them.</b>
 
-<h5>Online APK archives</h5>To get hold of an APK you can typically just google the package name. There are quite a few sites where to download them from. Some are more frequently updated and others. Note that you can get hold of different versions and the APK for different architectual platforms.
+<h5>Online APK archives</h5>To get hold of an APK you can typically just google the package name. There are quite a few sites where to download them from. Some are more frequently updated than others. Note that you can get hold of different versions and the APK for different architectual platforms.
 
-A word of wisdom: <b>Don't download and run some random APK out there (at least do it in a sandboxed and/or emulated environment). There's quite a few sites that serves bogus or altered APKs. The app might look allright, but still have some malware injected. Don't blindly trust the ones that I recommend either.</b> If the APK is signed with the same key as an APK that you got from Play Store you should be able to trust its origin (though there have been cases of private keys in the wild (even repackaged APKs uploaded to the vendor's own web site)).
+A word of wisdom: <b>Don't download and run some random APK out there (at least do it in a sandboxed and/or emulated environment). There are quite a few sites that serves bogus or altered APKs. The app might look allright, but still have some malware injected. Don't blindly trust the ones that I recommend either.</b> If the APK is signed with the same key as an APK that you got from Play Store you should be able to trust its origin (though there have been cases of private keys in the wild (even repackaged APKs uploaded to the vendor's own web site)).
 
 Here's a few you might want to try out:
  - <a href="https://apkmirror.com">APKMirror</a>
  - <a href="https://apkpure.com/">APKPure</a>
  - <a href="https://www.apkmonk.com/">APKMonk</a>
 
-<h5>Online decompiler</h5>The quickest and easiest way to decompile an APK is to just use an online service. You just upload the APK and get an archive with all the resource and decompiled files. <b><a href="http://www.javadecompilers.com/apk">javadecompilers.com</a> is the one I have used, and I have been pretty happy with it.</b>
+<h5>Online decompiler</h5>The quickest and easiest way to decompile an APK is to just use an online service. You just upload the APK and get an archive with all the resources and decompiled files. <b><a href="http://www.javadecompilers.com/apk">javadecompilers.com</a> is the one I have used, and I have been pretty happy with it.</b>
 
 As you might know, the <a href="https://en.wikipedia.org/wiki/Android_application_package">APK file is really just a ZIP file</a>, so you can typically just rename it to <span class="code">.zip</span> and double click it or run <span class="code">unzip</span> and you can start investigating the app. If it's a <a href="https://en.wikipedia.org/wiki/Web_application#Definition_and_similar_terms">hybrid app</a> you might not have to decompile it at all to get access to everything. Actually, the <a href="/2017/10/tracking-kids">Gator Watch app</a> was a hybrid app and gave away everything with little effort.
 
@@ -3161,6 +3159,10 @@ In Norway we can have separate companies for electricity distribution ("nettsels
                     {
                         "title": "Smart meter",
                         "url": "/smart-meter"
+                    },
+                    {
+                        "title": "Account takeover",
+                        "url": "/account-takeover"
                     },
                     {
                         "title": "OWASP 2017 A5",
