@@ -98,9 +98,9 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             if (path.length === 0) {
                 self.goToFrontpage();
             } else if (parts.length === 1) {
-                if(isInt(parts[0]) && parts[0] >= 2017) {
+                if (isInt(parts[0]) && parts[0] >= 2017) {
                     self.goToYearMonth(parts[0], null);
-                }else{
+                } else {
                     self.goToNotFoundPage();
                 }
             } else if (parts.length === 2) {
@@ -131,7 +131,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     if (!foundTag) {
                         self.goToNotFoundPage();
                     }
-                } else if(isInt(parts[0]) && isInt(parts[1]) && parts[0] >= 2017 && parts[1] >= 1 && parts[1] <= 12 && parts[1].length == 2) {
+                } else if (isInt(parts[0]) && isInt(parts[1]) && parts[0] >= 2017 && parts[1] >= 1 && parts[1] <= 12 && parts[1].length == 2) {
                     self.goToYearMonth(parts[0], parts[1]);
                 } else {
                     self.goToNotFoundPage();
@@ -221,7 +221,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         self.goToYearMonth = function (year, month) {
             var title = year;
             var url = '/' + year;
-            if (month != null){
+            if (month != null) {
                 title = new Date(year + '-' + month + '-01').toLocaleString('en-US', { year: 'numeric', month: 'long' });
                 url += '/' + month;
             }
@@ -231,7 +231,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.post(null);
                     self.tag(null);
                     self.category(null);
-                    self.yearMonth({title: title, url: url});
+                    self.yearMonth({ title: title, url: url });
                     self.pageNotFound(false);
                     self.isTransitioning(false);
                     self.loadAds();
@@ -285,7 +285,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         }
 
         function isInt(value) {
-            return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value));
+            return !isNaN(value) && (function (x) { return (x | 0) === x; })(parseFloat(value));
         }
 
         function processCategoriesAndTags() {
