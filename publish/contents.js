@@ -115,7 +115,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
             {
                 "title": `Case #1: Get your Social Security numbers here!`,
                 "published": true,
-                "hot": true,
+                "hot": false,
                 "publishDate": "2017-08-14T05:30:00.000Z",
                 "updateDate": "2017-08-17T16:50:00.000Z",
                 "summary": `Using only the plate number of a Norwegian car you can find the name, address, Social Security number, etc. of the owners.`,
@@ -1293,7 +1293,7 @@ From public financial information I see that they have had 1-2 million USD in an
 
 <b>To try it on other pages, just drag the button to your bookmark row in your browser.</b> After that you can just click the bookmark when visiting other sites.
 
-<h4>What's a bookmarklet?</h4>A <a href="https://en.wikipedia.org/wiki/Bookmarklet">bookmarklet</a> is a bookmark stored in a web browser that contains JavaScript commands that add new features to the browser. Bookmarklets can be useful tools, e.g. for increasing the readability of web pages, do seaches, create short urls, etc.
+<h4>What's a bookmarklet?</h4>A <a href="https://en.wikipedia.org/wiki/Bookmarklet">bookmarklet</a> is a bookmark stored in a web browser that contains JavaScript commands that add new features to the browser. Bookmarklets can be useful tools, e.g. for increasing the readability of web pages, do searches, create short urls, etc.
 
 <a onclick="ga('send','event','game','play','dom2',3);return true;" href="javascript:var%20s=document.createElement('script');s.type='text/javascript';s.onerror=function(e){alert('Failed%20to%20load%20the%20script.%20The%20site\\'s%20Content%20Security%20Policy%20might%20be%20blocking%20it.%20Feel%20free%20to%20try%20again.');};document.body.appendChild(s);s.src='https://blog.roysolberg.com/js/dom2.min.js';void(0);">DOM II: JavaScript Hell</a> might not be very useful, but hopefully it's an enjoyable small game if you're bored or if you're disliking a web site. :)
 
@@ -2818,6 +2818,7 @@ It's isn't a very hard task to break in. But that is actually part of the point.
             {
                 "title": "Guide: How to crack Android apps",
                 "published": true,
+                "hot": true,
                 "publishDate": "2018-02-09T21:40:00.000Z",
                 "updateDate": "2018-06-02T17:40:00.000Z",
                 "summary": "Learn how to reverse engineer Android apps, alter them, and put them back together.",
@@ -2898,7 +2899,6 @@ Then we'll change some hard coded text so that we have changed both resources an
  $ # Edit the smali file and change the string value:
  $ vi base/smali/com/roysolberg/android/developertools/ui/activity/MainActivity.smali
 </pre>
-
 <h4>Getting the app back together</h4>There are quite a few steps getting everything together. <b>We need to rebuild the app, sign it, zipalign it, and then install it.</b> If the properly signed app is still installed it needs to first be uninstalled as our signature violates the existing one.
 
 The command-line tool <a href="https://developer.android.com/studio/command-line/zipalign.html">zipalign</a> is needed to align the contents of the APK for Android to be able to run it. You can find the tool in the Android's installation folder <span class="code">build-tools/&lt;some version number&gt;</span>.
@@ -3427,6 +3427,70 @@ PostNord know about the issue of displaying names and other information based on
                     {
                         "title": "Information leak",
                         "url": "/information-leak"
+                    }
+                ]
+            },
+            {
+                "title": "Linkifying robots.txt",
+                "published": true,
+                "publishDate": "2018-06-03T19:50:00.000Z",
+                "summary": `Here's a simple bookmarklet to linkify <span class="code">robots.txt</span>.`,
+                "niceUrl": "/2018/06/robots-txt-linkifier",
+                "text": `<h4>tl;dr</h4><a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard"><span class="code">robots.txt</span></a> is a unfortunately often a source for finding links to parts of websites that should not be publicly known (or even be on the Internet in the first place). I've written a few lines of JavaScript to make it quicker to visit all the links in this file.
+
+<h4>Bookmarklet</h4><p style="text-align:center;"><a onclick="alert('No need to click this. :-) Just drag the link to your bookmark row or copy it and paste it into a new bookmark.');return false;" href="javascript:(function()%7Bconsole.log(%27robots.txt%20linkifier%20v1.0%3B%20https%3A%2F%2Fblog.roysolberg.com%27)%3Bfunction%20openLinks()%7Bvar%20links%3Ddocument.links%3Bif(links.length%3E20)%7Bif(!confirm(%27There%20are%20%27%2Blinks.length%2B%27%20links.%20Are%20you%20sure%20you%20want%20to%20open%20them%20all%20at%20once%3F%27))%7Breturn%7D%7D%3Bconsole.log(%27Some%20browsers%20will%20block%20opening%20links%20this%20way.%27)%3Bfor(var%20i%3D0%3Bi%3Clinks.length%3Bi%2B%2B)%7Bwindow.open(links%5Bi%5D.href%2C%27_blank%27)%7D%7D%3Bvar%20base%3Dlocation.protocol%2B%22%2F%2F%22%2Blocation.hostname%2B(location.port%26%26%22%3A%22%2Blocation.port)%3Bvar%20html%3D%27%3Cbody%20style%3D%22font-size%3A120%25%3B%22%3E%3Cscript%3E%27%2BopenLinks.toString()%2B%27%3C%2Fscript%3E%3Cbutton%20type%3D%22button%22%20style%3D%22width%3A200px%3Bheight%3A40px%3Bfont-size%3A120%25%3B%22%20onclick%3D%22openLinks()%3B%22%3EOpen%20all%20links%3C%2Fbutton%3E%3Cdiv%20style%3D%22font-family%3A%20monospace%3B%22%3E%27%3Bhtml%2B%3Ddocument.body.textContent.replace(%2F(Allow%7CDisallow)%3A%20(%5C%2F%5CS*)%2Fg%2C%27%241%3A%20%3Ca%20href%3D%22%27%2Bbase%2B%27%242%22%20target%3D%22_blank%22%3E%242%3C%2Fa%3E%27).replace(%2F%5Cn%2Fg%2C%27%3Cbr%2F%3E%27)%3Bvar%20win%3Dwindow.open()%3Bwin.document.write(html)%3Bwin.document.close()%7D)()%3B" class="waves-effect waves-light btn-large">robots.txt linkifier</a></p><b>Just drag the button to your bookmark row in your browser.</b> (In some browsers you might need to copy and paste the link of the button into a new bookmark.)
+
+<b>After that you can just click the bookmark when visiting websites' <a href="/robots.txt"><span class="code">robots.txt</span> (like my)</a> to get them linkified and even all their links opened with just one click of a button.</b>
+
+<h4>What's a bookmarklet?</h4>A <a href="https://en.wikipedia.org/wiki/Bookmarklet">bookmarklet</a> is a bookmark stored in a web browser that contains JavaScript commands that add new features to the browser. Bookmarklets can be useful tools, e.g. for increasing the readability of web pages, do searches, create short urls, etc.
+
+<h4>Source code</h4>Here's the few lines of source code without <a href="https://en.wikipedia.org/wiki/Minification_(programming)">minification</a> and without <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoding</a>.<pre class="prettyprint lang-js">/*
+* ----------------------------------------------------------------------------
+* "THE BEER-WARE LICENSE" (Revision 42):
+* <phk@FreeBSD.ORG> wrote this file.  As long as you retain this notice you
+* can do whatever you want with this stuff. If we meet some day, and you think
+* this stuff is worth it, you can buy me a beer in return.         Roy Solberg
+* ----------------------------------------------------------------------------
+*/
+javascript: (function () {
+    console.log('robots.txt linkifier v1.0; https://blog.roysolberg.com');
+    function openLinks() {
+        var links = document.links;
+        if (links.length > 20) {
+            if (!confirm('There are ' + links.length + ' links. Are you sure you want to open them all at once?')) {
+                return;
+            }
+        }
+        console.log('Some browsers will block opening links this way.');
+        for (var i = 0; i < links.length; i++) {
+            window.open(links[i].href, '_blank');
+        };
+    }
+    var base = location.protocol + "//" + location.hostname + (location.port && ":" + location.port);
+    var html = '&lt;body style="font-size:120%;">&lt;script>' + openLinks.toString() + '&lt;/script>&lt;button type="button" style="width:200px;height:40px;font-size:120%;" onclick="openLinks();">Open all links&lt;/button>&lt;div style="font-family: monospace;">';
+    html += document.body.textContent.replace(/(Allow|Disallow): (\\/\\S*)/g, '$1: &lt;a href="' + base + '$2" target="_blank">$2&lt;/a>').replace(/\\n/g, '&lt;br/>');
+    var win = window.open();
+    win.document.write(html);
+    win.document.close();
+})();</pre>
+The software and source code is released under the <a href="https://en.wikipedia.org/wiki/Beerware">beer-ware licence</a> 🍻💻.
+
+<h4>Want more bookmarklet fun?</h4>Why don't you try out my bookmarklet game <a href="/2017/10/dom2-bookmarklet">DOM II: JavaScript Hell</a>? 😎
+`,
+                "images": [],
+                "category":
+                    {
+                        "title": "Security",
+                        "url": "/security"
+                    },
+                "tags": [
+                    {
+                        "title": "JavaScript",
+                        "url": "/javascript"
+                    },
+                    {
+                        "title": "Bookmarklet",
+                        "url": "/bookmarklet"
                     }
                 ]
             },
