@@ -1004,6 +1004,41 @@ window.SpaBlog=window.SpaBlog||{};(function(SpaBlog){SpaBlog.posts=
         ]
     },
     {
+        "title": "Case #16: Free parking and personal data",
+        "published": true,
+        "publishDate": "2018-06-11T04:40:00.000Z",
+        "summary": "It was possible to do systematic account takeover for one of Norway's biggest parking companies.",
+        "niceUrl": "/2018/06/free-parking",
+        "text": "<h4>tl;dr</h4>The parking company <i>OnePark</i> had a security issue that made it possible to systematically iterate through and change the username and password for all of their customers. By logging in afterwards one could collect personal data and even register your car's licence plate to be paid by that account.\n\n<h4>Summary</h4><table class=\"summary\">\n<tr>\n    <td style=\"width:30%\">Who:</td>\n    <td><a href=\"https://onepark.no/\">OnePark</a></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Severity level:</td>\n    <td><span class=\"orange-text\">Medium</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reported:</td>\n    <td>November 2017</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reception and handling:</td>\n    <td><span class=\"orange-text\">Fair</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Status:</td>\n    <td><span class=\"green-text\">Fixed</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reward:</td>\n    <td>A thank you</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Issue:</td>\n    <td>Information leak with personal information</td>\n</tr>\n</table>\n<div style=\"padding-top:80px;\" class=\"col s12 m5 l5 xl4 right\"><div class=\"card-panel light-blue darken-1\"><span style=\"text-decoration:underline;\" class=\"white-text\"><a class=\"white-text\" href=\"/2017/08/security-vulnerability-disclosures\">Background: The purpose of these posts</a></span></div></div>\n<h4>Background</h4>OnePark is one of Norway's biggest parking companies. They have many parking lots where they use <a href=\"https://en.wikipedia.org/wiki/Automatic_number-plate_recognition\">automatic number-plate recognition (ANPR)</a>. You can just park your car, and then after picking it up you have 48 hours to go online to pay your bill. You don't even have to do any registration up front.\n\n<b>I got a tip that OnePark sends out the passwords for their accounts in clear text - and that is just never a good sign.</b> So I decided to take a quick peek at their site.\n\n<h4>Approach (technical stuff)</h4><!--a class=\"skip-link\" href=\"#security-issue\">Skip</a--><img style=\"width:500px;float:left;margin-right:20px;\" class=\"materialboxed responsive-img\" title=\"Screenshot from source code of Onepark's profile page.\" data-caption=\"Screenshot from source code of Onepark's profile page.\" src=\"/images/onepark03.png\"/>I took a look at OnePark's site with <a href=\"https://help.vivaldi.com/article/developer-tools/\">Vivaldi developer tools</a> running. I created an account (you can create as many as you'd like using just an e-mail address) and looked at the communication with the server.\n\nMost stuff looked good, but <b>I hesitated when I saw that the web form for updating the user profile actually sent the user's ID back. The user ID was that classic integer that we so often see and therefore - when there's a vulnerability - opens up for an enumeration attack.</b>\n\nI didn't want to destroy anyone else's data so <b>I created myself a another new account and tested by passing that user ID in when doing a profile update with a third e-mail address and a new password. The site didn't complain, and voilà - I was able to log in to the other account with that e-mail address and password.</b> <span title=\"Hacker cat\">🐱‍💻</span>\n\nBut of course, now the data was all replaced by mine. So <b>I removed all other form fields than the username (e-mail address) and password from the profile update request. This worked just fine.</b>\n\nInside the other person's profile it was now possible to get hold of all the personal data, including any licence plate numbers and see if there was payment information added to the profile. The payment information was securely stored at a third-party site.\n\nSince the user ID was an integer one could easily have set up a script to steal all the data. And not only that, one could also of course do vandalism by updating/removing the data. What's more - if one's a bit bold - <b>one could register the licence plate of the car and remove it after the parking was paid for. I did not check if this would be easily spotted and trackable for either the customer or OnePark.</b>\n\n<h4 id=\"security-issues\">Security issues</h4><img style=\"width:500px;float:right;margin-left:20px;margin-bottom:20px;\" class=\"materialboxed responsive-img\" title=\"Screenshot of Onepark's profile page.\" data-caption=\"Screenshot of Onepark's profile page.\" src=\"/images/onepark02.png\"/><img style=\"width:500px;float:right;margin-left:20px;\" class=\"materialboxed responsive-img\" title=\"Screenshot of Onepark's profile page.\" data-caption=\"Screenshot of Onepark's profile page.\" src=\"/images/onepark01.png\"/><b>One could systematically go through all customers and retrieve the following information:\n - Full name\n - Full address\n - Phone number\n - Licence plate numbers\n</b>\nIt was also possible to register any car's licence plate to be paid for with any account. In addition initial and reset passwords were sent in clear text by e-mail.\n\n<h4>Reception and handling</h4><h5>Day zero</h5>I found a contact form where I described the issue with the account takeover.\n\nI got an automatic reply that they had received the e-mail.\n\n<h5>Day 10</h5>I got a phone call (even though I didn't give them my phone number) from one of the chiefs of the company that apparently was responsible for OnePark's web solution.\n\n<b>He thanked me a lot and clearly was proud that they had fixed the issue in just three hours. Three hours? Well, my message took 9.5 days to reach the people that could actually fix the issue.</b>\n\nWhile the handling of this company was good, OnePark seems to have quite a way to go on how to receive and handle issues around their online security.\n\nJust after the phone call I also received an e-mail from the same chief - again thanking me and telling how they dealt with the issue.\n\n<h4>Conclusion</h4>Just like <a href=\"/2018/04/power-company-leak\">the security issue with the power company Norgesnett</a> this is a case where the authorization check for updating the profile fails. And because of the usage of an integer as user ID it was possibly to systematically exploit the issue.\n\nIt is quite common for software developers to trust the authentication, but then forgetting the authorization check and user input sanitization.\n\nAnd yet again we can see our personal data open for anyone to steal…\n",
+        "images": [
+            "/images/onepark01.png",
+            "/images/onepark02.png",
+            "/images/onepark03.png"
+        ],
+        "category": {
+            "title": "Security",
+            "url": "/security"
+        },
+        "tags": [
+            {
+                "title": "Security Monday",
+                "url": "/security-monday"
+            },
+            {
+                "title": "Information leak",
+                "url": "/information-leak"
+            },
+            {
+                "title": "Account takeover",
+                "url": "/account-takeover"
+            },
+            {
+                "title": "OWASP 2017 A5",
+                "url": "/owasp-2017-a5"
+            }
+        ]
+    },
+    {
         "title": "Case #XX: ",
         "published": false,
         "publishDate": "2018-01-01T04:30:00.000Z",
