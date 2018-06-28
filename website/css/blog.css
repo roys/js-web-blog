@@ -43,6 +43,11 @@ ul {
 html {
     font-size: 100%;
 }
+@media only screen and (min-width: 960px){
+    .flow-text {
+        font-size: 1.55rem;
+    }
+}
 .card.waves-effect,
 .card .waves-effect {
     display: block;
@@ -97,8 +102,27 @@ a[href*="//blog.roysolberg.com/"]:after, footer a[href*="//"]:after {
   content: '';
   margin: 0;
 }
-.code{
+.skip-link{
+    font-size: 90%;
+    clear: right;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+em, .markup{
+    background-color: rgba(12,242,143,.3);
+    -webkit-print-color-adjust: exact !important;
+    font-style: normal;
+}
+code, .code{
     font-family: Courier New, monospace;
+}
+@media print{
+    .prepare-print{
+        display: none;
+    }
+    .skip-link{
+        display: none;
+    }
 }
 
 /**

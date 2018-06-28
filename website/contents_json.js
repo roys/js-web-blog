@@ -194,6 +194,10 @@ window.SpaBlog=window.SpaBlog||{};(function(SpaBlog){SpaBlog.posts=
             {
                 "title": "HDL Buspro",
                 "url": "/hdl-buspro"
+            },
+            {
+                "title": "Internet of Things",
+                "url": "/iot"
             }
         ]
     },
@@ -623,6 +627,10 @@ window.SpaBlog=window.SpaBlog||{};(function(SpaBlog){SpaBlog.posts=
                 "url": "/information-leak"
             },
             {
+                "title": "Internet of Things",
+                "url": "/iot"
+            },
+            {
                 "title": "#WatchOut",
                 "url": "/watchout"
             }
@@ -1031,6 +1039,40 @@ window.SpaBlog=window.SpaBlog||{};(function(SpaBlog){SpaBlog.posts=
             {
                 "title": "Account takeover",
                 "url": "/account-takeover"
+            },
+            {
+                "title": "OWASP 2017 A5",
+                "url": "/owasp-2017-a5"
+            }
+        ]
+    },
+    {
+        "title": "Case #17: Tracking dog owners",
+        "published": true,
+        "publishDate": "2018-06-25T04:57:00.000Z",
+        "summary": "The tool for the owner to track its pet became a tool for tracking all the pet owners themselves. The hunters became the hunted.",
+        "niceUrl": "/2018/07/tracking-dog-owners",
+        "text": "<h4>tl;dr</h4>A tracking system was leaking information about all the users, pictures, and information and location data from all the trackers.\n\n<h4>Summary</h4><table class=\"summary\">\n<tr>\n    <td style=\"width:30%\">Who:</td>\n    <td>Anonymous, let's call them <a href=\"https://en.wikipedia.org/wiki/Fictional_company\">Acme4</a></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Severity level:</td>\n    <td><span class=\"orange-text\">Medium</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reported:</td>\n    <td>May 2018</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reception and handling:</td>\n    <td><span class=\"green-text\">Good</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Status:</td>\n    <td><span class=\"green-text\">Fixed</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reward:</td>\n    <td>A thank you</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Issue:</td>\n    <td>Information leak with pictures, personal information and location data</td>\n</tr>\n</table>\n<div style=\"padding-top:80px;\" class=\"col s12 m5 l5 xl4 right\"><div class=\"card-panel light-blue darken-1\"><span style=\"text-decoration:underline;\" class=\"white-text\"><a class=\"white-text\" href=\"/2017/08/security-vulnerability-disclosures\">Background: The purpose of these posts</a></span></div></div>\n<h4>Background</h4>Acme4 sells a tracking chip intended to be used for dogs. There's a companion mobile app which is used to see the tracker on the map and send commands to it. It was a bit of a coincident that I noticed this system and took a closer look at it.\n\n<h4>Approach (technical stuff)</h4><a class=\"skip-link\" href=\"#security-issues\"><u>Skip this part</u> 🙈</a><h5>The app</h5>I never had physical access to a tracker, so the only entry point for me was the app itself.\n\nI have <a href=\"/2018/02/crack-android-apps\">my guide on how to crack Android apps</a> which I take a quick glance at when doing this stuff. This was easy enough though. I downloaded the APK from <a href=\"https://apkmonk.com\">apkmonk.com</a> and decompiled it with <a href=\"http://www.javadecompilers.com/apk\">javadecompilers.com</a>. The end result was a an full access to the source code and resources.\n\n<span class=\"markup\">Normally I would probably just've used a HTTP proxy to intercept the traffic, but in this case where I didn't have the necessary hardware (the tracker) I wouldn't be able to use all functions, so I needed the source code to discover all possible HTTP calls. Also the source code sometimes include hidden gems like unused endpoints, test servers and more.</span>\n\nI was a bit surprised by the how clean the code was and how it used modern patterns and libraries. The UI isn't that nice and often I find there to be a correlation..\n\n<h5>The server API</h5>With the app's source code I could try out the server communication. <span class=\"markup\">This wasn't exactly your regular REST API. While the data returned from the server was JSON, all of the calls were GET calls for all kinds of actions with the data in query string parameters  - even the authentication.</span> Of course this just make it much easier to play around using a desktop browser.\n\n<em>The search for adding friends had the classic \"return everything\" when searching for <code>___</code>.</em> There's nothing inherently wrong with that, but it isn't ideal, and also <em>the search returned the ID, username, a display name, first name, last name and e-mail address of the users.</em>\n\n<h5>That open Amazon S3 bucket</h5><img style=\"width:400px;float:left;margin:0 20px 20px 0;\" class=\"materialboxed responsive-img\" title=\"Location data from one of the GPS trackers.\" data-caption=\"Location data from one of the GPS trackers.\" src=\"/images/acme402.png\"/><span class=\"markup\">I found all the pictures of the users in an open <a href=\"https://en.wikipedia.org/wiki/Amazon_S3#Design\">Amazon S3 bucket</a>. Luckily most of the users are dogs. 😅</span> But still, some owners might upload pictures of themselves with their pet. Surely the owners don't expect the pictures to be lying around on the Internet.\n\n<h5 style=\"clear:left;\">The web site</h5><img style=\"width:400px;float:left;margin-right:20px;\" class=\"materialboxed responsive-img\" title=\"Location data from one of the GPS trackers.\" data-caption=\"Location data from one of the GPS trackers.\" src=\"/images/acme401.png\"/>In addition to the app I found a \"my page\" at the service's website, and this is where I struck gold. Most of the site's PHP scripts were available when logged in, but the scripts were located in a directory with open directory listing.\n\n<em>Using the PHP scripts it was possible to iterate through all of the registered trackers as the ID was based on an incremental integer. The combined tracker information I got from the scripts was ID, phone number (to the tracker SIM card), <a href=\"https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity\">IMEI</a>, display name and historical location data (latitude, longitude, address, direction).</em>\n\n<em>The good news is that I didn't find any direct way of seeing which tracker belonged to which user. However, about 5% could be connected because of the display name of the tracker. Additionally, because of the incremental IDs, it was possible to pretty accurately estimate which tracker belonged to which user.</em>\n\n<h4 id=\"security-issues\">Security issues</h4><em>One could systematically go through all users and all trackers and retrieve the following information:\n - Users:\n   - Full name\n   - E-mail address\n   - Username\n   - Display name\n - Trackers:\n   - Display name\n   - Location (latitude, longitude, direction, address)\n   - IMEI\n   - Phone number\n</em>\nIt was only possible to either estimate the owner of the tracker (based on incremental IDs) or - for 5% av of the trackers - assume a match based on display names. <em>All pictures of the pets were available for download.</em>.\n\n<h4>Reception and handling</h4><h5>Day zero</h5>Night time Friday I sent an e-mail to the support address. I like to keep it short, but this was probably the longest description I've had to write in such an e-mail.\n\n<h5>Day 3</h5>Before lunch on Monday I got an e-mail thanking me for the report.\n\n<h5>Day 4</h5>Again before lunch, I got an e-mail telling me that everything should be fixed. So this was all pretty quickly taken care of.\n\n<h5>Day X</h5>While doing this write-up I saw - and reported - that the search for adding friends within the app still also returns e-mail addresses and still returns all users if searching for a special character. I hope that'll be fixed. Imagine Facebook giving away all users and their e-mail addresses that easily.\n\n<h4>Anonymous you say?</h4>I looked into the financial and other public information of this company. I also checked out social media and did a little general due diligence. Though the person behind the company might not do all coding and support personally, it appeared to be a one-man show. <em>I don't want to use my blog to afflict individuals.</em> <a href=\"/2017/08/security-vulnerability-disclosures\">As stated before</a>, I want people to know that none of their data is secure, I want us developers to improve our data security skills, and I want companies to take more responsibility around data security and their customer data.\n\n<h4>Conclusion</h4>Maybe we as consumers should think twice when buying devices connected to the Internet. Think about what information you hand over to the vendor and what could be the worst case if everything's leaked. Would someone be able to live track you? Would someone be able to know when you're not at home? Would you be ok with anyone having the usage data for this system? Would you be fooled if anyone used this information in a clever way in a <a href=\"https://en.wikipedia.org/wiki/Phishing\">phising e-mail</a>?\n\n<em>I wish that there was some sort of certification to know that an IoT vendor at least fulfils some minimum standards in regards of computer security and have regularly third party audits.</em>\n",
+        "images": [
+            "/images/acme401.png",
+            "/images/acme402.png"
+        ],
+        "category": {
+            "title": "Security",
+            "url": "/security"
+        },
+        "tags": [
+            {
+                "title": "Security Monday",
+                "url": "/security-monday"
+            },
+            {
+                "title": "Information leak",
+                "url": "/information-leak"
+            },
+            {
+                "title": "Internet of Things",
+                "url": "/iot"
             },
             {
                 "title": "OWASP 2017 A5",

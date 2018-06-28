@@ -41,10 +41,10 @@ While one might argue that Knockout is beyond its prime time, it sure works grea
 `,
                 "images": ["/images/knockout-js_dead.png"],
                 "category":
-                    {
-                        "title": "Software development",
-                        "url": "/software-development"
-                    },
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -101,10 +101,10 @@ The purpose of posting these vulnerabilities is fivefold:
 If you want more thoughts about responsible disclosure I would recommand reading <a href="https://www.troyhunt.com/kids-pass-just-reminded-us-how-hard-responsible-disclosure-is/">Troy Hunt's site</a> (and maybe especially the video in that link).
 `,
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Background article",
@@ -236,10 +236,10 @@ If you use your imagination I'm sure you can come up with other ways to (ab)use 
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -356,10 +356,10 @@ curl 'https://example.com/UpdateTask' \\
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -470,10 +470,10 @@ The first URL apparently returned the number of unpaid invoices you have. Not so
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -546,14 +546,18 @@ For the ones of you trusting on your local network security I want to quote a gr
                     }
                 ],
                 "category":
-                    {
-                        "title": "Smart home",
-                        "url": "/smart-home"
-                    },
+                {
+                    "title": "Smart home",
+                    "url": "/smart-home"
+                },
                 "tags": [
                     {
                         "title": "HDL Buspro",
                         "url": "/hdl-buspro"
+                    },
+                    {
+                        "title": "Internet of Things",
+                        "url": "/iot"
                     }
                 ]
             },
@@ -651,10 +655,10 @@ This is only speculation as I didn't look further after finding the file inclusi
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -714,10 +718,10 @@ Secondly the different social media sites need to start doing what Google has be
 `,
                 "images": ["/images/linkedin_preview.png"],
                 "category":
-                    {
-                        "title": "Software development",
-                        "url": "/software-development"
-                    },
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -819,10 +823,10 @@ I feel confident that this issue would've been discovered relatively quickly by 
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -872,10 +876,10 @@ I didn't really know what the <a href="https://en.wikipedia.org/wiki/World_Wide_
 `,
                 "images": ["/images/floppy01.jpg", "/images/floppy02.jpg"],
                 "category":
-                    {
-                        "title": "Internet archive",
-                        "url": "/internet-archive"
-                    },
+                {
+                    "title": "Internet archive",
+                    "url": "/internet-archive"
+                },
                 "tags": [
                     {
                         "title": "1990s",
@@ -976,10 +980,10 @@ If companies choose to store images like in this case, they should indeed mentio
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1101,10 +1105,10 @@ And to start connecting the dots between the cases I'm representing; <b>do you r
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1243,10 +1247,10 @@ From public financial information I see that they have had 1-2 million USD in an
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1308,10 +1312,10 @@ Oh, and the name? Since this game is all about <a href="https://en.wikipedia.org
                 "images": [],
                 "links": [],
                 "category":
-                    {
-                        "title": "Software development",
-                        "url": "/software-development"
-                    },
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -1456,10 +1460,10 @@ I also hope that we'll soon see most websites switch to secure communications on
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1595,10 +1599,10 @@ However, in this case there seems to be a big lack of understanding how to - and
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1769,10 +1773,10 @@ For those of you wanting to go even deeper I would recommend the solid <a href="
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -1781,6 +1785,10 @@ For those of you wanting to go even deeper I would recommend the solid <a href="
                     {
                         "title": "Information leak",
                         "url": "/information-leak"
+                    },
+                    {
+                        "title": "Internet of Things",
+                        "url": "/iot"
                     },
                     {
                         "title": "#WatchOut",
@@ -1928,10 +1936,10 @@ While I understand that not everybody has the flexible server environments like 
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -2004,10 +2012,10 @@ Acknowledgement: https://example.com/security-hall-of-fame.html</pre>
                 "images": ["/images/security.png"],
                 "links": [],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "security.txt",
@@ -2103,10 +2111,10 @@ I don't like when it takes more than 3 months to fix something that seemingly is
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -2635,10 +2643,10 @@ In the table below I've marked the the cases in which there are some overlapping
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -2747,10 +2755,10 @@ And with the mentioned other kindergarten system with vulnerabilities, and <a hr
                     }
                 ],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -2810,10 +2818,10 @@ It's isn't a very hard task to break in. But that is actually part of the point.
 `,
                 "images": ["/images/ra.gl.png"],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    }
+                {
+                    "title": "Security",
+                    "url": "/security"
+                }
             },
             {
                 "title": "Guide: How to crack Android apps",
@@ -2938,10 +2946,10 @@ If you need to know the value of a string - e.g. a parameter - you can use <a hr
 <h4>Wrapping it up</h4><img style="float:left;width:550px;margin-right:20px;" class="materialboxed responsive-img" title="The regular Developer Tools app on the left and the cracked one on the right." data-caption="The regular Developer Tools app on the left and the cracked one on the right." alt="The regular Developer Tools app on the left and the cracked one on the right." src="/images/cracked_app.jpg"/>If you have followed along the guide you would see the app change from the version on the left to something like the one on the right. One of the reasons I wrote this guide was for my own sake to have something to easily copy and paste from when doing some reverse engineering myself, but I thought this might be useful one for others as well. :)`,
                 "images": ["/images/cracked_app.jpg"],
                 "category":
-                    {
-                        "title": "Software development",
-                        "url": "/software-development"
-                    },
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
                 "tags": [
                     {
                         "title": "Reverse engineering",
@@ -3022,10 +3030,10 @@ And I'm also happy to see - at least the Norwegian version of - Gator taking thi
 `,
                 "images": ["/images/gator-revisited01.png", "/images/gator-revisited02.png", "/images/gator-revisited03.png"],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "#WatchOut",
@@ -3147,10 +3155,10 @@ In Norway we can have separate companies for electricity distribution ("nettsels
 `,
                 "images": ["/images/norgesnett01.png", "/images/norgesnett02.png", "/images/norgesnett03.png"],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -3271,10 +3279,10 @@ I think we all expect our hotel to keep our personal details safe and secured.
 `,
                 "images": ["/images/hotel01.png", "/images/hotel02.png"],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -3419,10 +3427,10 @@ Just a few minutes later, the Data Protection Officer from Komplett confirms <b>
 PostNord know about the issue of displaying names and other information based on tracking number.`,
                 "images": ["/images/postnord02.png", "/images/postnord01.png", "/images/postnord03.png"],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Information leak",
@@ -3488,10 +3496,10 @@ The software and source code is released under the <a href="https://en.wikipedia
 `,
                 "images": [],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "JavaScript",
@@ -3586,10 +3594,10 @@ And yet again we can see our personal data open for anyone to steal…
 `,
                 "images": ["/images/onepark01.png", "/images/onepark02.png", "/images/onepark03.png"],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",
@@ -3610,6 +3618,121 @@ And yet again we can see our personal data open for anyone to steal…
                 ]
             },
             {
+                "title": "Case #17: Tracking dog owners",
+                "published": true,
+                "publishDate": "2018-06-25T04:57:00.000Z",
+                "summary": `The tool for the owner to track its pet became a tool for tracking all the pet owners themselves. The hunters became the hunted.`,
+                "niceUrl": "/2018/07/tracking-dog-owners",
+                "redirectUrls": ["/2018/07/tracking-dog-owners"],
+                "text": `<h4>tl;dr</h4>A tracking system was leaking information about all the users, pictures, and information and location data from all the trackers.
+
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td>Anonymous, let's call them <a href="https://en.wikipedia.org/wiki/Fictional_company">Acme4</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>May 2018</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Information leak with pictures, personal information and location data</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div>
+<h4>Background</h4>Acme4 sells a tracking chip intended to be used for dogs. There's a companion mobile app which is used to see the tracker on the map and send commands to it. It was a bit of a coincident that I noticed this system and took a closer look at it.
+
+<h4>Approach (technical stuff)</h4><a class="skip-link" href="#security-issues"><u>Skip this part</u> 🙈</a><h5>The app</h5>I never had physical access to a tracker, so the only entry point for me was the app itself.
+
+I have <a href="/2018/02/crack-android-apps">my guide on how to crack Android apps</a> which I take a quick glance at when doing this stuff. This was easy enough though. I downloaded the APK from <a href="https://apkmonk.com">apkmonk.com</a> and decompiled it with <a href="http://www.javadecompilers.com/apk">javadecompilers.com</a>. The end result was a an full access to the source code and resources.
+
+<span class="markup">Normally I would probably just've used a HTTP proxy to intercept the traffic, but in this case where I didn't have the necessary hardware (the tracker) I wouldn't be able to use all functions, so I needed the source code to discover all possible HTTP calls. Also the source code sometimes include hidden gems like unused endpoints, test servers and more.</span>
+
+I was a bit surprised by the how clean the code was and how it used modern patterns and libraries. The UI isn't that nice and often I find there to be a correlation..
+
+<h5>The server API</h5>With the app's source code I could try out the server communication. <span class="markup">This wasn't exactly your regular REST API. While the data returned from the server was JSON, all of the calls were GET calls for all kinds of actions with the data in query string parameters  - even the authentication.</span> Of course this just make it much easier to play around using a desktop browser.
+
+<em>The search for adding friends had the classic "return everything" when searching for <code>___</code>.</em> There's nothing inherently wrong with that, but it isn't ideal, and also <em>the search returned the ID, username, a display name, first name, last name and e-mail address of the users.</em>
+
+<h5>That open Amazon S3 bucket</h5><img style="width:400px;float:left;margin:0 20px 20px 0;" class="materialboxed responsive-img" title="Location data from one of the GPS trackers." data-caption="Location data from one of the GPS trackers." src="/images/acme402.png"/><span class="markup">I found all the pictures of the users in an open <a href="https://en.wikipedia.org/wiki/Amazon_S3#Design">Amazon S3 bucket</a>. Luckily most of the users are dogs. 😅</span> But still, some owners might upload pictures of themselves with their pet. Surely the owners don't expect the pictures to be lying around on the Internet.
+
+<h5 style="clear:left;">The web site</h5><img style="width:400px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Location data from one of the GPS trackers." data-caption="Location data from one of the GPS trackers." src="/images/acme401.png"/>In addition to the app I found a "my page" at the service's website, and this is where I struck gold. Most of the site's PHP scripts were available when logged in, but the scripts were located in a directory with open directory listing.
+
+<em>Using the PHP scripts it was possible to iterate through all of the registered trackers as the ID was based on an incremental integer. The combined tracker information I got from the scripts was ID, phone number (to the tracker SIM card), <a href="https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity">IMEI</a>, display name and historical location data (latitude, longitude, address, direction).</em>
+
+<em>The good news is that I didn't find any direct way of seeing which tracker belonged to which user. However, about 5% could be connected because of the display name of the tracker. Additionally, because of the incremental IDs, it was possible to pretty accurately estimate which tracker belonged to which user.</em>
+
+<h4 id="security-issues">Security issues</h4><em>One could systematically go through all users and all trackers and retrieve the following information:
+ - Users:
+   - Full name
+   - E-mail address
+   - Username
+   - Display name
+ - Trackers:
+   - Display name
+   - Location (latitude, longitude, direction, address)
+   - IMEI
+   - Phone number
+</em>
+It was only possible to either estimate the owner of the tracker (based on incremental IDs) or - for 5% av of the trackers - assume a match based on display names. <em>All pictures of the pets were available for download.</em>.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>Night time Friday I sent an e-mail to the support address. I like to keep it short, but this was probably the longest description I've had to write in such an e-mail.
+
+<h5>Day 3</h5>Before lunch on Monday I got an e-mail thanking me for the report.
+
+<h5>Day 4</h5>Again before lunch, I got an e-mail telling me that everything should be fixed. So this was all pretty quickly taken care of.
+
+<h5>Day X</h5>While doing this write-up I saw - and reported - that the search for adding friends within the app still also returns e-mail addresses and still returns all users if searching for a special character. I hope that'll be fixed. Imagine Facebook giving away all users and their e-mail addresses that easily.
+
+<h4>Anonymous you say?</h4>I looked into the financial and other public information of this company. I also checked out social media and did a little general due diligence. Though the person behind the company might not do all coding and support personally, it appeared to be a one-man show. <em>I don't want to use my blog to afflict individuals.</em> <a href="/2017/08/security-vulnerability-disclosures">As stated before</a>, I want people to know that none of their data is secure, I want us developers to improve our data security skills, and I want companies to take more responsibility around data security and their customer data.
+
+<h4>Conclusion</h4>Maybe we as consumers should think twice when buying devices connected to the Internet. Think about what information you hand over to the vendor and what could be the worst case if everything's leaked. Would someone be able to live track you? Would someone be able to know when you're not at home? Would you be ok with anyone having the usage data for this system? Would you be fooled if anyone used this information in a clever way in a <a href="https://en.wikipedia.org/wiki/Phishing">phising e-mail</a>?
+
+<em>I wish that there was some sort of certification to know that an IoT vendor at least fulfils some minimum standards in regards of computer security and have regularly third party audits.</em>
+`,
+                "images": ["/images/acme401.png", "/images/acme402.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Internet of Things",
+                        "url": "/iot"
+                    },
+                    {
+                        "title": "OWASP 2017 A5",
+                        "url": "/owasp-2017-a5"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2018-01-01T04:30:00.000Z",
@@ -3621,10 +3744,10 @@ And yet again we can see our personal data open for anyone to steal…
                 "author": "Roy Solberg",
                 "images": [],
                 "category":
-                    {
-                        "title": "Security",
-                        "url": "/security"
-                    },
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
                 "tags": [
                     {
                         "title": "Security Monday",

@@ -34,6 +34,7 @@ if MATCH_OBJECT is not None:
         if 'published' in post and post['published']:
             category = post['category']['title'].encode('utf-8')
             if category == 'Security':
+                # TODO: redirectUrls - avoid sending new e-mail
                 url = post['niceUrl']
                 title = post['title'].encode('utf-8')
                 summary = post['summary'].encode('utf-8')

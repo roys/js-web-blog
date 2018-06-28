@@ -19,9 +19,14 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         self.commentsTimer;
         processCategoriesAndTags();
 
+        var lastHash = null;
         window.onpopstate = function (event) {
             console.log("onpopstate() location: " + document.location + ", state: " + JSON.stringify(event.state));
             console.log(event);
+            if (location.protocol !== 'file:' && location.hash !== lastHash) { // Just a hash change
+                lastHash = location.hash;
+                return;
+            }
             if (!self.changingUrl) {
                 self.changingUrl = true;
                 self.goToPageBasedOnUrl();
@@ -141,9 +146,18 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 var foundPost = false;
                 posts.forEach(function (post, index) {
                     //console.log(post);
-                    if (!foundPost && post.niceUrl === niceUrl) {
-                        foundPost = true;
-                        self.goToPost(post);
+                    if (!foundPost) {
+                        if (post.niceUrl === niceUrl) {
+                            foundPost = true;
+                            self.goToPost(post);
+                        } else if (post.redirectUrls) {
+                            posts.redirectUrls.forEach(function (redirectUrl, index) {
+                                if (!foundPost && redirectUrl === niceUrl) {
+                                    foundPost = true;
+                                    self.goToPost(post);
+                                }
+                            });
+                        }
                     }
                 });
                 if (!foundPost) {

@@ -26,6 +26,7 @@ if MATCH_OBJECT is not None:
     POSTS = json.loads(MATCH_OBJECT.group(1))
     for post in reversed(POSTS):
         if post['niceUrl'] in PAGE:
+            # TODO: redirectUrls
             url = post['niceUrl']
             title = post['title'].encode('utf-8')
             summary = post['summary'].encode('utf-8')
