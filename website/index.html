@@ -10,14 +10,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
-  <link type="text/css" rel="stylesheet" href="/css/blog.css?v=10" />
+  <link type="text/css" rel="stylesheet" href="/css/blog.css?v=11" />
   <!--link type="text/css" rel="stylesheet" href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css"-->
-  <script type="text/javascript" src="/contents_json.js?v=54"></script>
+  <script type="text/javascript" src="/contents_json.js?v=55"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/e6a5037/js/materialize.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/jqcloud.min.js"></script>
-  <script type="text/javascript" src="/js/app.js?v=31"></script>
+  <script type="text/javascript" src="/js/app.js?v=32"></script>
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({
@@ -143,9 +143,11 @@
     <div class="nav-wrapper">
       <div class="container">
         <ul id="nav-mobile" class="left">
-          <li data-bind="css: { active: shouldDisplayFrontpage }"><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">Home</a></li>
+            <li data-bind="css: { active: shouldDisplayFrontpage }"><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">Home</a></li>
+            <li data-bind="css: { active: shouldDisplayPage('/about') }"><a href="/about" data-bind="click: function(){$root.goToPage('/about')}">About</a></li>
         </ul>
         <ul id="nav-mobile" class="right prepare-print">
+          <li><a class="grey-text text-lighten-4 right" href="https://twitter.com/roysolberg" title="Twitter"><i class="icon-twitter"></i></a></li>
           <li><a class="right" data-bind="click: function(){ga('send','event','game','play','dom2',1);return true;}" href="javascript:var%20s=document.createElement('script');s.type='text/javascript';s.onerror=function(e){alert('Failed%20to%20load%20the%20script.%20The%20site\'s%20Content%20Security%20Policy%20might%20be%20blocking%20it.%20Feel%20free%20to%20try%20again.');};document.body.appendChild(s);s.src='https://blog.roysolberg.com/js/dom2.min.js';void(0);">Play DOM II</a></li>
         </ul>
       </div>
@@ -155,6 +157,8 @@
   <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: function(){ !$data.post() && !$data.category() && !$data.tag() }}, fadeVisible: $data.shouldDisplayFrontpage">
   </div>
   <div id="article" style="display: none" class="container" data-bind="template: { name: 'article-template', if: $data.post}, fadeVisible: $data.shouldDisplayArticle">
+  </div>
+  <div id="page" style="display: none" class="container" data-bind="template: { name: 'page-template', if: $data.page}, fadeVisible: $data.shouldDisplayPage">
   </div>
   <div id="category" style="display: none" class="container" data-bind="template: { name: 'category-template', if: $data.category}, fadeVisible: $data.shouldDisplayCategory">
   </div>
@@ -315,6 +319,53 @@
         </div>
     </div>
     <div id="disqus_thread" class="prepare-print"></div>
+  </script>
+
+  <script type="text/html" id="page-template">
+    <div style="margin-bottom:0px;" class="row">
+      <div class="col s12">
+        <h4 data-bind="text: page().title"></h4>
+      </div>
+    </div>
+    <!-- ko if: page().summary -->
+    <div class="row">
+      <div class="col s12">
+        <p class="flow-text"><b data-bind="html: page().summary"></b></p>
+      </div>
+    </div>
+    <!-- /ko -->
+    <div class="row">
+      <div class="col s12">
+        <p style="white-space: pre-wrap;" class="flow-text" data-bind="html: page().text"></p>
+      </div>
+    </div>
+    <div class="row prepare-print">
+        <div class="col s10 offset-s1">
+            <div id="mc_embed_signup">
+                <form action="https://roysolberg.us17.list-manage.com/subscribe/post?u=914df4966855c5c9ff1a2b5cb&amp;id=738e3d2cb5" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                    <div id="mc_embed_signup_scroll">
+                  <h6>Get notified when there are new posts! :-)</h6>
+                <div class="mc-field-group">
+                  <label for="mce-EMAIL">E-mail address </label>
+                  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
+                </div>
+                <div class="mc-field-group input-group">
+                    <label>Area of interest </label>
+                    <ul><li><input type="radio" value="1" name="group[2447]" id="mce-group[2447]-2447-0" checked="checked"><label for="mce-group[2447]-2447-0">All posts</label></li>
+                <li><input type="radio" value="2" name="group[2447]" id="mce-group[2447]-2447-1"><label for="mce-group[2447]-2447-1">Only security-related posts</label></li>
+                </ul>
+                </div>
+                  <div id="mce-responses" class="clear">
+                    <div class="response" id="mce-error-response" style="display:none"></div>
+                    <div class="response" id="mce-success-response" style="display:none"></div>
+                  </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_914df4966855c5c9ff1a2b5cb_738e3d2cb5" tabindex="-1" value=""></div>
+                    <div class="clear"><input style="margin-top: 10px;" type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn waves-effect waves-light"></div>
+                    </div>
+                </form>
+                </div>
+        </div>
+    </div>
   </script>
 
   <script type="text/html" id="category-template">

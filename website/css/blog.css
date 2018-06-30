@@ -98,7 +98,7 @@ a[href^="https://"]:after {
   content: url(https://blog.roysolberg.com/images/external_link.png);
   margin: 0 0 0 5px;
 }
-a[href*="//blog.roysolberg.com/"]:after, footer a[href*="//"]:after {
+a[href*="//blog.roysolberg.com/"]:after, a[href*="//"].no-ext:after, nav a[href*="//"]:after, footer a[href*="//"]:after {
   content: '';
   margin: 0;
 }

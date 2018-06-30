@@ -3,6 +3,27 @@ var window = window || {}; // Not defined when run on command-line
 window.SpaBlog = window.SpaBlog || {}; // Our namespace
 
 (function (SpaBlog) {
+    SpaBlog.pages =
+        [
+            {
+                "title": "About Roy",
+                "summary": null,
+                "niceUrl": "/about",
+                "text": `I'm Roy Solberg, a Norwegian system developer working as Android Tech Lead for <a href="http://fotmob.com">FotMob</a> - one of the world's biggest football ⚽ apps.
+
+Before I started working with FotMob I worked 10 years as an IT consultant. I'm a full stack developer, but have an extra passion when it comes to mobile apps, smart homes, virtual assistants and other new tech.
+
+I mainly started this blog as <a href="/2017/08/security-vulnerability-disclosures">I grew tired of seeing all these security vulnerabilities</a> in web and mobile apps. 
+
+<h5>Speaking</h5>I always give a few talks every year - lately especially on IT security and related to findings I have presented on my blog. Other topics include smart homes and mobile app development. If you're interested in me giving a talk just <a href="https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/" onclick="window.open('https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=750,height=720'); return false;" title="Click to reveal my e-mail address">send me an e-mail</a> or give me a word on <a href="https://twitter.com/roysolberg">Twitter</a> or <a href="https://linkedin.com/in/roysolberg">LinkedIn</a>. 🙂
+
+I give both talks that are on a higher level (not technical) and on as a low level as desired. I also do workshops.
+
+<h5>Find me</h5><a class="deep-purple-text text-lighten-2 no-ext" href="https://twitter.com/roysolberg" title="Twitter"><i class="icon-twitter"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://stackoverflow.com/users/467650/roy-solberg" title="Stack Overflow"><i class="icon-stackoverflow"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://github.com/roys" title="GitHub"><i class="icon-github-circled"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://linkedin.com/in/roysolberg" title="LinkedIn"><i class="icon-linkedin"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/" onclick="window.open('https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=750,height=720'); return false;" title="Click to reveal my e-mail address"><i class="icon-mail-alt"></i></a>
+
+<h5>Stay up to date</h5>The best way to stay up to date is to either <a href="https://twitter.com/roysolberg">follow me on Twitter</a>, <a href="/atom">subscribe to my Atom (RSS) feed</a> or sign up for my mailing list in the form below:`
+            }
+        ];
     SpaBlog.posts =
         [
             {
@@ -3759,5 +3780,5 @@ It was only possible to either estimate the owner of the tracker (based on incre
 }(window.SpaBlog));
 
 if (typeof module != 'undefined') {
-    module.exports = window.SpaBlog.posts;
+    module.exports = [window.SpaBlog.pages, window.SpaBlog.posts];
 }

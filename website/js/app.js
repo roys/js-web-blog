@@ -6,9 +6,11 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         console.log(self.constructor.name + '()');
 
         self.posts = SpaBlog.posts;
+        self.pages = SpaBlog.pages;
         self.categories = [];
         self.tags = [];
         self.post = ko.observable();
+        self.page = ko.observable();
         self.category = ko.observable();
         self.tag = ko.observable();
         self.yearMonth = ko.observable();
@@ -22,7 +24,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
         var lastHash = null;
         window.onpopstate = function (event) {
             console.log("onpopstate() location: " + document.location + ", state: " + JSON.stringify(event.state));
-            console.log(event);
+            //console.log(event);
             if (location.protocol !== 'file:' && location.hash !== lastHash) { // Just a hash change
                 lastHash = location.hash;
                 return;
@@ -57,35 +59,42 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 });
             }, 200);
         }
-        self.shouldDisplayFrontpage = ko.computed(function () {
-            console.log('shouldDisplayFrontpage: return ' + !this.post());
-            return !this.isTransitioning() && !this.post() && !this.category() && !this.tag() && !this.yearMonth() && !this.pageNotFound();
+        self.shouldDisplayFrontpage = ko.pureComputed(function () {
+            console.log('shouldDisplayFrontpage()');
+            return !this.isTransitioning() && !this.post() && !this.page() && !this.category() && !this.tag() && !this.yearMonth() && !this.pageNotFound();
         }, self);
-        self.shouldDisplayArticle = ko.computed(function () {
+        self.shouldDisplayArticle = ko.pureComputed(function () {
             console.log('shouldDisplayArticle()');
             return !this.isTransitioning() && this.post();
         }, self);
-        self.shouldDisplayCategory = ko.computed(function () {
+        self.shouldDisplayPage = function (page) {
+            console.log('shouldDisplayPage()');
+            return ko.pureComputed(function () {
+                console.log('page:', page);
+                if (typeof page != 'undefined') {
+                    return !this.isTransitioning() && this.page() && this.page().niceUrl === page;
+                }
+                return !this.isTransitioning() && this.page();
+            }, self);
+        }
+        self.shouldDisplayCategory = ko.pureComputed(function () {
             console.log('shouldDisplayCategory()');
             return !this.isTransitioning() && this.category();
         }, self);
-        self.shouldDisplayTag = ko.computed(function () {
+        self.shouldDisplayTag = ko.pureComputed(function () {
             console.log('shouldDisplayTag()');
             return !this.isTransitioning() && this.tag();
         }, self);
-        self.shouldDisplayYearMonth = ko.computed(function () {
+        self.shouldDisplayYearMonth = ko.pureComputed(function () {
             console.log('shouldDisplayYearMonth()');
             return !this.isTransitioning() && this.yearMonth();
         }, self);
-        self.shouldDisplayPageNotFound = ko.computed(function () {
+        self.shouldDisplayPageNotFound = ko.pureComputed(function () {
             console.log('shouldDisplayPageNotFound()');
             return !this.isTransitioning() && this.pageNotFound();
         }, self);
 
         self.goToPageBasedOnUrl = function () {
-            var posts = self.posts;
-            var tags = self.tags;
-            var categories = self.categories;
             var path = location.protocol === 'file:' ? location.hash.substr(1) : location.pathname
             var index = path.indexOf(window.SpaBlog.config.blogUrlPrefix);
             if (index !== -1) {
@@ -97,22 +106,22 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             if (path.endsWith('/')) {
                 path = path.substr(0, path.length - 1);
             }
-            //alert(path);
             var parts = path.split('/');
-            console.log(parts);
+            //console.log(parts);
             if (path.length === 0) {
                 self.goToFrontpage();
             } else if (parts.length === 1) {
                 if (isInt(parts[0]) && parts[0] >= 2017) {
                     self.goToYearMonth(parts[0], null);
-                } else {
-                    self.goToNotFoundPage();
+                } else { // Static page
+                    var niceUrl = '/' + path;
+                    self.goToPage(niceUrl);
                 }
             } else if (parts.length === 2) {
                 if (parts[0] === 'category') {
                     var categoryUrl = '/' + parts[1];
                     var foundCategory = false;
-                    categories.forEach(function (category, index) {
+                    self.categories.forEach(function (category, index) {
                         console.log(category);
                         if (!foundCategory && category.url === categoryUrl) {
                             foundCategory = true;
@@ -126,7 +135,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     var tagUrl = window.SpaBlog.config.blogUrlPrefix + '/tag/' + parts[1];
                     console.log('tagUrl:' + tagUrl);
                     var foundTag = false;
-                    tags.forEach(function (tag, index) {
+                    self.tags.forEach(function (tag, index) {
                         if (!foundTag && tag.link === tagUrl) {
                             console.log(tag);
                             foundTag = true;
@@ -144,14 +153,14 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             } else if (parts.length === 3) { // Post
                 var niceUrl = '/' + path;
                 var foundPost = false;
-                posts.forEach(function (post, index) {
+                self.posts.forEach(function (post, index) {
                     //console.log(post);
                     if (!foundPost) {
                         if (post.niceUrl === niceUrl) {
                             foundPost = true;
                             self.goToPost(post);
                         } else if (post.redirectUrls) {
-                            posts.redirectUrls.forEach(function (redirectUrl, index) {
+                            post.redirectUrls.forEach(function (redirectUrl, index) {
                                 if (!foundPost && redirectUrl === niceUrl) {
                                     foundPost = true;
                                     self.goToPost(post);
@@ -172,6 +181,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             if (self.changeUrl(null, 'Roy Solberg - blog.roysolberg.com', '/')) {
                 self.numOfLatestPosts(4);
                 self.post(null);
+                self.page(null);
                 self.tag(null);
                 self.category(null);
                 self.yearMonth(null);
@@ -202,6 +212,32 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.loadAds();
                     self.loadComments(post.title, post.niceUrl, post.commentsIdentifier ? post.commentsIdentifier : post.niceUrl);
                 }, 250);
+            }
+        }
+        self.goToPage = function (niceUrl) {
+            var foundPage = null;
+            self.pages.forEach(function (page, index) {
+                if (foundPage == null) {
+                    if (niceUrl === page.niceUrl) {
+                        foundPage = page;
+                    }
+                }
+            });
+            if (foundPage != null) {
+                if (self.changeUrl(null, foundPage.title, foundPage.niceUrl)) {
+                    self.isTransitioning(true);
+                    setTimeout(function () {
+                        self.post(null);
+                        self.page(foundPage);
+                        self.tag(null);
+                        self.category(null);
+                        self.yearMonth(null);
+                        self.pageNotFound(false);
+                        self.isTransitioning(false);
+                    }, 250);
+                }
+            } else {
+                self.goToNotFoundPage();
             }
         }
         self.goToCategory = function (category) {
@@ -265,7 +301,6 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             if (!url.startsWith(window.SpaBlog.config.blogUrlPrefix)) {
                 url = window.SpaBlog.config.blogUrlPrefix + url;
             }
-            console.log('changeUrl()', url, title);
             var documentTitle = title + ' - ' + location.host
             document.title = documentTitle;
             var ogTitleJqEl = $('meta[property="og:title"]');
@@ -277,6 +312,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             if (url === location.pathname) {
                 return true;
             }
+            console.log('changeUrl()', url, title);
             try {
                 history.pushState(state, documentTitle, url);
                 // If push state throws an exception the page view will automatically be logged on next page load
