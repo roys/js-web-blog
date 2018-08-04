@@ -3922,6 +3922,116 @@ While we will continue to see leaks like this I hope that companies will get bet
                 ]
             },
             {
+                "title": "Behind the news: Unresponsible disclosure",
+                "published": true,
+                "publishDate": "2018-07-16T04:30:00.000Z",
+                "summary": `A newspaper published details about a newly discovered really bad security vulnerability. Here are the details that the newspaper article did not give.`,
+                "niceUrl": "/2018/07/unresponsible-disclosure",
+                "text": `<h4>Background</h4>Just hours after I had warned Thomas Cook Airlines about <a href="/2018/07/airline-flights-leak">a massive leak of flight data</a> <em>the Norwegian newspaper VG <a href="https://www.vg.no/nyheter/innenriks/i/yvMvxJ/fikk-logget-seg-paa-reiseselskaps-bookingsystem">reported about a person who accidently got logged in as a booking agent on a travel agency's web site</a>. What surprised me was that the travel agency wasn't notfied and that the newspaper published the article without giving any chance to fix the issue.</em>
+
+<h4>Who was this?</h4>The travel agency with the affected system was the Norwegian <a href="https://amisol.no">Amisol</a> (ex Pyramidene Reiser). They were using a booking system called <a href="https://www.adbutveckling.se/travelbook">TravelBook</a> from a Swedish company called <a href="https://www.adbutveckling.se/">adb utveckling</a>.
+
+<h4>Security issue</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" data-caption="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" src="images/amisol01.png"/><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" data-caption="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" src="images/amisol02.png"/><em>The security issue here was anyone on the Internet could log in as the booking agent for the travel agency:
+- The username and password for the booking agent was visible
+- The following information about travels from at least 2013 to 2018 was available:
+  - Booking number
+  - Password for checking booking
+  - Info about all travelers on that booking:
+    - Full name
+    - Birthday
+    - Gender
+  - Additional info about person registering the booking:
+    - Customer number
+    - Email address 
+    - Phone number(s)
+  - Order date
+  - Departure:
+    - Date
+    - Airport
+    - Flight number
+    - Meal
+  - Return:
+    - Date
+    - Airport
+    - Flight number
+    - Meal
+  - Info about hotel:
+    - Hotel name
+    - Room type
+    - Meals
+  - Excursions
+  - Price
+  - Amount left to pay
+- It seemed to be possible to change the above information and even cancel the trip
+- All personal information was sent unencrypted over the Internet
+- Agent username and password was sent unencrypted over the Internet
+- End user username and password was sent unencrypted over the Internet</em>
+
+<h4>Unethical disclosure</h4>The person discovering the security vulnerability was no IT person and I can kind of see how he decided to notify the newspaper after doing such a random discovery through Google. However, I cannot understand how the journalist or editor would publish the article the same day as they got the tip about the issue. The newspaper interviewed the CEO of Amisol, but they did not give them or the system vendor any time to actually look at the issue or left alone fix it.
+
+Why is this bad? Well, <em>I read the news article shortly after it was published and I just googled for the term <i>"amisol booking"</i> and found the link with the agent login.</em> I could log in and see all the details about all the travels from at least 2013 to future ones. It would take minutes to make a script that could download all the personal data I listed and anyone could go in and do their best to ruin a future vacation.
+
+In Norway the press have to follow the <a href="http://presse.no/pfu/etiske-regler/vaer-varsom-plakaten/vvpl-engelsk/">Ethical Code of Practice for the Press</a>. I don't know if this is a breach of the publication rule 4.3 that says <i>"Always respect a person’s character and identity, privacy, etnicity, nationality and belief."</i> But none the less, VG did indeed risk thousands of people's privacy when giving anyone the description on how to find all these personal data. I don't think that was the right thing to do.
+
+<h4>Technical details</h4><a class="skip-link" href="#conclusion"><u>Skip this part</u> 🙈</a>
+I wanted to add the technical details of this issue and what should have been in place to avoid it.
+
+<h5>1. Enforce SSL</h5>In 2018 you cannot create a system like this that does not use https. If your old legacy system is still using http you need to upgrade. And remember to check two things:
+ - <em>Ensure that if you change a <code>https</code> link to <code>http</code> it does a redirect to <code>https</code> instead of returning any content over <code>http</code>.</em>
+ - <em>Check that the cookie flag <a class="code" href="https://en.wikipedia.org/wiki/HTTP_cookie#Secure_cookie">Secure</a> is used</em> (or else the browser may send things like the session cookie over http (even if you do the mentioned redirect)).
+
+If you are in doubt if you site needs <code>https</code> or why it's a good idea in general, please check out <a href="https://www.troyhunt.com/heres-why-your-static-website-needs-https/">Troy Hunt's great article and video</a> on the subject. Also, <a href="https://www.wired.com/story/google-chrome-https-not-secure-label/">from Chrome 68 Google now labels http sites as "not secure"</a>.
+
+It's also a good idea to use <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HTTP Strict Transport Security (HSTS)</a> to protect against protocol downgrade attacks.
+
+<h5>2. Don't accept login information as query parameters</h5>This is what gave away the Amisol security vulnerabilities. <em>Because the username and password was sent as <code>GET</code> (and with no redirects) instead of <code>POST</code> - and Google somehow got hold of the URL - it was indexed and available through search.</em> Just in case it's worth testing that even though your login form is using <code>POST</code> that it does not accept the credentials in a <code>GET</code> request.
+
+<h5>3. Avoid XSS</h5>I suppose some think of <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a> as harmless fun, but I think that's a harmful view. <em>For this site it was - and still is - possible to endanger both administrators and customers. A successful attack would make it possible to steal usernames, passwords, session cookies, personal data, and also to alter and delete data.</em>
+
+<h5>4. Use robots.txt</h5>While some might argue that hiding stuff is <a href="https://en.wikipedia.org/wiki/Security_through_obscurity">security by obscurity</a>, it's a good practice to not let your administrator pages show up in search. It's not what anyone (except for bad guys) want to find when searching for something related to your service. <em>Just remember to not specify direct URLs to your admin stuff in <code>robots.txt</code> or else it just makes it easier to try to find any ways into your system.</em>
+
+<h5>5. Keep your software up to date</h5>Looking at the server's response header it responded with <em><code>Server: Microsoft-IIS/6.0</code></em>. If that's right <em>that's pretty crazy. That is software from 2003 - 15 years ago.</em> <a href="https://www.cvedetails.com/vulnerability-list.php?vendor_id=26&product_id=3436&version_id=13492&order=3">The list of bugs in the CVE security vulnerability database</a> is pretty long, and I would expect that the belonging Operating System, frameworks and libraries to be of the same age.
+
+<h5>6. Have a third party external audit</h5>The challenge with IT security is that the good guys need to find all vulnerabilities, while the bad guys only need to find one. Security is not easy, or everybody would get it right. Instead, we all get it wrong at some point to some degree. <em>IT security is not a <i>state</i>, it's a <i>process</i>.</em> Any sort of audit would surely discover the flaws in this case.
+
+<h5>7. Bonus: Use security.txt</h5><a href="/2017/11/security-txt">I've written about <code>security.txt</code> before</a>. I would recommend everybody to include that file on their site. It can be so hard to find the right (or any) contact point at a web site. Often you have to really push through to get a customer support to deliever the right message to the right persons.
+
+<h4 id="conclusion">Conclusion</h4>This security vulnerability and leak was really bad. Who knows who can have misused it for how long, and I think the news article in VG qualifies as unresponsible disclosure as it gave anyone the opportunity to misuse the vulnerability.
+`,
+                "images": [],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "OWASP 2017 A2",
+                        "url": "/owasp-2017-a2"
+                    },
+                    {
+                        "title": "OWASP 2017 A3",
+                        "url": "/owasp-2017-a3"
+                    },
+                    {
+                        "title": "OWASP 2017 A7",
+                        "url": "/owasp-2017-a7"
+                    },
+                    {
+                        "title": "OWASP 2017 A9",
+                        "url": "/owasp-2017-a9"
+                    },
+                    {
+                        "title": "OWASP 2017 A10",
+                        "url": "/owasp-2017-a10"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2018-01-01T04:30:00.000Z",
