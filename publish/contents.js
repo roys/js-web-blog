@@ -3925,16 +3925,17 @@ While we will continue to see leaks like this I hope that companies will get bet
                 "title": "Behind the news: Unresponsible disclosure",
                 "published": true,
                 "publishDate": "2018-08-03T09:40:00.000Z",
+                "updateDate": "2018-08-04T08:40:00.000Z",
                 "summary": `A newspaper published details about a newly discovered serious security vulnerability. Here are the details that the newspaper article did not give.`,
                 "niceUrl": "/2018/08/unresponsible-disclosure",
                 "text": `<h4>Background</h4>Just hours after I warned Thomas Cook Airlines about <a href="/2018/07/airline-flights-leak">a massive leak of flight data</a>, <em>the Norwegian newspaper VG <a href="https://www.vg.no/nyheter/innenriks/i/yvMvxJ/fikk-logget-seg-paa-reiseselskaps-bookingsystem">reported about a person who accidentally got logged in as a booking agent on a travel agency's web site</a>. What surprised me was that the travel agency wasn't notified first and that the newspaper published the article without giving any chance to fix the issue.</em>
 
 <h4>Who was this?</h4>The travel agency with the affected system was the Norwegian <a href="https://amisol.no">Amisol</a> (ex Pyramidene Reiser). They were using a booking system called <a href="https://www.adbutveckling.se/travelbook">TravelBook</a> from a Swedish company called <a href="https://www.adbutveckling.se/">adb utveckling</a>.
 
-<h4>Security issue</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="List of bookings found through a simple Google search." data-caption="List of bookings found through a simple Google search." src="/images/amisol01.png"/><img style="float:right;width:400px;margin-right:20px;margin-top:20px;clear:right;" class="materialboxed responsive-img" title="Booking details found via a simple Google search." data-caption="Booking details found via a simple Google search." src="/images/amisol02.png"/><em>The security issue here was anyone on the Internet could log in as the booking agent for the travel agency:
-- The username and password for the booking agent was visible
-- The following information about travels from at least 2013 to 2018 was available:
-  - Booking number
+<h4>Security issue</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="List of bookings found through a simple Google search." data-caption="List of bookings found through a simple Google search." src="/images/amisol01.png"/><img style="float:right;width:400px;margin-right:20px;margin-top:20px;clear:right;" class="materialboxed responsive-img" title="Booking details found via a simple Google search." data-caption="Booking details found via a simple Google search." src="/images/amisol02.png"/>The security issue here was <em>anyone on the Internet could log in as the booking agent</em> for the travel agency:
+- The <em>username and password for the booking agent was visible</em>
+- The following information about <em>travels from at least 2013 to 2018</em> was available:
+<em>  - Booking number
   - Password for checking booking
   - Info about all travelers on that booking:
     - Full name
@@ -3943,26 +3944,26 @@ While we will continue to see leaks like this I hope that companies will get bet
   - Additional info about person registering the booking:
     - Customer number
     - Email address 
-    - Phone number(s)
+    - Phone number(s)</em>
   - Order date
-  - Departure:
+<em>  - Departure:
     - Date
+    - Flight number</em>
     - Airport
-    - Flight number
     - Meal
-  - Return:
+<em>  - Return:
     - Date
+    - Flight number</em>
     - Airport
-    - Flight number
     - Meal
   - Info about hotel:
-    - Hotel name
+<em>    - Hotel name</em>
     - Room type
     - Meals
   - Excursions
   - Price
   - Amount left to pay
-- It seemed to be possible to change the above information and even cancel the trip
+<em>- It seemed to be possible to change the above information and even cancel the trip
 - All personal information was sent unencrypted over the Internet
 - Agent username and password was sent unencrypted over the Internet
 - End user username and password was sent unencrypted over the Internet</em>
