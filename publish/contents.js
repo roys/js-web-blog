@@ -444,7 +444,7 @@ curl 'https://example.com/UpdateTask' \\
 </tr>
 </table>
 <div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div>
-<h4>Background</h4>In Norway we have two official suppliers for a "digital mailbox" where Norwegian public agencies can send you letters and documents. It's considered a more secure way than regular mail for delievering important letters and documents. The mailboxes have been pushed pretty hard the last couple of years, ensuring that as many as possible will sign up for it.
+<h4>Background</h4>In Norway we have two official suppliers for a "digital mailbox" where Norwegian public agencies can send you letters and documents. It's considered a more secure way than regular mail for delivering important letters and documents. The mailboxes have been pushed pretty hard the last couple of years, ensuring that as many as possible will sign up for it.
 
 I've personally used Digipost for quite a few years now. I think it's a great service for receiving important documents. One day I was wondering if my information and documents were safe with them.
 
@@ -1392,7 +1392,7 @@ Oh, and the name? Since this game is all about <a href="https://en.wikipedia.org
 </table>
 <div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div><h4>Background</h4>I have both ordered stuff online at ikea.com and also designed kitchen and walk-in warderobe using their planners. That means that I have an online account there.
 
-I have always liked IKEA. Lots of cheap furnitures and other products, and mostly good value for the money. Even though they figured out warehouses a long time ago I have bad experiences with their online store. They didn't deliever the products on the estimated dates, they didn't deliver the right amount of stuff and they were unable to deliever the whole order, making me stuck with stuff I had to store and couldn't start to assemble.
+I have always liked IKEA. Lots of cheap furnitures and other products, and mostly good value for the money. Even though they figured out warehouses a long time ago I have bad experiences with their online store. They didn't deliver the products on the estimated dates, they didn't deliver the right amount of stuff and they were unable to deliver the whole order, making me stuck with stuff I had to store and couldn't start to assemble.
 
 <h4>Approach (technical stuff)</h4>I browsed ikea.com while having the <a href="https://en.wikipedia.org/wiki/Web_development_tools">browser development tools</a> open.
 
@@ -2001,7 +2001,7 @@ In most cases I have had to contact first-line customer support and try to write
 
 <h5>Gjensidige</h5>In <a href="/2017/10/gjensidige-leak">the case with the insurance company Gjensidige</a> <b>they managed to lose one of two reports before it reached the IT department</b>. <span class="code">security.txt</span> would have solved this nicely.
 
-<h5>Tryg and Infotorg</h5>In <a href="/2017/08/get-your-ssn-here">the case with 1 million+ Norwegian Social Security numbers etc. exposed</a>, <b>the insurance company Tryg did not read the e-mails sent to the specified contact e-mail address, and Infotorg - who was responsible for the delievering the data - just stopped responding.</b> It was probably a lost case for Infotorg, but at least Tryg would have been notified with a <span class="code">security.txt</span>.
+<h5>Tryg and Infotorg</h5>In <a href="/2017/08/get-your-ssn-here">the case with 1 million+ Norwegian Social Security numbers etc. exposed</a>, <b>the insurance company Tryg did not read the e-mails sent to the specified contact e-mail address, and Infotorg - who was responsible for the delivering the data - just stopped responding.</b> It was probably a lost case for Infotorg, but at least Tryg would have been notified with a <span class="code">security.txt</span>.
 
 <h5>Project site with SQL injection</h5>In <a href="/2017/10/10-years-of-injection">the case with the company vulnerable for for SQL injection for 10 years</a> I did not know if their customer support form worked at all as I never got a reply. Writing to an e-mail address specified in <span class="code">security.txt</span> would've helped here.
 
@@ -2095,7 +2095,7 @@ That made me think. <b>Is it OK that anyone can enter my e-mail address to a ser
    - The date of the purchase
    - <b>Each and all products ordered</b>
    - Any discount
-   - <b>Name and address used for payment</b> (in addition to the one used for delievery)
+   - <b>Name and address used for payment</b> (in addition to the one used for delivery)
    - <b>Credit card number with <a href="https://en.wikipedia.org/wiki/PAN_truncation">PAN truncation</a></b>
 
 <b>And then there's the question if the user wants it to be possible to look up his or her name, address and phone number using their e-mail address. What if you have some kind of unlisted address? This part has not been fixed, but is assumingly working as intended.</b>
@@ -3924,17 +3924,18 @@ While we will continue to see leaks like this I hope that companies will get bet
             {
                 "title": "Behind the news: Unresponsible disclosure",
                 "published": true,
-                "publishDate": "2018-07-16T04:30:00.000Z",
-                "summary": `A newspaper published details about a newly discovered really bad security vulnerability. Here are the details that the newspaper article did not give.`,
-                "niceUrl": "/2018/07/unresponsible-disclosure",
-                "text": `<h4>Background</h4>Just hours after I had warned Thomas Cook Airlines about <a href="/2018/07/airline-flights-leak">a massive leak of flight data</a> <em>the Norwegian newspaper VG <a href="https://www.vg.no/nyheter/innenriks/i/yvMvxJ/fikk-logget-seg-paa-reiseselskaps-bookingsystem">reported about a person who accidently got logged in as a booking agent on a travel agency's web site</a>. What surprised me was that the travel agency wasn't notfied and that the newspaper published the article without giving any chance to fix the issue.</em>
+                "publishDate": "2018-08-03T09:40:00.000Z",
+                "updateDate": "2018-08-04T08:40:00.000Z",
+                "summary": `A newspaper published details about a newly discovered serious security vulnerability. Here are the details that the newspaper article did not give.`,
+                "niceUrl": "/2018/08/unresponsible-disclosure",
+                "text": `<h4>Background</h4>Just hours after I warned Thomas Cook Airlines about <a href="/2018/07/airline-flights-leak">a massive leak of flight data</a>, <em>the Norwegian newspaper VG <a href="https://www.vg.no/nyheter/innenriks/i/yvMvxJ/fikk-logget-seg-paa-reiseselskaps-bookingsystem">reported about a person who accidentally got logged in as a booking agent on a travel agency's web site</a>. What surprised me was that the travel agency wasn't notified first and that the newspaper published the article without giving any chance to fix the issue.</em>
 
 <h4>Who was this?</h4>The travel agency with the affected system was the Norwegian <a href="https://amisol.no">Amisol</a> (ex Pyramidene Reiser). They were using a booking system called <a href="https://www.adbutveckling.se/travelbook">TravelBook</a> from a Swedish company called <a href="https://www.adbutveckling.se/">adb utveckling</a>.
 
-<h4>Security issue</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" data-caption="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" src="images/amisol01.png"/><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" data-caption="I got the location and voice messages of a random watch in Sweden. (Screenshot from gps-coordinates.net.)" src="images/amisol02.png"/><em>The security issue here was anyone on the Internet could log in as the booking agent for the travel agency:
-- The username and password for the booking agent was visible
-- The following information about travels from at least 2013 to 2018 was available:
-  - Booking number
+<h4>Security issue</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="List of bookings found through a simple Google search." data-caption="List of bookings found through a simple Google search." src="/images/amisol01.png"/><img style="float:right;width:400px;margin-right:20px;margin-top:20px;clear:right;" class="materialboxed responsive-img" title="Booking details found via a simple Google search." data-caption="Booking details found via a simple Google search." src="/images/amisol02.png"/>The security issue here was <em>anyone on the Internet could log in as the booking agent</em> for the travel agency:
+- The <em>username and password for the booking agent was visible</em>
+- The following information about <em>travels from at least 2013 to 2018</em> was available:
+<em>  - Booking number
   - Password for checking booking
   - Info about all travelers on that booking:
     - Full name
@@ -3943,26 +3944,26 @@ While we will continue to see leaks like this I hope that companies will get bet
   - Additional info about person registering the booking:
     - Customer number
     - Email address 
-    - Phone number(s)
+    - Phone number(s)</em>
   - Order date
-  - Departure:
+<em>  - Departure:
     - Date
+    - Flight number</em>
     - Airport
-    - Flight number
     - Meal
-  - Return:
+<em>  - Return:
     - Date
+    - Flight number</em>
     - Airport
-    - Flight number
     - Meal
   - Info about hotel:
-    - Hotel name
+<em>    - Hotel name</em>
     - Room type
     - Meals
   - Excursions
   - Price
   - Amount left to pay
-- It seemed to be possible to change the above information and even cancel the trip
+<em>- It seemed to be possible to change the above information and even cancel the trip
 - All personal information was sent unencrypted over the Internet
 - Agent username and password was sent unencrypted over the Internet
 - End user username and password was sent unencrypted over the Internet</em>
@@ -3994,11 +3995,11 @@ It's also a good idea to use <a href="https://en.wikipedia.org/wiki/HTTP_Strict_
 
 <h5>6. Have a third party external audit</h5>The challenge with IT security is that the good guys need to find all vulnerabilities, while the bad guys only need to find one. Security is not easy, or everybody would get it right. Instead, we all get it wrong at some point to some degree. <em>IT security is not a <i>state</i>, it's a <i>process</i>.</em> Any sort of audit would surely discover the flaws in this case.
 
-<h5>7. Bonus: Use security.txt</h5><a href="/2017/11/security-txt">I've written about <code>security.txt</code> before</a>. I would recommend everybody to include that file on their site. It can be so hard to find the right (or any) contact point at a web site. Often you have to really push through to get a customer support to deliever the right message to the right persons.
+<h5>7. Bonus: Use security.txt</h5><a href="/2017/11/security-txt">I've written about <code>security.txt</code> before</a>. I would recommend everybody to include that file on their site. It can be so hard to find the right (or any) contact point at a web site. Often you have to really push through to get a customer support to deliver the right message to the right persons.
 
-<h4 id="conclusion">Conclusion</h4>This security vulnerability and leak was really bad. Who knows who can have misused it for how long, and I think the news article in VG qualifies as unresponsible disclosure as it gave anyone the opportunity to misuse the vulnerability.
+<h4 id="conclusion">Wrapping it up</h4>This security vulnerability and leak was really bad. Who knows who can have misused it for how long. I think the news article in VG qualifies as unresponsible disclosure as it gave anyone the opportunity to misuse the vulnerability. Though with no consequences for anyone we can just sit back and wait for this to happen again.
 `,
-                "images": [],
+                "images": ["/images/amisol01.png", "/images/amisol02.png"],
                 "category":
                 {
                     "title": "Security",
