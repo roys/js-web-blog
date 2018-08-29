@@ -3441,7 +3441,7 @@ GDPR is launch in Europe on this day (25th of May 2018). Not active in Norway un
 
 <h5>Hour 19 (15:03) - Fixed</h5>Phone call from Komplett again. Again thanking me for the notification. I was told that the <b>issue is fixed</b>. I quickly verify it after the conversation.
 
-Just a few minutes later, the Data Protection Officer from Komplett confirms <b>the mandatory incident report to The Norwegian Data Protection Authority was sent</b>. In Norway any authorized disclosure of personal data (e.g. data leak or client report sent to the wrong address) must be reported. The reports will be public (a few details might be withheld).
+Just a few minutes later, the Data Protection Officer from Komplett confirms <b>the mandatory incident report to The Norwegian Data Protection Authority was sent</b>. In Norway any unauthorized disclosure of personal data (e.g. data leak or client report sent to the wrong address) must be reported. The reports will be public (a few details might be withheld).
 
 <h4>Conclusion</h4>This is quite a large number of affected customers with their name, e-mail, phone number and full address neatly displayed along with their last parcel delivery. The leak is bad.
 
