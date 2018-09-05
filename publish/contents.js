@@ -4033,6 +4033,431 @@ It's also a good idea to use <a href="https://en.wikipedia.org/wiki/HTTP_Strict_
                 ]
             },
             {
+                "title": "Leak: Half a million Norwegians affected",
+                "published": true,
+                "publishDate": "2018-09-03T21:40:00.000Z",
+                "summary": `Looking for an easy way to find out when the garbage was being picked up ended up in discovering a data leak affecting half a million people.`,
+                "niceUrl": "/2018/08/norconsult-soap-leak",
+                "text": `<h4>tl;dr</h4>An app that was supposed to contain only addresses and a garbage collection calendar was actually using services that was leaking personal information like names and Social Security numbers for many, many persons.
+
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://nois.no/">Norconsult Informasjonssystemer</a> (Nois)</td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="green-text">Low</span> to <span class="orange-text">medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>April 2018</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td>Response time good, but slow on fixing. Notification to clients was faulty.</td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Information leak with personal data and usage data for up to 625,000 people. Data also contained waste disposal routes, sewage monitoring, and more. Likely that modification of some data was possible.</td>
+</tr>
+</table>
+                
+<h4>Background</h4><img style="float:right;width:240px;margin-left:20px;" class="materialboxed responsive-img" title="Screenshot from BIR's app." data-caption="Screenshot from BIR's app." src="/images/norconsult01-app.png"/>A friend came up with an idea of having an Alexa skill/Google Assistant app where one could ask for <i>"when will the paper garbage be picked up"</i>? He saw that the website for BIR - our local waste management company - did not provide an easy way to fetch that data. He said there also was an app with the same data. <em>Taking a look at the communication between the app and the server it quickly became clear that something was very wrong in regards of security.</em>
+
+<h4>Approach (technical stuff)</h4><h5>The app</h5><img style="float:left;width:350px;margin-right:20px;" class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult02-charles.png"/>Using the HTTP proxy application Charles it was easy to look at the traffic between the app and server. Surprisingly the app and server actually used SOAP for communication. SOAP is pretty painful to work with and not commonly observed in the world of apps (though it was used for <a href="/2017/08/get-your-ssn-here">the case with Tryg and Infotorg</a>).
+                
+<em>All the SOAP calls used the same simple username and password and all data was transferred unencrypted over HTTP.</em>
+
+Surprisingly, doing a search for a street name actually returned a list of properties including the full name of the owner.
+
+Then, when selecting a property in the app there was a call getting more details about it. Even though the app did not show the data, the server response returned <em>full name, address and Social Security number of the property owner</em>.
+
+<h5>SOAP service with the full access</h5><table><tr style="border: 1px solid;"><td>SOAP and related concepts</td></tr><tr style="border: 1px solid;"><td>SOAP is a XML based messaging protocol. It can be used over HTTP, as in this case, or other protocols like JMS and SMTP. A SOAP server contains a lot over SOAP services. These are described in a WSDL file. With the WSDL (and corresponding XSDs) one can generate strongly typed classes for all endpoints that are easy to use. The WSDL/XSD files can contain comments that describe the parameters and possible values. This was not the case here. Using SoapUI or similar tool, one can easily execute different parameters for each service. SoapUI is like Swagger or Postman for REST.</td></tr></table>
+The WSDL file for the service was accessible without any authentication or IP check. This means that all services that was available was listed with their parameters/definitions. Bringing up SoapUI from back in the days, we were able to create requests to services we did not know about from the app.
+
+Using the username and password that was found in the app, we could do queries to the SOAP service. As we did not know the input values, some services was hard to use. 
+
+<h5>The system overview page</h5><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult03-status_page.png"/><a href="https://play.google.com/store/apps/developer?id=Norconsult+Informasjonssystemer+AS">Nois has published quite a few apps</a>, and one of the calls that the app made was one to get the configuration of these apps. <em>Looking at the root of this URL revealed a public facing status page with URLs to many of Nois' web services. This page was even indexed by Google. The URLs gave out WSDL files for all services available.</em>
+
+Based on the copyright statements on the page and source code it looked like the system overview page was last maintained in 2012.
+<br style="clear:left;"/>
+<h5>Many more SOAP services</h5>After dedusting SoapUI, we explored some of the "<code>GetXYZ</code>" services. We were able to get successful response on a subset of the once we tried. Main reason for failed requests was lack of examples of the input parameters. We did not try any write operations.
+
+<h6>Example - <code>GetRecycleStations</code> (BIR AS)</h6>
+<img  class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult07.png"/>
+A SOAP service that might be called by a web page or app. Data we should have access to, in some way.
+  
+<h6>Example - <code>GetKommune</code> (<code>GetMunicipalities</code>) - Envina</h6>
+<img  class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult06.png"/>
+This service told which municipalities was available on the given server. We used it to create the below table of affected municipalities.
+  
+<h6>Example - <code>GetWaterGaugePoints</code> - Sandnes kommune</h6>
+<img  class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult09.png"/>
+Some municipalities like Sandnes are billing water based on usage. This endpoint returns information about where a water gauge is located and what the last measurements were.
+  
+<h6>Example - <code>SearchPropertiesWithPrincipalsAndZipCodes</code> - BIR AS</h6>
+<img  class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult08.png"/>
+Some services provided a search for customers. It should make it easy to get hold of all the customers.
+
+<h4>Data available</h4>Based on the list of SOAP services available, we figure the following data is available within the systems (given that they use that part of the system):
+
+ - <em>Register of persons including Social Security number (used as customer id), name, address, e-mail, phone number, fax number, notes</em>, created time, last changed, etc.
+ - Register of companies with the same data. Customer id is organization number.
+ - Who owns a property. Who is paying for waste disposal/water/etc.
+ - <em>Who made changes (e.g. municipal employee, customer via Internet) and their IP address.</em>
+ - <em>Invoices including the contents of the invoice.</em>
+ - <em>Invoices not paid in time.</em>
+ - Pick up spots for waste. Driving routes, work orders, etc.
+ - <em>Water gauge usage data</em> including description on where you can find it, history (timestamps, amount of water, measurement type, who did the reading).
+ - Register of both internal users and external users.
+
+<h4>Verification</h4>We created a list of servers we found on the system overview page. We also manage to find some using search engine (Googling for phrases from the application). From the overview page we identified some of the owners and it was also clear that some servers were offline.
+
+To exclude those that were not affected by this huge security flaw, <em>we verified each and every server</em>. Mainly <em>two SOAP services were called</em>, one that returned all municipalities on that server and one with the <em>latest changes in customer data</em>. The service with customer data revealed that our user (<code>nois/nois</code>) had <em>access to customer data</em> on that particular server AND that the server was currently being used (somebody edited some customer in the past week/month or so).
+
+The servers were verified manually using SoapUI and we took screenshots as proof. The screenshots were edited to censor any personal data (we don't want to have that saved).
+
+A few servers on the overview page did not work even if they showed status “green". One example of this is Gjesdal kommune. According to the overview page, the service was running but we could not reach it. This could be that they had firewalls that blocked our HTTP requests.
+
+The owners were either a municipality or a cooperation of municipalities (Norwegian: IKS - interkommunalt selskap). 
+
+<table style="font-size:75%;" class="striped"><tr>
+<th style="width:25%;">Municipality / company</th>
+<th style="width:25%;">Municipalities</th>
+<th style="width:25%;">Inhabitants</th>
+<th style="width:25%;">Screenshot</th>
+</tr>
+<tr>
+<td>Avfall Sør AS</td>
+<td>Kristiansand, Songdalen, Søgne, Vennesla</td>
+<td>120,403
+Customer estimate: 45-65,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-AvfallSor.png"/></td>
+</tr>
+<tr>
+<td>Remiks</td>
+<td>Tromsø, Karlsøy</td>
+<td>76,814
+Customer estimate: 30-40,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Remiks.png"/></td>
+</tr>
+<tr>
+<td>Regiondata</td>
+<td>Dovre, Lesja, Sel, Vågå</td>
+<td>14,820
+Customer estimate: 5-8,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Regiondata.png"/></td>
+</tr>
+<tr>
+<td>Haugaland Interkommunale Miljøverk (HIM)</td>
+<td>Haugesund, Bokn, Tysvær, Vindafjord, Etne</td>
+<td>62,026
+Customers: <a href="https://2017.him.as/">33,052</a></td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-HaugesundIM.png"/></td>
+</tr>
+<tr>
+<td>Shmil</td>
+<td>Hemnes
+
+* Server is responding with "Hemnes kommune", Shmil also responsible for Alstahaug, Brønnøy, Dønna, Grane, Hattfjelldal, Herøy, Leirfjord, Sømna, Vefsn, Vega, Vevelstad. Only Hemnes counted.</td>
+<td>4,524
+Customer estimate: 2,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Shmil.png"/></td>
+</tr>
+<tr>
+<td>Retura Val-Hall AS / Hallingdal renovasjon / Valdres Kommunale renovasjon</td>
+<td>Hol, Ål, Gol, Hemsedal, Nesbyen, Flå, Krødsherad, Nord-Aurdal, Sør-Aurdal, Øystre Slidre, Vestre Slidre, Etnedal, Vang
+
+* Server is also responding with Gjøvik, Søndre Land and Sigdal. These are not counted.</td>
+<td>40,915
+Customer estimate: 15-22,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-HallingdalValdres.png"/></td>
+</tr>
+<tr> 
+<td>BIR AS</td>
+<td>Askøy, Bergen, Fusa, Kvam, Os, Osterøy, Samnanger, Sund, Vaksdal</td>
+<td>359,364
+Customer estimate: 140-190,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPACustomers-Bir.png"/></td>
+</tr>
+<tr>
+<td>Innherred Renovasjon</td>
+<td>Selbu, Malvik, Meråker, Stjørdal, Frosta, Levanger, Verdal, Inderøy, Leksvik
+
+* Server is also responding with Moss, Oslo, Tolga, Bergen, Sula, Trondheim, Rissa, Bjugn, Orkdal, Melhus, Tydal, Steinkjer, Verran, Høylandet, Overhalla, Flatanger, Nærøy, Vefsn, Tydal, Indre Fosen, Innherred. These are not counted in the number of inhabitants.</td>
+<td>92,563
+Customers: 35,671</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Innherred.png"/></td>
+</tr>
+<tr>
+<td>Hamos Forvaltning IKS</td>
+<td>Hemne, Agdenes, Meldal, Orkdal, Snillfjord, Skaun, Rindal, Hitra, Frøya, Rennebu, Surnadal</td>
+<td>50,967
+Customer estimate: 20-27,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Hamos.png"/></td>
+</tr>
+<tr>
+<td>Stavanger kommune (own server)</td>
+<td>Stavanger
+
+* Server also responded with Sandnes, Hå, Klepp, Time, Gjesdal, Sola, Randaberg, Finnøy after we notified Nois about the issue. Not counted.</td>
+<td>132,729
+Customer estimate: 50-70,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Stavanger.png"/></td>
+</tr>
+<tr>
+<td>Sandnes kommune (own server)</td>
+<td>Sandnes</td>
+<td>76,328
+Customer estimate: 30-40,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Sandnes.png"/></td>
+</tr>
+<tr>
+<td>Nordfjord Miljøverk IKS (NoMil)</td>
+<td>Bremanger, Vågsøy, Selje, Eid, Hornindal, Gloppen, Stryn</td>
+<td>32,932
+Customer estimate: 12-18,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Nomil.png"/></td>
+</tr>
+<tr>
+<td>Envina IKS</td>
+<td>Klæbu, Melhus, Midtre Gauldal
+
+* Server also responded with Meldal, Holtålen, Soknedal, Skaun. Not counted.</td>
+<td>28,582
+Customer estimate: 10-15,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Envina.png"/></td>
+</tr>
+<tr>
+<td>Movar (Mosseregionen Vann, Avløp og Renovasjon)</td>
+<td>Moss, Rygge, Råde, Vestby, Våler</td>
+<td>76,391
+Customer estimate: 30-40,000</td>
+<td><img class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult-verification-GetPAContractsChangedDate-Movar.png"/></td>
+</tr>
+</table>    
+<em>Total number of inhabitants in the municipalities: 1,169,358</em>
+
+It was hard to find good numbers of the amount of customers that are in the databases of the different municipalities. Innherred Renovasjon and Haugaland Interkommunale Miljøverk did have numbers on customers (Innherred)/waste disposal customers (HIM). They were respectively 2.6 inhabitants per customer and 1.87 inhabitant per customer. Based on those numbers <em>we estimate 450,000 to 625,000 private persons possibly exposed with full name, address, Social Security number, contact information, etc.</em>
+
+<h4>Data from one municipal spans the whole country and more</h5>Since people owns properties across the country, we checked one of the response (Regiondata) to check if that was true. An example is owning a cabin in Dovre kommune and paying the municipal a fee for waste disposal. This is mandatory and not possible to opt out of.
+
+<b>Some ZIP codes from a <code>GetEiendom</code> request to the server <code>Regiondata</code>:</b>
+ - 0274 Oslo
+ - 0378 Oslo
+ - 0382 Oslo
+ - 0465 Oslo
+ - 0594 Oslo
+ - 0775 Oslo
+ - 1348 Rykkinn, Bærum kommune
+ - 1363 Høvik, Bærum kommune
+ - 1407 Vinterbro, Ås kommune
+ - 1555 Son, Vestby kommune
+ - 1816 Skiptvet
+ - 2013 Skjetten, Skedsmo kommune
+ - 2056 Algarheim, Ullensaker kommune
+ - 2319 Hamar
+ - 2322 Ridabu, Hamar kommune
+ - 2615 Lillehammer
+ - 2624 Lillehammer
+ - 2663 Dovreskogen, Dovre kommune
+ - 2670 Otta, Sel kommune
+ - 2672 Sel
+ - 2675 Otta, Sel kommune
+ - 2676 Heidal, Sel kommune
+ - 2677 Nedre Heidal, Sel kommune
+ - 2682 Lalm, Vågå kommune
+ - 2816 Gjøvik
+ - 6040 Vigra, Giske kommune (Møre og Romsdal)
+ - Danmark
+ - Sweden
+
+This is not a complete list. We manually picked out some from the response in SoapUI to get a feeling for the data set.
+
+<h5>ISY ProActive servers with no/minor issues found</h5>
+<b>Municipalities listed, but with a different service exposed:</b>
+ - Dalane Miljøverk IKS, DIM (Eigersund, Sokndal, Bjerkreim)
+ - Ryfylke Miljøverk IKS, Rymi (Forsand, Finnøy, Strand, Hjelmeland, Suldal)
+ - Hadeland og Ringerike Avfallsselskap AS, HRA (Gran, Lunner og Jevnaker)
+ - Indre Hordaland Miljøverk, IHM (Eidfjord, Granvin, Jondal, Ullensvang, Ulvik, Voss)
+ - Iris Salten
+
+We did not have a username/password that worked for this service. It doesn't seem wise to have these on the Internet. They should all add a firewall blocking access.
+
+<b>Municipalities listed, where our requests did not work:</b>
+ - Agder Renovasjon IKS (Arendal, Froland og Grimstad)
+ - Hå kommune
+ - Steinkjær kommune
+ - Sykkylven Energi
+ - Ålesund kommune
+
+We believe we shouldn't have been able to reach the servers of these municipalities. It doesn't seem wise to have these on the Internet. They probably should all add a firewall blocking access.
+
+<b>Municipalities listed where firewall blocked our request:</b>
+ - Gjesdal kommune
+ - Fet kommune
+ - Skaun kommune
+ - Mandal kommune
+ - Kristiansund kommune
+
+We consider all these secure.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>Sunday night we sent an e-mail to the director of Nois and the head of department of the department responsible for the software in question.
+
+A few hours later we got a pretty cold <i>"We confirm that the email has been received."</i> back.
+
+<h5>Day 1</h5>Just before midnight we sent an e-mail with some questions and information about another 7 municipalities affected by the issue.
+
+<h5>Day 5</h5>Not having heard back we sent a new e-mail asking for a status.
+
+We soon got a response telling that they had established a working group for the issue. They had fixed a couple of the issues and they had informed the The Norwegian Data Protection Authority (Datatilsynet) and the municipalities in question.
+
+We used the freedom of information law to get a hold of the alerts and communication with the municipalities. The alert was a letter sent on day 5.
+
+<img style="float:right;width:300px;margin-left:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/norconsult10.png"/>In addition to general information, this is was what the letter told:
+<i>"It has been discovered that it is technically possible for 3rd party to extract information from this service if you have the deep technical insight required. </i><em><i>It is important to emphasize that this has not happened, but that we have implemented preventive measures.</i></em><i>"</i>
+They also said a new version would be rolled out during the next days.
+
+ - BIR: Alerted by letter. ISY ProAktiv Mobil Tømmeplan affected.
+   - No further follow up by BIR. They thougth the letter was clear and that no data was leaked.
+   - Server was accessible about 2 months after the letter was sent.
+ - Stavanger kommune: Alerted by letter. Same as BIR but with ISY ProAktiv WebPortal also affected. Was also told to add firewall in front of the service.
+
+<h5>Day 55</h5>We saw that the issue still was open for many of the municipalities and asked for an ETA of a fix.
+
+<h5>Day 58</h5>Tuesday morning Nois said they expected everything to be OK by the end of the week.
+
+<h5>Day 61</h5>Friday night we asked if really was the case that everything was fixed.
+
+We got a reply that they would work through the weekend to get it fixed.
+
+<h5>Day 65</h5>We informed that not everything was fixed yet. We sent an example query that returned a <em>list of 1208 customers that had changed the last couple of months. The details returned from server included full name, social security number, property identifier and lots of other fields.</em>
+
+Nois told they were working on getting access to the necessary serves to fix it.
+
+<em>In the afternoon we got another response telling us that everything should be OK and they thanked us for informing them about it.
+
+We replied that we still were getting personal data from one of their services.
+
+They looked into the issue and they thought it could have been a service being restarted by an automatic scheduled job...</em>
+
+<h5>Day 66</h5><em>We got another e-mail telling us that they had even more services automatically restarting during the night.</em>
+
+<h5>Day 112</h5><em>We noticed that a service was back up running, and it returned information about more than 6,000 persons.</em>
+
+<h5>Day 113</h5>The day after, a Sunday, we got a response that they would contact the customer the day after to make sure it was fixed.
+
+<h5>Day 114</h5>We got another response that the service in question now was removed.
+
+<h4>Inaccurate report to the Data Protection Authority</h4>We reported the incident to The Norwegian Data Protection Authority (DPA). After Nois gave their version of it, the DPA closed the case and said they were satisfied by the countermeasures implemented by Nois. <em>We believe the report sent from Nois to the DPA to be inaccurate.</em>
+
+<em>Nois claimed that it was not possible to get lists (supposedly one would have to ask for one at the time) of Social Security numbers or of properties that had not made their payments.</em> Several services returned lists of SSN/customers/properties. (Property addresses are anyways public knowledge and one could easily just as for each property, one by one.)
+
+<em>Nois claimed that the issue was caused by a "technical failure".</em> Not using encryption on any of their services, using both username and password "<code>nois</code>" and returning Social Security numbers when asking for which days the garbage is picked up is not a technical failure. The cause is ignorance by developers and lack of knowledge by any managers above them. Quite a few people must have been aware of this.
+
+<em>Nois claimed that the "deviation" was open from January 31st 2018 until April 16th 2018.</em> The issue was not closed until the later part of June 2018 and start of August 2018 - and not at all when the report to the DPA was sent. While we discovered this mid April, Nois published BIR's "garbage collection calendar" app in August 2017. Looking at that exact version of the app reveals that the same services without encryption, with the same login and the fields for Social Security numbers, names and addresses were being used. <em>Looking at Innherred Renovasjon's app we found the same to be true in a version released in October 2015.</em> We don't understand why they would specify January 31st 2018 as the start date. If they will want to claim this, they should provide some evidence for the date being January 31st.
+
+<em>Nois claims that no personal information was leaked when looking at the logs.</em> This claim is a bit hard to understand as Nois did not have operational responsibility of many of the servers and they have had a hard time getting access to the servers to do updates. At the time of the report they had not closed the issue on all servers. Also, as mentioned, the issue was seemingly open for much longer than they claim. And finally, <em>the services were indeed leaking personal information for every request being made.</em> It's impossible to know if a request came from the "garbage collection calendar" apps or from someone faking it and looking up a person's Social Security number. And for how long do they have logs for?
+
+<h4>Timeline of fixed services</h4>During the period from we notified the vendor to the time it was fixed, we monitored the servers from time to time using a small script. The monitoring was done by calling one of the SOAP services. We choose the <code>GetMunicipalities</code> (Norwegian: <code>GetKommune</code>) as this did not contain the personal information, required authentication and returned some data.
+
+The smilies and colors below indicate if the service responded or not. There are two versions of this data set, one with just the days we tested and one with empty cells for days we did not test.
+
+<img class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult05.png"/>
+<img class="materialboxed responsive-img" title="" data-caption="." src="/images/norconsult04.png"/>
+  
+<h4>Media</h4>We sent this security issue out to the local media since there was 14 different corporations/municipalities involved. The main take away from it is that information security is higher on the agenda for a lot of these. We also got to know that the corporations (customers of Nois) did not view this as a security issue/breach of personal data. Norwegian headlines translated below.
+ - Remiks:
+   - iTromsø - <a href="https://www.itromso.no/pluss/2018/08/28/Avsl%C3%B8rte-sikkerhetshull-30,000-40,000-Remiks-kunders-personnummer-l%C3%A5-tilgjengelig-p%C3%A5-nettet-17415170.ece">"Disclosed security hole: 30,000-40,000 Remiks customers social security numbers available online"</a>
+ - Haugaland Interkommunale Miljøverk (HIM):
+   - Haugesunds Avis - <a href="https://www.h-avis.no/nyheter/haugaland-interkommunale-miljoverk-him/soppel/oppdaget-lekkasje-i-informasjonssikkerheten-hos-him/s/5-62-675393">"Discovered leakage in information security at HIM"</a>
+ - Hallingdal renovasjon / Retura Val-Hall AS / Valdres Kommunale renovasjon:
+   - Hallingdølen
+     - <a href="http://www.hallingdolen.no/nyheiter/svikt-i-datatryggleiken-personnummer-lag-opne-1.2477740">"Data security failure: Social security number in the open"</a>
+     - <a href="http://www.hallingdolen.no/nyheiter/norconsult-avviser-at-data-har-kome-pa-avvege-1.2478350 ">"Norconsult denies data being in the wrong hands."</a>
+     - <a href="http://www.hallingdolen.no/nyheiter/fullt-mogleg-a-prove-a-narre-datatilsynet-1.2480118">"-Possible to fool the DPA"</a>
+   - Avisa Valdres - <a href="https://www.avisa-valdres.no/teknologi/datasikkerhet/it/avdekket-svakhet-i-systemene-til-interkommunale-renovasjonsselskap/s/5-54-250962">"Detected weakness in the systems of renovation company"</a>
+- BIR:
+  - Bergens Tidende - <a href="https://www.bt.no/nyheter/lokalt/i/zLjq5w/Avslorte-sikkerhetshull-Personnummer-til-bosskunder-la-tilgjengelig-pa-nett-i-maneder">"Disclosed security hole - Social security number of waste customers available online for months"</a>
+- Innherred Renovasjon:
+   - Innherred - <a href="https://www.innherred.no/nyheter/2018/08/27/Kundenes-personnummer-l%C3%A5-tilgjengelig-17407631.ece">"Customers social security number available"</a> 
+- Sandnes kommune, Stavanger kommune:
+   - Stavanger Aftenblad - <a href="https://www.aftenbladet.no/lokalt/i/Qlkvr8/Avslorte-datasvikt-i-Sandnes-og-Stavanger">"Disclosed security issue in Sandnes and Stavanger"</a>
+
+digi.no wrote a summary on a national level: <a href="https://www.digi.no/artikler/renovasjonsforetak-i-mange-norske-kommuner-lekket-personopplysninger/444627">"Renovation companies in many Norwegian municipalities leak personal data"</a>
+
+No media reported on these:
+- Avfall Sør AS
+- Movar
+- Regiondata
+- Shmil
+- Hamos Forvaltning IKS
+- Nordfjord Miljøverk IKS (Nomil)
+- Envina IKS
+
+<h4>Questions we still have</h4>What is clear is that the municipality is responsible for the protection of the personal data they have. They are responsible for their database. It seems like Nois have full access to the system for upgrades and checking logs. <em>We still wonder about who is responsible for the running of the systems.</em> Who is responsible for not changing default configuration (default username and password with full access)? Who is responsible for not configuring the firewalls? Who is responsible for building apps on top of SOAP and using a user with full access for the communications?
+ 
+After the media asked the municipalities responsible for the personal data and after we got to see the letter from Nois notifying their customer about the security issue, most of them did not react to this as a system leaking information. <em>Why did Nois send such a vague letter to the customers and DPA (Datatilsynet)?</em>
+
+Nois claimed they checked the logs and that no data was actually leaked. They also claim the security issue was just present for 4 months. <em>How was the access logs checked? Did they check back in time to at least 2015? Where is the report to their customers about this?</em>
+
+<h4>Conclusion</h4>Who checks the security of an app that doesn't contain a login or any personal data at all? No one, because it just doesn't make sense to do that. It was just a coincidence that we discovered this one.
+
+What sticks out in the end for us is that the reception and handling of the issue wasn't very good. Usually IT companies responds more quickly and are more open about the issue and handling of it. Here the customers got a vague description not telling much about what was going on.
+
+It would be interesting to know if anyone really digged into how long the data was available for, because it seems like they have been there for quite a few years.
+
+Finally, if you as a developer are told to use a service that returns much more data than what's intended to be used, <b>you should speak up</b>. Quite a few people have known about these personal data being transferred unencrypted over the wire.
+`,
+                "hot": false,
+                "author": "Hallvard Nygård & Roy Solberg",
+                "images": ["/images/norconsult00-preview.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Social Security numbers",
+                        "url": "/ssn"
+                    },
+                    {
+                        "title": "OWASP 2013 A2",
+                        "url": "/owasp-2013-a2"
+                    },
+                    {
+                        "title": "OWASP 2013 A3",
+                        "url": "/owasp-2013-a3"
+                    },
+                    {
+                        "title": "OWASP 2013 A6",
+                        "url": "/owasp-2013-a6"
+                    },
+                    {
+                        "title": "OWASP 2013 A10",
+                        "url": "/owasp-2013-a10"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2018-01-01T04:30:00.000Z",
