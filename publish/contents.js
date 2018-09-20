@@ -2087,7 +2087,6 @@ Acknowledgement: https://example.com/security-hall-of-fame.html</pre>
 That made me think. <b>Is it OK that anyone can enter my e-mail address to a service and get back my full name, address and phone number? And maybe there could be more than meets the eye?</b>
 
 <h4>Approach (technical stuff)</h4><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="/images/goshopping01.png"/>When I was at the checkout step I opened <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> to inspect the network traffic. There was a <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> call to the mother site GoShopping's CMS (they're using <a href="https://umbraco.com/">the open source ASP.NET CMS Umbraco</a>) returning some JSON with the name, address and phone number. <b>But the JSON contained more. It contained my previous order in full details including all items that I bought. And even my payment information was included.</b>
-
 <br style="clear:left;"/>
 <h4>Security issues</h4><img style="float:right;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="The service was leaking all data about my previous order - including order lines and payment information." data-caption="The service was leaking all data about my previous order - including order lines and payment information." src="/images/goshopping02.png"/>The service for looking up the address from the e-mail address leaked the following information:
  - Seemingly all orders
@@ -4011,6 +4010,10 @@ It's also a good idea to use <a href="https://en.wikipedia.org/wiki/HTTP_Strict_
                         "url": "/information-leak"
                     },
                     {
+                        "title": "Behind the news",
+                        "url": "/behind-the-news"
+                    },
+                    {
                         "title": "OWASP 2017 A2",
                         "url": "/owasp-2017-a2"
                     },
@@ -4033,7 +4036,7 @@ It's also a good idea to use <a href="https://en.wikipedia.org/wiki/HTTP_Strict_
                 ]
             },
             {
-                "title": "Leak: Half a million Norwegians affected",
+                "title": "Case #19: Leak affecting half a million Norwegians",
                 "published": true,
                 "publishDate": "2018-09-03T21:40:00.000Z",
                 "summary": `Looking for an easy way to find out when the garbage was being picked up ended up in discovering a data leak affecting half a million people.`,
@@ -4454,6 +4457,95 @@ Finally, if you as a developer are told to use a service that returns much more 
                     {
                         "title": "OWASP 2013 A10",
                         "url": "/owasp-2013-a10"
+                    }
+                ]
+            },
+            {
+                "title": "Behind the news: Authentication gone wrong",
+                "published": true,
+                "publishDate": "2018-09-10T04:55:00.000Z",
+                "summary": `Personal - and in some cases sensitive - information about 63,000 students could be accessed. Here are the details that the newspaper article did not give.`,
+                "niceUrl": "/2018/09/osloskolen-leak",
+                "text": `<h4>Background</h4><img style="float:left;width:180px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot of the app from Play Store." data-caption="Screenshot of the app from Play Store." src="/images/skolemelding03.png"/>I got in contact with a parent concerned about the security in a <a href="https://aktuelt.osloskolen.no/larerik-bruk-av-laringsteknologi/digital-skolehverdag/skolemelding/">new messaging app used for communication between pupils, teachers and parents</a> (Norwegian link) in the schools of <a href="https://www.oslo.kommune.no/">Oslo</a>. The app - which is called <i>Skolemelding</i> - was released this summer and is developed by <a href="https://www.cginorge.no/">CGI Norge</a>. Unfortunately the concerns turned out to be justified. <em>Please note that I was not the one to discover any of these issues.</em>
+
+The Norwegian newspaper Aftenposten <a href="https://www.aftenposten.no/osloby/i/G1L3oQ/Alvorlig-sikkerhetshull-Private-meldinger-om-elevene-i-Oslo-skolen-la-tilgjengelige-pa-nettet">broke the news about the vulnerabilities September 6th</a> (<a href="https://www.aftenposten.no/norge/politikk/i/jPElAw/Private-meldinger-om-elever-var-pa-avveie-i-Oslo-skolen---Tenker-det-er-trygt-med-MinID">follow-up article</a>) and the system was temporarily shut down.
+<br style="clear:left;"/><h4>Security issues</h4>The security vulnerabilities were really bad. The system is designed for sending messages between school and home, including messages related to student absence. According to Norwegian law health information is regarded as sensitive personal information, and therefore I would assume that the system should be designed with the appropriate security level to prevent unauthorized access.
+
+<em>Anyone with either a valid login or anyone who got hold of a guardian's <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Social Security number</a> could access any and all messages across all 63,000 pupils + guardians and teachers.</em> This includes not only communication between guardians and school, but also communication between teachers was accessible through these vulnerabilities.
+
+<em>Anyone who got hold of a guardian's Social Security number could access details about a pupil's family (full names, Social Security Numbers, usernames, e-mail addresses, phone numbers) (in addition to the guardian's messages).</em> I have published <a href="/tag/ssn">a couple of cases</a> where one easily could get a specific person's Social Security number.
+
+<h4>Technical details</h4><a class="skip-link" href="#responsible_disclosure"><u>Skip this part</u> 🙈</a>
+<h5>The apps</h5>There are two apps - one for parents and one for teachers + students. Looking at <a href="https://play.google.com/store/apps/developer?id=Osloskolen">the Android apps</a> they are pretty much the same app with just <a href="https://developer.android.com/studio/build/build-variants#product-flavors">different build variant (flavors)</a>. Parents use a different login than the teachers and students.
+
+The apps are built using <a href="https://en.wikipedia.org/wiki/React_(JavaScript_library)#React_Native">React Native</a> with all the functionality bundled in a JavaScript file. Seemingly you get the same functionality by logging in on the web as in the apps.
+
+<h5>Reading anyone's messages</h5>To fetch a message the app calls <code>/api/message/GetMessageWithId?messageId=[ID1]&threadId=[ID2]&isReplyAllowed=[true|false]&onBehalfOf=[pupil's username]</code>.
+
+<em>This is where we find the first failure. The server did not do an authorization check on the <code>messageId</code> and therefore let one read any other message in the system. And to make this a huge problem; the IDs were a sequential number that let one go through all messages available.</em>
+
+<h5>Log in as someone else</h5><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="&quot;I promise, authentication is done and I'm the user with this SSN!&quot;" data-caption="&quot;I promise, authentication is done and I'm the user with this SSN!&quot;" src="/images/skolemelding01.png"/>The parent/guardian version of the app uses a common log-in solution by the Agency for Public Management and eGovernment (Difi) called <a href="https://eid.difi.no/en/id-porten">ID-porten</a>. The teacher + student version of the app uses a log-in solution called <a href="https://www.feide.no/introducing-feide">Feide</a> - a pretty common solution among schools. <em>It's important to emphasize that there were no weaknesses in these two solutions in this case. However, the usage and implementation in the apps was horrible.</em>
+
+In the parent version of the app, when pressing the <i>Log in</i> button, the user is taken through the log-in flow of ID-porten as expected. However, <em>there was a big flaw in the logic of the authentication server (called midporten) used by this system. The "token" returned from that server was just the user ID - the parent's Social Security number. One could intercept the call at this stage and replace the user ID/SSN with another one and get full access.</em>
+
+<h5>Log in by just skipping the authentication system</h5>Reading the last sentence you might ask what the client really did with the user ID. Well, <em>the client sent the user's SSN to the school portal (the app's API) to generate an access token. This means that it was possible to just skip the whole flow of midporten and ID-porten and just ask the app's backend to get an access token for any valid user ID. Wow.</em>
+
+So the flow was like this (with optional faking of user ID in either step 5 or 6):<pre class="prettyprint lang-html">
+1. Tell midporten you want to log in 
+2. Tell ID-porten which electronic id you want to use
+3. Do the log-in process with ID-porten
+4. Get authentication response from ID-porten and forward to midporten
+5. Tell midporten which user ID/SSN just logged in
+6. Tell app's API which user ID/SSN you want to log in as and get an access token for</pre>
+<h5>LDAP to the people</h5><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="LDAP test data bundled in the app." data-caption="LDAP test data bundled in the app." src="/images/skolemelding02.png"/>While not a direct flaw, it is interesting to look at the structure of the data from the server. There's a call going to <code>/api/settings</code> which returns information about the logged in user and the belonging student(s). <em>The JSON returned is actually <a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">LDAP</a> data. And it contains full names, usernames, e-mails, Social Security numbers, possibly phone numbers of guardians and belonging student(s). It looks like a dump of the LDAP. Why would one need this information in the app? And why are Social Security numbers stored in a way like this in a directory where an app has access?</em> We're talking about hundreds - maybe thousands - of lines of LDAP data.
+<br style="clear:left;"/><h5>Is that a good fix?</h5><img style="float:left;width:400px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot showing the log-in flow and how the JWT is sent back with lower case." data-caption="Screenshot showing the log-in flow and how the JWT is sent back with lower case." src="/images/skolemelding04.png"/>The fix for the login vulnerability was - instead of sending the user ID to generate the access token - to send a <a href="https://en.wikipedia.org/wiki/JSON_Web_Token">JSON Web Token</a> (JWT). The JWT does not contain any user information, meaning that it has be checked on the server side to see which user is asking for an access token.
+
+<em>What is surprising is that the JWT does not contain some internal user ID (like a <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>), but rather a timestamp. And the JWT cannot actually be verified on the backend (other than string comparison) as it is sent back as lower-case.</em>
+
+What happens if two users log in at the exact same time? Is it possible that the timestamps (and therefore JWT) can end up being the same? Would one user get access to the other?
+
+<h5>Could there be more?</h5>With these vulnerabilities you can start to wonder if there are other problems here. I have not tested any of these things, but it is something for the vendor to look into.
+
+<h6>Injection?</h6>It looks like the messages in the app support HTML markup. Does the server and clients handle data escaping properly?
+
+<h6>File storage</h6>It's interesting to take a look at the file names and directory structure of the server. It really makes you wonder if there could be weaknesses and vulnerabilities related to naming of files.
+
+<h6>Logs with SSN?</h6>Some of the requests contained Social Security numbers in the query parameters. This means that there probably are logs with many SSN. Is this okay?
+
+<h4 id="responsible_disclosure">Responsible disclosure?</h4>I understand how Aftenposten wanted to get out the news about this as fast as they could. And they did indeed warn the City of Oslo before publishing it to give them a heads-up and chance to shut down the system. They only right thing to do here was to shut down the system immediately as someone might soon find the issues or maybe already was abusing them. So this wasn't too bad, but I would have liked to see CGI Norge and the City of Oslo get some more time to look at the issues and confirm that they had fixed them before publishing the article.
+
+<h4>Conclusion</h4>It's easy to make mistakes when programming, and not all programmers will have a good enough understanding of security (though I think we should try to improve this!). <em>What really sticks out here is how both CGI Norge and the City of Oslo could release a product like this without testing the security.</em> I do not believe this is a case where a <a href="https://en.wikipedia.org/wiki/Penetration_test">pen tester</a> overlooked something. This must be a case where there has been no external testing of the system. And that's a shame.
+`,
+                "images": ["/images/skolemelding04.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "Social Security numbers",
+                        "url": "/ssn"
+                    },
+                    {
+                        "title": "Behind the news",
+                        "url": "/behind-the-news"
+                    },
+                    {
+                        "title": "OWASP 2013 A2",
+                        "url": "/owasp-2013-a2"
+                    },
+                    {
+                        "title": "OWASP 2013 A3",
+                        "url": "/owasp-2013-a3"
+                    },
+                    {
+                        "title": "OWASP 2013 A5",
+                        "url": "/owasp-2013-a5"
                     }
                 ]
             },
