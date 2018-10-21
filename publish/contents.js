@@ -3851,7 +3851,7 @@ Other than that it's only speculations, but <em>airshoppen.com do handle many, m
 
 <h4 id="security-issues">Security issues</h4><em>It was possible to retrieve the following information from Thomas Cook Airlines using only a booking number:
  - Full name of all travelers on that booking
- - Email address of person registering the booking
+ - E-mail address of person registering the booking
  - Departure:
    - Date
    - Airport
@@ -3942,7 +3942,7 @@ While we will continue to see leaks like this I hope that companies will get bet
     - Gender
   - Additional info about person registering the booking:
     - Customer number
-    - Email address 
+    - E-mail address 
     - Phone number(s)</em>
   - Order date
 <em>  - Departure:
@@ -4316,7 +4316,7 @@ We consider all these secure.
 
 <h4>Reception and handling</h4><h5>Day zero</h5>Sunday night we sent an e-mail to the director of Nois and the head of department of the department responsible for the software in question.
 
-A few hours later we got a pretty cold <i>"We confirm that the email has been received."</i> back.
+A few hours later we got a pretty cold <i>"We confirm that the e-mail has been received."</i> back.
 
 <h5>Day 1</h5>Just before midnight we sent an e-mail with some questions and information about another 7 municipalities affected by the issue.
 
@@ -4546,6 +4546,186 @@ What happens if two users log in at the exact same time? Is it possible that the
                     {
                         "title": "OWASP 2013 A5",
                         "url": "/owasp-2013-a5"
+                    }
+                ]
+            },
+            {
+                "title": "885,086 customer records exposed in search engine",
+                "published": true,
+                "publishDate": "2018-09-24T19:20:00.000Z",
+                "author": "Hallvard Nygård",
+                "summary": `<i>Guest blog post by <a href="https://twitter.com/hallny">Hallvard Nygård (@hallny)</a></i>`,
+                "niceUrl": "/2018/09/postnord-leak-2",
+                "text": `<h4>tl;dr</h4>PostNord put all customers (name, phone and address) into a search database that was publicly available (known API key and referer). The database was used for easy selection of name and address when returning items. It was possible to opt out (mark address as secret). The customers had to register on the PostNord site, but was not told that the address would be publicly available. Previously PostNord had a dark UX pattern that tricked users into registering when they really wanted to track their package.
+                
+<table class="summary">
+<tbody><tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://www.postnord.no/en">PostNord</a>. Also reported to <a href="https://www.netonnet.no/">NetOnNet</a>.</td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="green-text">Low</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>September 2018</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>No reward. Thanks for the feedback.</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>The return package to web shop had a inline search field where you could search for name, address and phone for registered PostNord customers. Easy to download the whole database.</td>
+</tr>
+</tbody></table>
+<h4>Background</h4><img style="float:left;width:50%;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/postnord12-return_page.png"/><img style="float:left;width:50%;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/postnord10-fuzzy_search.png"/>A friend of mine - <a href="https://tkalve.no/">Thomas Kalve</a> -  sent me a tip about a interesting fuzzy search when trying to return a package to the online shop NetOnNet. When entering a phone number it was searching for a match and was also showing close matches. Not knowing that he had signed up for this search service, he sent me a tip.
+
+The "return to web shop" page was backed by a search <b>database containing 885,086 customer records</b>. It used the search service Algolia which is a "search as a service" (SaaS) that is mainly branded towards product search. PostNord had added all customers to this search engine and made them searchable. It was possible opt out of this use of personal data.
+
+PostNord told me they had 1.1 million users. I found 885,086 customers in the database. So around 200,000 had opted out.
+
+The main issue with this database was that it was open and that <b>PostNord did not declare this use and exposure of personal data.</b> According to <a href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR</a> one should declare all uses of personal data. One should also make sure that the customer understands what he or she is accepting.
+
+The form where you could say that an address is secret ("hemmelig adresse"), meaning opt out of the search database:
+<img style="float:left;width:500px;margin-right:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/postnord11-opt_out.png"/><br style="clear:left;"/>
+
+<h4>Approach (technical stuff)</h4>The easiest way to use this leakage was to search for people in the form. One would need a return code (e.g. "netonnet") and knowledge where to find this page. Search could then be done in Chrome or another browser. If you had ha partial name or partial phone number, the search engine would help with the rest.
+
+<b>If you wanted a copy of the database, you could download the data over time.</b> According to PostNord the service was protected by the following <a href="https://www.algolia.com/doc/guides/security/api-keys/">Algolia security features</a>: HTTP referer restriction, rate limit and number of records retrieved limit. The first is, of course, super easy to spoof. The settings they used for the IP rate limit and number of records retrieved per result is not known to me. So how long this would take is also unknown. I did not test any limits on this system. Using my browser and <a href="https://curl.haxx.se/">Curl</a> I would guess I saw around 100-200 customer records.
+
+After doing a <i>"copy to curl"</i> in Chrome, I got a working and reproducible Curl command that I could run from a terminal. Stripping away unneeded headers I saw that the <code>Referer</code> header was required. I did not strip the query or change the JSON data.
+<pre class="prettyprint">curl 'https://swstrzr7ig-3.algolianet.com/1/indexes/address_books/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.28.0&x-algolia-application-id=SWSTRZR7IG&x-algolia-api-key=35b1d443b661ed9e65aa4e6c439030f1' \\
+    -H 'Referer: https://my.postnord.no/return/show' \\
+    --data '{"params":"query=45442095&hitsPerPage=5"}'</pre>
+The request the following data (personal information has been changed):
+<pre class="prettyprint lang-js">{
+    "hits":[
+        {
+            "id":775007,
+            "name":"John Johnsen",
+            "mobile":"45445095",
+            "street_name":"John street 3",
+            "additional_street_name":null,
+            "city_name":"John town",
+            "postal_zone":"4000",
+            "country":"NO",
+            "external_id":"808007",
+            "source":"contacts",
+            "user_id":1378007,
+            "created_at":"2018-07-20 10:03:39",
+            "updated_at":"2018-07-20 10:03:39",
+            "objectID":"775007",
+            "_highlightResult":{
+            "name":{
+                "value":"John Johnsen",
+                "matchLevel":"none",
+                "matchedWords":[
+
+                ]
+            },
+            "mobile":{
+                "value":"<em>45445095</em>",
+                "matchLevel":"full",
+                "fullyHighlighted":true,
+                "matchedWords":[
+                    "45442095"
+                ]
+            },
+            "street_name":{
+                "value":"John street 3",
+                "matchLevel":"none",
+                "matchedWords":[
+
+                ]
+            },
+            // (.... More highlights without match ....)
+            }
+        },
+        {...},
+        {...},
+        {...},
+        {...}
+    ],
+    "nbHits":270,
+    "page":0,
+    "nbPages":54,
+    "hitsPerPage":5,
+    "processingTimeMS":8,
+    "exhaustiveNbHits":true,
+    "query":"45442095",
+    "params":"query=45442095&hitsPerPage=5"
+}</pre>
+The documentation for the Algolia API is <a href="https://www.algolia.com/doc/rest-api/search/">available online</a>. By using the API I could see a other indices and tried a query without parameters. The query returned 30 results. The first results were created <code>2018-04-13 14:35:54</code>. The <code>nbHits</code> was <code>885086</code>, meaning there were 885,086 customer records in the database. Querying for indices I got the same number of records but a different created date. <b>I'm guessing this system was set up between November 2017 and April 2018.</b>
+
+<pre class="prettyprint lang-js">{
+    "items":[
+        {
+            "name":"address_books",
+            "createdAt":"2017-11-16T08:23:33.157Z",
+            "updatedAt":"2018-09-19T19:23:17.094Z",
+            "entries":885093,
+            "dataSize":225565146,
+            "fileSize":691313817,
+            "lastBuildTimeS":87,
+            "numberOfPendingTasks":1,
+            "pendingTask":true
+        },
+        {"name":"biggest_decline",   "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:23:35.868Z", (...)},
+        {"name":"biggest_incline",   "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:23:35.868Z", (...)},
+        {"name":"popular",           "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:23:35.868Z", (...)},
+        {"name":"price_amount_asc",  "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:25:15.172Z", (...)},
+        {"name":"price_amount_desc", "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:25:15.172Z", (...)},
+        {"name":"products",          "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:23:35.868Z", (...)},
+        {"name":"rating_desc",       "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:23:35.868Z", (...)},
+        {"name":"review_score_desc", "createdAt":"2017-12-15T10:32:32.897Z", "updatedAt":"2018-09-19T19:23:35.868Z", (...)}
+    ],
+    "nbPages":1
+}</pre>
+<h5>Dark UX pattern</h5>I do not have screenshot proof of this, but a previous version of the "track package" page (which was <a href="/2018/05/postnord-api-leak">leaking personal data back in May 2018</a>) applied a <a href="https://en.wikipedia.org/wiki/Dark_pattern">dark UX pattern</a> where the user was shown a registration form instead before the tracking information. A link to this page was sent in an SMS to the recipient of a package. There was a small skip registration link or button (E.g. <i>"No thanks, I just want to see where my package is"</i>).
+
+<b>A user would typically do like this:</b>
+1. Click on "track package link" in SMS.
+2. Get PostNord registration form.
+3. <b>Register user profile.</b>
+4. See package status / pick up code.
+
+When I saw this last, I did the following:
+1. Click on "track package link" in SMS.
+2. Get PostNord registration form.
+3. <b>Skip registration by clicking a link.</b>
+4. See package status / pick up code.
+
+<h4>Security issues</h4>This is was not a security issue the way Roy and I normally find and write about. The issue here was mainly that the customers did not accept this. PostNord did not have consent to make the customer records available for download. Customers did accept some terms and conditions and PostNord did have a privacy policy. None of them said anything about putting the records online.
+
+The use of the search API was intentionally as part of their solution. It did not have any security issues in the normal sense, but this usage with personal data constitutes a leak of personal information. 
+
+<h4>Reception and handling</h4>As <a href="/2018/05/postnord-api-leak">last time</a> the issue was quickly resolved. 
+
+<h5>Day 0</h5>I reported the issue to NetOnNet and PostNord. A copy was also sent to The Norwegian Data Protection Authority (DPA, Datatilsynet). It was reported to NetOnNet since the return code used to access the page was from them. The report e-mail was title as "Whole NetOnNet customer database available" as that was the first assumption and that it was something that would get attention. It later showed that it was not their customer database, but a separate PostNord database.
+
+<h5>Day 1</h5>I talked to PostNord on the phone and got an e-mail summarizing the handling during following day. According to PostNord, the service was temporality taken down at 08:50. Taking the service down was the right response. My friend confirmed that the service was offline at 10:13.
+
+<b>PostNord will give the Data Protection Authority their version of the leak as part of the mandatory deviation notification.</b>`,
+                "images": ["/images/postnord12-return_page.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
                     }
                 ]
             },
