@@ -2728,7 +2728,7 @@ Even if the authorization seems okay, there is almost always this one place or f
 
 <b>As you might have guessed, one could just change the ID and you started the background job for another child in the same kindergarten. When the job was done you got a downloadable ZIP file will all of the contents.</b>
 
-<h4>Security issue</h4><img style="float:left;width:350px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from the frontpage of the generated downloadable pages." data-caption="Screenshot from the frontpage of the generated downloadable pages." alt="Screenshot from security issue." src="/images/kindergarten01.png"><img style="clear:left;float:left;width:350px;margin-right:20px;margin-top:20px;" class="materialboxed responsive-img" title="Screenshot from some of the personal data of the generated downloadable pages." data-caption="Screenshot from some of the personal data of the generated downloadable pages." alt="Screenshot from security issue." src="/images/kindergarten02.png">The URL for creating a downloadable archive with all of the contents belonging to the child didn't have an authorization check. <b>It was possible to systematically download all contents for all children within the same kindergarten.</b>
+<h4>Security issue</h4><img style="float:left;width:350px;margin-right:20px;" class="materialboxed responsive-img" title="Screenshot from the front page of the generated downloadable pages." data-caption="Screenshot from the front page of the generated downloadable pages." alt="Screenshot from security issue." src="/images/kindergarten01.png"><img style="clear:left;float:left;width:350px;margin-right:20px;margin-top:20px;" class="materialboxed responsive-img" title="Screenshot from some of the personal data of the generated downloadable pages." data-caption="Screenshot from some of the personal data of the generated downloadable pages." alt="Screenshot from security issue." src="/images/kindergarten02.png">The URL for creating a downloadable archive with all of the contents belonging to the child didn't have an authorization check. <b>It was possible to systematically download all contents for all children within the same kindergarten.</b>
 
 <b>This is the data that was available:
 - Full name of the child
@@ -3289,7 +3289,7 @@ Ariane has stated that <a href="https://nrkbeta.no/2018/04/19/gjester-ved-to-nor
 
 <h5>Day 7</h5>I got an e-mail from the chief of security in the group owning the Thon Hotels where he thanked me and asked for my details to send a reward - a gift card which I received just a few days after that.
 
-<h4>Media coverage</h4>For once I did things a bit differently and worked with the media before I published the case here myself. <a href="https://nrkbeta.no/2018/04/19/gjester-ved-to-norske-hotellkjeder-kan-ha-fatt-sine-bookingdetaljer-eksponert/">NRKbeta covered the story less than a week ago</a> (Norwegian link only, sorry). NRK is the Norwegian government-owned radio and television public broadcasting company, and the largest media organisation in Norway. They also featured it as as the top story on <a href="https://nrk.no">nrk.no</a> of their frontpage for some time. I'm happy to see that big media companies like NRK cares about online security and our personal data.
+<h4>Media coverage</h4>For once I did things a bit differently and worked with the media before I published the case here myself. <a href="https://nrkbeta.no/2018/04/19/gjester-ved-to-norske-hotellkjeder-kan-ha-fatt-sine-bookingdetaljer-eksponert/">NRKbeta covered the story less than a week ago</a> (Norwegian link only, sorry). NRK is the Norwegian government-owned radio and television public broadcasting company, and the largest media organisation in Norway. They also featured it as as the top story on <a href="https://nrk.no">nrk.no</a> of their front page for some time. I'm happy to see that big media companies like NRK cares about online security and our personal data.
 
 <h4>Conclusion</h4>Is this leak so bad? Most people can handle having their name, e-mail address and reservation stolen or being open on the Internet forever. This is still a pretty bad leak. The number of reservations was pretty big. Maybe someone was already taking advantage of it? It would be possible to regularly check the bookings for public persons or other individuals. It could also be circumstantial evidence for some person being at a certain place at a certain time.
 
@@ -4717,6 +4717,140 @@ The use of the search API was intentionally as part of their solution. It did no
 
 <b>PostNord will give the Data Protection Authority their version of the leak as part of the mandatory deviation notification.</b>`,
                 "images": ["/images/postnord12-return_page.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    }
+                ]
+            },
+            {
+                "title": "Advent calendars debugged",
+                "published": true,
+                "publishDate": "2018-12-31T09:00:00.000Z",
+                "summary": `A Christmas story on how to cheat in advent calendars and of course some personal information leaks.`,
+                "niceUrl": "/2018/12/advent-calendars-debugged",
+                "text": `<h4>Background 📅</h4>At least here in Norway we have long traditions with <a href="https://en.wikipedia.org/wiki/Advent_calendar">advent calendars</a> - both as gift calendars for kids and TV shows with one new episode from December 1st until Christmas Eve. In the last couple of decades this tradition has also extended online with businesses having gift calendars where you can typically give away some personal information with a chance to win some prize.
+
+I usually end up answering a few calendars hoping to win something cool, but this year I signed up on quite a few calendars to see if I could find anything interesting security wise. <em>Most of the stuff presented in this post is no big deal. Companies just want as many people as possible to sign up and don't really care about if it's possible to get an advantage. Still I think it's interesting to see how the calendars are built. And then there are the big leaks of personal information.</em>
+
+<h4>Circle K - cheat in pre-Christmas competition ☕</h4><a href="https://en.wikipedia.org/wiki/Circle_K">Circle K</a> Norge runs quite a few gas stations in Norway. They had a "pre-Christmas game" in the second half of November where you could win a <a href="https://koppen2019.no/">"coffee deal"</a> worth 34 USD (299 NOK). With that deal you get a cup that you can refill with any hot liquids on any of their stations throughout 2019.
+
+The game was easy enough; you had to catch as many as possible of the falling Christmas themed items. You had three chances to play every day and there was a top score list where the top 10 single game scores would win the prize.
+
+So, how could one cheat in this game? Well, that seemed pretty easy. <em>The whole game was run in the user's browser and when the game was over the browser posted back the score to the server.</em>
+
+<img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="The game's JavaScript is paused just before sending the request to the server." data-caption="The game's JavaScript is paused just before sending the request to the server." src="/images/calendar01.png">Technically it wasn't all bad news. I mean, the JavaScript was <a href="https://en.wikipedia.org/wiki/Minification_(programming)">minified</a>, you had to be identified with your phone number and the requests containing the score was signed by the mentioned minified JavaScript. Of course, the concept of a client telling the score kind of breaks all other efforts. The easiest way to cheat here would be to play one round with the web developer tools open, watch the request and then search for related parameters in the source code. Then one could just set a <a href="https://en.wikipedia.org/wiki/Breakpoint">breakpoint</a> before the request was signed, play another round and then when the game was paused, change what was obviously the points, before letting the script run on.
+
+<img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="They have even made a dedicated chatbot just for the coffee deal!" data-caption="They have even made a dedicated chatbot just for the coffee deal!" src="/images/calendar03.png">But is it a big deal? Circle K just wants as many as possible to play and as many as possible to know about their coffee deal. Any cups sold/given away will most probably end up in sales that'll give more profit than cost. Just me writing this post gives them some more free advertisement. <em>But I think it's pretty unfair to the hundreds of people who really tried to play their best day after day for a chance to win this cup. They are the ones that are cheated.</em>
+
+<h4>Circle K - cheat in advent calendar ⛽</h4>December came and the pre-Christmas game closed. The next competition in line for Circle K was a pretty cool "name that tune" type of game where you got more points the quicker you were able to identify and pick the song playing.
+
+<img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Name the tune game with JavaScript paused just before sending points back to the server." data-caption="Name the tune game with JavaScript paused just before sending points back to the server." src="/images/calendar02.png">The concepts surrounding this game were pretty much the same as the previous one. The game was run in the contestant's browser and then the score was reported back to the server. The way to cheat would be the same as described in the previous game.
+
+There's some mismatch between the invitations to the games, the terms and the in-game text in regards of the actual prizes, but from my understanding the awards were like this: The daily top 10 scores of the game would be awarded the coffee deals (so 240 thermo cups were given away in total), the next 10 best daily scores would get a gift card for a coffee and bun. There's also some talk about a main prize, and my understanding is that that's usually 113 USD (1000 NOK) worth of gas. It's unclear to me if there's a draw and/or if it's related to the total points across all days.
+
+<em>Is it acceptable to cheat in competitions like this? Terms and conditions most often doesn't allow for any kind of fraud, but on the other hand they don't take any precautions trying to stop cheating and let anyone just tell them their score.</em>
+
+<h4>Leaking all e-mail addresses 📧</h4>There was this web site with another smaller advent calendar with a daily challenge. I happened to surf by their front page early in December when they <b>just</b> had published an article telling about the new leaderboard that they had made. <em>The leaderboard was loaded in an iframe. And going to the root of that website revealed the usernames and e-mails of all 1000+ contestants.</em>
+
+I quickly wrote an e-mail to them and they responded within minutes and took down the whole webapp in question. They told me that the article telling about the leaderboard was published too early by a mistake. Probably the leak didn't last for many minutes. Because of the short duration of the leak and the small amount of e-mail addresses I don't feel very comfortable naming them. (But it's probably a good idea to not expose webapps with personal information to the Internet even during development.)
+
+<h4>The biggest leaks 💧</h4><em>There were some advent calendars that used a third party system that I have reported several security issues to. We're talking about millions of names, e-mail addresses, phone numbers, and in some cases addresses, names and birthdays of kids, purchase history, national identity numbers and passwords. I will wait until they have fixed everything before doing a write-up or two about them.</em>
+
+<h4>Fjordkraft - exposing their admin UI 🖥️</h4>The power company <a href="https://en.wikipedia.org/wiki/Fjordkraft">Fjordkraft</a> and their subsidiary TrøndelagKraft had their own advent calendar with a daily prize of 568 USD (5000 NOK) in cash.
+
+<img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Now, that's some interesting names on those services." data-caption="Now, that's some interesting names on those services." src="/images/calendar05.png">What they also had was a good old <a href="https://en.wikipedia.org/wiki/AngularJS">AngularJS</a> app which had a "flaw" often seen on the web: The JavaScript revealed the path to other parts of the application. And <em>what it revealed was the path to the admin interface used for getting statistics and draw a winner. There was even a frightful function that was called <i>Reset database</i>.</em> The admin UI was so in the open that I have a small hope that it could be a <a href="https://en.wikipedia.org/wiki/Honeypot_(computing)">honeypot</a>, but I doubt it.
+
+<img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Calendar's admin user interface." data-caption="Calendar's admin user interface." src="/images/calendar04.png">Luckily there was some sort of code needed to use any of the functionality. And that's really why I didn't bother to report it to them. I just hope they didn't use a simple code word like <i>"santa"</i> or <i>"xmas2018"</i>.
+
+<h4 style="clear:left;">Others - giving advantage to web developers 👩‍💻</h4>Most of the online advent calendars have a daily question with a few alternatives. Many of the calendars are so nice as giving the correct solution of a question - either in the JSON or markup alongside the question. Of course the companies with the calendars don't care too much about this as they just want people to join in. 
+
+For me this is different from the Circle K competitions where you were guaranteed to get a physical prize if you just give a high enough score back. In these other cases you are at max given an advantage when there's a draw in the daily or final lottery.
+
+<h5>Mester Grønn</h5><img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="Very practical with the answers alongside the questions. 🌹" data-caption="Very practical with the answers alongside the questions. 🌹" src="/images/calendar06.png">The florist <a href="https://mestergronn.no/">Mester Grønn</a> had one of the calendars giving a little advantage to a web developer. <em>The JSON clearly stated which answer was the correct one</em>, and in many cases that would be a quicker way of finding the answer than googling, or looking at their web site. Of course, it's no big deal.
+
+<h5>Kiwi</h5><img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="&quot;Hey server, I answered all your questions correctly.&quot;" data-caption="&quot;Hey server, I answered all your questions correctly.&quot;" src="/images/calendar07.png">The supermarket chain <a href="https://en.wikipedia.org/wiki/Kiwi_(store)">Kiwi</a> had an interesting twist technology wise. <em>Also in this case the JSON clearly stated which answer was the correct one. But what's more, it gave the opportunity to just return <code>true</code> for the answer for a given day so you didn't really have to look at what was the correct answer. And - while I haven't got it confirmed - it looked like you could just fill in the answer for all weeks at once.</em>
+
+<h5>kode24</h5>The news site for coders <a href="https://kode24.no">kode24.no</a> had an <a href="https://www.kode24.no/nedetid/bli-med-pa-kode24-sin-kodekalender/70504275">entertaining calendar</a>. Every day it gave a new small puzzle - typically involving some use of the browser's developer tools. <em>While this didn't directly give a big advantage, it let you stay ahead of the game by letting you solve the puzzles for the following days by directly requesting the contents of the puzzle "file"</em> (which was practical if you were short on time some days). A simple <a href="https://curl.haxx.se/">Curl</a> command made it all very easy to use:<pre class="prettyprint lang-js">
+for i in {20..24}; do
+  echo '\\n'$i:
+  curl 'https://kode24-jul2018.herokuapp.com/api/files' \\
+  -H 'Content-Type: application/json' \\
+  -H 'Cookie: id=[valid user id hash]' \\
+  --data-binary '{"path":"\\'$i'-DES","fileName":"HINT.TXT"}'
+  sleep 1
+done
+
+20:
+{"content":["To legender, fra Porsgrunn den ene.","Slår etternavnene sine sammen,","og skaper en kode av glede."],"type":"txt","name":"hint.txt","size":256}
+21:
+{"content":["Når jeg dobler dette tallet,","og plotter det inn der artiklene deres bor,","finner jeg en spillmaskin,","som er dagens kodeord:","35262282,5"],"type":"txt","name":"hint.txt","size":8}
+22:
+{"type":"error","content":"Fant ikke fila di."}
+23:
+{"content":["mine to favorittfolk,","fra min favorittserie.","slå dem sammen,","så løser du kodens mysterie."],"type":"txt","name":"hint.txt","size":256}
+24:
+{"content":["Siste innspurt, du har vært flittig som bien.","Denne her blir ekstra vrien.","Reisens start, er per e-brev.","Send meg et pling, få tilbake et stev."],"type":"txt","name":"hint.txt","size":256}</pre>
+And even though you couldn't actually answer the puzzle for a future day, it was possible to verify that you had the right solution:<pre class="prettyprint lang-js">
+curl 'https://kode24-jul2018.herokuapp.com/api/code' \\
+-H 'Content-Type: application/json' \\
+-H 'Cookie: id=[valid user id hash]' \\
+--data-binary '{"path":"\\24-DES","code":"julekos"}'
+
+{"type":"txt","content":
+  ["** Passord korrekt: Server er allerede autorisert. **",
+   "Trekningen for denne dagen er over. Gå til dagens konkurransemappe, 22. desember",
+   "** OBS! Du får kun poeng for å svare på dagens konkurranse."]
+}</pre>
+
+<h4>Privacy 🔏</h4>It's interesting to see the different information the different calendars ask for. What is really needed to draw a winner and/or send any desired information to the end user? E-mail or phone number should be sufficient I suppose. Maybe a (first) name is ok?
+
+The different types of information the calendars asked for were these:
+ - First name
+ - Last name
+ - E-mail address
+ - Phone number
+ - <em>Postal code</em>
+ - Membership number
+ - Favourite store
+ - <em>Gender</em>
+ - <em>Full address</em>
+
+<em>Why on Earth would you ask for the gender and address to be part of a draw?</em> Even worse - user experience wise - was that you in some calendars had to fill in all the information every single day.
+
+<em>A few calendars even forced you to sign up for a newsletter to able to participate in the competition.</em> I must say I liked <a href="https://en.wikipedia.org/wiki/Vipps">Vipps'</a> Messenger calendar where they used Microsoft Forms to collect names and e-mail addresses and clearly stated in one line that the information would only be used to contact the winners and that all information would be deleted when the contest is done. It doesn't have to be harder than that.
+
+<h4>Some observations and user experiences 🔭</h4>I did some more observations I wanted to add at the end here.
+
+<h5>Dark pattern</h5>The alarm company <a href="https://www.sectoralarm.no/">Sector Alarm</a> had a very interesting feature which can't be described as anything but a <a href="https://en.wikipedia.org/wiki/Dark_pattern">dark pattern</a>. From Wikipedia: <i>'A dark pattern is "a user interface that has been carefully crafted to trick users into doing things, such as buying insurance with their purchase or signing up for recurring bills."'</i>
+
+Of all the calendars that I tried out this year Sector Alarm was the only one who had a checkbox with inverted logic. <em>One of the checkboxes you had to take a stand on every day said <i>"I don't want to receive a security alarm offer"</i>. While this seems to be formulated to trick people to sign up for something they don't want, they made it worse by suddenly one day rephrase the checkbox to <i>"I want to receive a security alarm offer"</i>.</em> So if you were used to tick the box you suddenly had to re-read it and take a new stand on whether to check it or not. I wonder what they do if you in the middle of December say you want to be contacted, but the rest of the month say no.
+
+<h5>E-mail to Facebook post to Facebook app to iframe</h5><a href="https://en.wikipedia.org/wiki/Intersport">Intersport's</a> reminder e-mail for the calendar linked to a URL that redirected to a Facebook post which was just a link and post telling that the calendar for that day was opened. Then you had to click that and have a new browser tab opened and go to a Facebook app which again was an iframe to a Fanbooster application which was the actual calendar. Were they trying to make the user experience worse on purpose?
+
+<h5>Dropdown from hell</h5><img style="width:300px;float:left;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Not very fun to use this drop down 24 times." data-caption="Not very fun to use this drop down 24 times." src="/images/calendar08.png">Intersport's not-so-good user experience went from a little annoying to bad when they <i>a)</i> forced you to fill out a lot of fields every day (while most calendars would use a cookie to remember the little info they wanted you to fill in), and <i>b)</i> every single day make you search for and select your favourite store from the 100+ elements drop down.
+
+<h5 style="clear:left;">"no reply"</h5>I got like 20 calendar reminder e-mails every day (😱), and the e-mail subjects and sender names made sense - except for one. <a href="https://kitchn.no/">Kitch'n</a> used a <i>"no reply"</i> sender, so it was the only e-mail you wouldn't know who was from.
+
+(Gotta love their name btw. Using an apostrophe in their name (<a href="https://en.wikipedia.org/wiki/Apostrophe">'</a>) means that most people will spell/type their name incorrectly. And guess what, they even do it themselves. In their e-mails they use acute accent (<a href="https://en.wikipedia.org/wiki/Acute_accent">´</a>).)
+
+<h5>Leaving the user with that bad feeling</h5><img style="width:300px;float:left;margin-right:20px;" class="materialboxed responsive-img" title="&quot;Nice! Unfortunately, one cannot win every time.&quot; 🤔" data-caption="&quot;Nice! Unfortunately, one cannot win every time.&quot; 🤔" src="/images/calendar09.png">Skoringen had a special twist on their calendar. They had a scratch calendar where you got X tickets for the lottery, and then they typically had a simple game you could try. <em>When you finally managed to win the game you got this message with <i>"Unfortunately, one cannot win every time"</i>. I don't know what it was, but you had this feeling for 2 seconds where you were satisfied and happy for winning the game, but then they just finished you off by saying you didn't win.</em>
+
+<h5>Session expired</h5><img style="width:300px;float:left;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Session expired, try again." data-caption="Session expired, try again." src="/images/calendar10.png">I had this case with Mester Grønn's calendar where it suddenly said <i>"Your session expired. For your own security you need to refresh the browser window."</i> Really? For a calendar? If you can just refresh the browser to continue, I'm sure you could've have solved this in a better way. 😀
+
+<h5 style="clear:left;">julekalender.no won Christmas</h5>Most calendars I tried out was using <a href="https://julekalender.no/">julekalender.no</a>'s platform for their calendar. They really seem to serve more advent calendars than all other platforms combined. And it looks like a good platform - at least from an end user's standpoint. It's easy to use with no fuzz and they remember your personal details from one day to another. Also they don't - at least out of the box - ask for too much of personal information.
+
+<h5>410 Gone</h5>The developer in me was fascinated by Fjordkraft's API endpoint <code>/api/calendar/<b>isbeforedecember</b></code> which returned the HTTP status code <code>200 OK</code> before December and then <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/410">410 Gone</a></code> in December. 😃
+
+<h4>Wrapping it up 🎁</h4>These were my observations of testing out quite a few online advent calendars. It was pretty much as expected; mostly ok, and then a few ways to cheat your way to prizes and some small and big leaks of personal information. Stay tuned for details on the biggest leak of them all.
+`,
+                "images": ["/images/calendar02.png"],
                 "category":
                 {
                     "title": "Security",
