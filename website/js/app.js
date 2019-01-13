@@ -35,6 +35,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                 self.changingUrl = false;
             }
         };
+        window.addEventListener('scroll', storeScrollPosition);
 
         self.loadAds = function () {
             setTimeout(function () {
@@ -193,6 +194,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     colors: ['#01579B', '#0277BD', '#0288D1', '#039BE5', '#03A9F4', '#29B6F6', '#4FC3F7', '#81D4FA', '#B3E5FC'],//, '#E1F5FE'],
                     fontSize: ['36px', '33px', '30px', '27px', '24px', '21px', '18px', '15px', '12px']
                 });
+                restoreScrollPosition();
             }
         }
         self.goToPost = function (post) {
@@ -212,6 +214,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.loadAds();
                     self.loadComments(post.title, post.niceUrl, post.commentsIdentifier ? post.commentsIdentifier : post.niceUrl);
                 }, 250);
+                restoreScrollPosition();
             }
         }
         self.goToPage = function (niceUrl) {
@@ -235,6 +238,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                         self.pageNotFound(false);
                         self.isTransitioning(false);
                     }, 250);
+                    restoreScrollPosition();
                 }
             } else {
                 self.goToNotFoundPage();
@@ -251,6 +255,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.isTransitioning(false);
                     self.loadAds();
                 }, 250);
+                restoreScrollPosition();
             }
         }
         self.goToTag = function (tag) {
@@ -266,6 +271,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.isTransitioning(false);
                     self.loadAds();
                 }, 250);
+                restoreScrollPosition();
             }
         }
         self.goToYearMonth = function (year, month) {
@@ -286,6 +292,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     self.isTransitioning(false);
                     self.loadAds();
                 }, 250);
+                restoreScrollPosition();
             }
         }
         self.goToNotFoundPage = function () {
@@ -379,6 +386,20 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
                     return 1;
                 return 0;
             });
+        }
+        function storeScrollPosition() {
+            console.log('storeScrollPosition()');
+            sessionStorage['scrollPos-' + window.location.href] = window.scrollY;
+        }
+        function restoreScrollPosition() {
+            var scrollPos = sessionStorage['scrollPos-' + window.location.href];
+            console.log('restoreScrollPosition()', scrollPos);
+            if (scrollPos > 0) {
+                setTimeout(function () {
+                    $(window).scrollTop(scrollPos);
+                    console.log('scrolled');
+                }, 250);
+            }
         }
     }
 
