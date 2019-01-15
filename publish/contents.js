@@ -2841,7 +2841,13 @@ It's isn't a very hard task to break in. But that is actually part of the point.
                 {
                     "title": "Security",
                     "url": "/security"
-                }
+                },
+                "tags": [
+                    {
+                        "title": "Challenge",
+                        "url": "/challenge"
+                    }
+                ]
             },
             {
                 "title": "Guide: How to crack Android apps",
@@ -4860,6 +4866,249 @@ Of all the calendars that I tried out this year Sector Alarm was the only one wh
                     {
                         "title": "Information leak",
                         "url": "/information-leak"
+                    }
+                ]
+            },
+            {
+                "title": "How to get a job interview with the Norwegian Police Security Service",
+                "published": true,
+                "publishDate": "2019-01-14T05:45:00.000Z",
+                "summary": `The Norwegian Police Security Service had a job posting with a "digital riddle" to find the right candidates for a job. Here's (hopefully) the solution.`,
+                "niceUrl": "/2019/01/pst-challenge",
+                "text": `<h4>Background</h4>The <a href="https://en.wikipedia.org/wiki/Norwegian_Police_Security_Service">Norwegian Police Security Service</a> (with the Norwegian abbreviation <a href="https://www.pst.no/">PST</a> which I'll use for this write-up) is the police <a href="https://en.wikipedia.org/wiki/Security_agency">security agency</a> of Norway. In December 2018 they <a href="https://1005007.webcruiter.no/Main/Recruit/Public/4001069401">posted a job listing</a> seeking a "curious solution-oriented digital forensics specialist".
+                
+In the job listing they included a <a href="https://en.wikipedia.org/wiki/Limerick_(poetry)">limerick</a> which was a riddle that they wanted people to solve. I didn't hear of the job posting until it suddenly in January was on the front page of most Norwegian newspapers. The titles were typically something like <i>"if you solve this puzzle the job could be yours"</i>.
+
+<h4>The shark theme 🦈</h4>Almost every part of the whole mystery had a shark theme. The background for that was a bit embarrassing episode from October 2018 where suddenly <em>PST tweeted a picture of a shark. It was the 7-year-old child of one of the PST employees that had accidentally clicked the share button while playing the game <a href="https://en.wikipedia.org/wiki/Hungry_Shark#Hungry_Shark_Evolution_(2014)">Hungry Shark Evolution</a> on his father's iPad. This of course sparked speculations of their Twitter account being hacked.</em> (It was not an iPad with any classified information, but an iPad used for updating Twitter from home. (Their Twitter account is also closed for direct messages.))
+
+Oh, and <i>"hai"</i> is the Norwegian word for <i>"shark"</i>.
+
+<h4>Step 1 - the limerick</h4>The limerick in the job posting was as follows:
+<i>    En oktobermorgen fikk vi pulsen til å øke 
+    var det en hackeR som hadde lykkes med forsøkeT 
+    men en HAI I en TWeeT 
+    er ikke særlig 1337. 
+    løser du gåtEn bør dU vurdere å søke</i>
+
+The direct meaning of it the limerick doesn't matter itself, but there's a pattern in it:
+<i>    <em>E</em>n oktobermorgen fikk vi pulsen til å øke
+    var det en hacke<em>R</em> som hadde lykkes med forsøke<em>T</em>
+    men en <em>HAI</em> <em>I</em> en <em>TW</em>ee<em>T</em>
+    er ikke særlig 1337.
+    løser du gåt<em>E</em>n bør d<em>U</em> vurdere å søke</i>
+
+The upper case letters are <code>ERTHAIITWTEU</code>. As you might know, <a href="https://en.wikipedia.org/wiki/.eu">.eu</a> is a top-level domain, and you might've noticed there's also one single period in the limerick. This makes it <code>ERTHAIITWT.EU</code>. If you're quicker than me (and Norwegian) you might already see that the first part can be re-ordered to <code>TWITTERHAI</code> (Twitter shark).
+
+<h5>Detour 1</h5>I didn't see the re-ordering opportunity, so I visited <code><a href="http://erthaiitwt.eu">http://erthaiitwt.eu</a></code>. That site shows a <a href="https://en.wikipedia.org/wiki/Hangman_(game)">hangman</a> saying that the order is incorrect.
+
+<h5>Solution 1</h5><em>The right solution for the first step was to visit <code><a href="http://twitterhai.eu">http://twitterhai.eu</a></code>.</em>
+
+<h4>Step 2 - the HTML page</h4><code><a href="http://twitterhai.eu">http://twitterhai.eu</a></code> shows an image of a shark and gives another poem telling you to look around. Now, I would always look at the source code, but I saw that there was this strange spacing in the middle of the word <i>være</i>. This is a sign that there's something going on with the HTML source code.
+<img style="width:300px;float:right;margin:20px" class="materialboxed responsive-img" title="Shark.html" data-caption="Shark.html" src="/images/pst01.png">
+Do you see the odd line breaks and what the first column says? <code>Shark.html</code>
+
+<h5>Detour 2a</h5>I tend do look closer at <code>robots.txt</code> and have even made <a href="/2018/06/robots-txt-linkifier">a nice robots.txt linkifier bookmarklet</a> to easily visit and open links from exactly that file. Visiting <code><a href="http://twitterhai.eu/robots.txt">http://twitterhai.eu/robots.txt</a></code> you get a helpful hint saying <i>Use the source, Luke!</i>.
+
+<h5>Detour 2b</h5>I'm used to files being lower case so I went straight to <code><a href="http://twitterhai.eu/shark.html">http://twitterhai.eu/shark.html</a></code>. There you get the helpful hint that <i>Case matters. Watch your characters.</i>
+
+<h5>Solution 2</h5><em>The solution for the second step was to visit <code><a href="http://twitterhai.eu/Shark.html">http://twitterhai.eu/Shark.html</a></code>.</em>
+
+<h4>Step 3 - the image</h4>While I suppose some people stopped looking when they found <code><a href="http://twitterhai.eu/Shark.html">http://twitterhai.eu/Shark.html</a></code> which gives a tip about taking the time to write a good job application. <em>However, there's a HTML comment telling that they have more puzzles if you look more closely</em>.
+
+I couldn't see any other clues or directions to go other than <a href="http://twitterhai.eu/">the image from step 2</a>. What made this one hard for me was that the tools I used to look for <a href="https://en.wikipedia.org/wiki/Exif">Exif metadata</a> didn't reveal anything. As I understand it the solution wasn't hiding in Exif at all, but rather a (JPEG) file comment. There are online tools out there that gives much more than just Exif, and if you're on a Unix-like system you could use a variant of the <a href="https://en.wikipedia.org/wiki/File_(command)"><code>file</code> command</a> to get the info needed:
+
+<code>file 1337_shrk.jpg
+
+1337_shrk.jpg: JPEG image data, JFIF standard 1.01, aspect ratio, density 72x72, segment length 16, 
+Exif Standard: [TIFF image data, big-endian, direntries=3, PhotometricIntepretation=RGB, orientation=upper-left], 
+<em>comment: "/haitech_secure.html"</em>, baseline, precision 8, 851x514, frames 3</code>
+
+<h5>Solution 3</h5><em>The solution for the second step was to visit <code><a href="http://twitterhai.eu/haitech_secure.html">http://twitterhai.eu/haitech_secure.html</a></code>.</em>
+
+<h4>Step 4 - the JavaScript</h4><code><a href="http://twitterhai.eu/haitech_secure.html">http://twitterhai.eu/haitech_secure.html</a></code> contained some general text with some "tips" for when applying for a job. More importantly it contained a password field and a login button.
+
+The source code revealed a client side validation of the password by first verifying the password and then using the password as a key to decipher a <a href="https://en.wikipedia.org/wiki/Ciphertext">ciphertext</a>.
+
+The JavaScript doing the actual verification of the key was as follows:<pre class="prettyprint lang-js">password.charCodeAt(0) == 8 * 8 + 8 && 
+password.charCodeAt(1) == Math.pow(9, 2) - 29 && 
+password.charCodeAt(2) == Math.pow(10, 2) + Math.pow(3, 2) && 
+password.charCodeAt(3) == password.charCodeAt(2) && 
+password.substring(4, 5) == 3 && 
+password.charCodeAt(5) == 7 * 17 - 5 && 
+password.charCodeAt(6) == password.charCodeAt(0) && 
+password.charCodeAt(7) == password.charCodeAt(1) && 
+password.charCodeAt(8) == 0x69</pre>
+Obviously the password was 9 characters long and it was just a matter of calculating each char. I just copied and pasted a bit and used the following quick and dirty JavaScript in the console to print out the password and run the login function which gave an alert box with the next clue.<pre class="prettyprint lang-js">var password = [];
+password[password.length] = 8 * 8 + 8;
+password[password.length] = Math.pow(9, 2) - 29;
+password[password.length] = Math.pow(10, 2) + Math.pow(3, 2);
+password[password.length] = password[password.length - 1];
+password[password.length] = '3'.charCodeAt(0);
+password[password.length] = 7 * 17 - 5;
+password[password.length] = password[0];
+password[password.length] = password[1];
+password[password.length] = 0x69
+for (var i = 0; i < password.length; i++) {
+    password[i] = String.fromCharCode(password[i]);
+}
+password = password.join('');
+document.getElementById("password").value = password;
+console.log(password);
+login();</pre>
+<h5>Solution 4</h5><em>The password needed to proceed was <code>H4mm3rH4i</code></em> (hammerhead shark).
+
+<h4>Step 5 - the Caesar cipher</h4>The alert box outputted the text <i>Caesar synes at du skal ta turen hit: uggc://gjvggreunv.grpu/unv_gurer.ugzy</i> meaning <i>Caesar thinks you should go here: uggc://gjvggreunv.grpu/unv_gurer.ugzy</i>.
+
+Just by looking at the last part itself it seemed pretty obvious that this was a <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar cipher</a>. This had to be <code>http://somethingsomething.html</code>. There are plenty of places to solve these kinds of code, but a quick JavaScript also does the trick: <pre class="prettyprint lang-js">var cipher = 'uggc://gjvggreunv.grpu/unv_gurer.ugzy';
+var shift = cipher.charCodeAt(0) - 'h'.charCodeAt(); // Char we suspect to know
+var charDistance = 'a'.charCodeAt();
+var cleartext = '';
+for (var i = 0; i < cipher.length; i++) {
+    var charCode = cipher.charCodeAt(i) - charDistance;
+    if (charCode >= 0 && charCode <= 25) { // a-z
+        cleartext += String.fromCharCode((((charCode + shift) % 26) + charDistance));
+    } else {
+        cleartext += cipher[i];
+    }
+}
+console.log(shift, charDistance, cleartext);</pre>
+<h5>Solution 5</h5><em>The plaintext for this one was <code><a href="http://twitterhai.tech/hai_there.html">http://twitterhai.tech/hai_there.html</a></code>.</em>
+
+<h4>Step 6 - the ASCII art and secret folder</h4><code><a href="http://twitterhai.tech/hai_there.html">http://twitterhai.tech/hai_there.html</a></code> just told that you should follow <a href="https://twitter.com/twitt3rhai">the Twitter user <code>twitt3rhai</code></a> (Twitter shark).
+
+The latest tweet was the text <i>"#justdoit, or make your ROBOTS do it. Transfer teXt to an ediTor"</i>. I suppose this was a double hint; another trip to <code>robots.txt</code> and transferring the rest of the tweets to a text editor.
+
+<a href="http://twitterhai.tech/robots.txt">The <code>robots.txt</code></a> pointed to the path <code>/min_hemmelige_mappe/</code> ("my secret folder").
+
+There were 65 other tweets containing shark and fish related words. It looked like some kind of cipher. The best thing to do was to just copy all the tweets into a text editor:<pre class="prettyprint lang-html">Tigerhai HvithaiHammerhaiHvalhai Oksehai Domenehai Brugde
+Brugde DomenehaiTigerhaiHvithai Hvalhai Hammerhai Oksehai
+HammerhaiJaws   Fish   Hvalhai Oksehai Domenehai Tigerhai
+HvithaiHaiene   Tail   Tigerhai DomenehaiBrugde Hammerhai
+HåbrannBrugde   Fins   HammerhaiBrugde HvithaiHvalhaiJaws
+HvithaiHammer          Domenehai Tigerhai Oksehai Hvalhai
+DomenehaiJaws   Mako   HåbrannHvithai HvalhaiTigerhaiMako
+BrugdeOksehai   Apex   Tigerhai HvalhaiDomenehaiHammerhai
+HvithaiBrugde   Jaws   HammerhaiOksehai BrugdeTigerhaiHai
+Brugde HvalhaiHvithaiDomenehai Oksehai Tigerhai Hammerhai
+TigerhaiHvithaiOksehai BrugdeHammerhaiHvalhaiDomenehaiHai
+HvithaiHvalhai   BrugdeOksehaiDomenehai HammerhaiTigerhai
+HvithaiSjøen   H   TigerhaiOksehai DomenehaiHvalhaiBrugde
+Hammerhaien   Hai   Domenehai HvalhaiBrugdeHvithaiOksehai
+HvithaiHai           DomenehaiHvalhai Hammerhai Oksehaien
+HvithaiHai   Havet   Oksehai TigerhaiHvalhaiDomenehaiApex
+OksehaiHai   Sjøen   HvalhaiBrugde HvithaiHammerhaiBrugde
+BrugdeJaws   Finne   Brugde HvithaiHvalhaiTigerhai Haiene
+HammerhaiDomenehaiBrugdeOksehaiTigerhai HvalhaiHvithaiHai
+HvalhaiBrugdeTigerhaiHammerhaiHvithai Oksehai Domenehaien
+Domenehaier           OksehaiHvithai HammerhaiHvalhai Hai
+OksehaiTigerhai   HvalhaiDomenehaiHammerhai BrugdeHvithai
+DomenehaiBrugde   TigerhaiHammerhai HvithaiHvalhaiOksehai
+BrugdeHvithaien   HammerhaiDomenehaiHvalhai Tigerhai Mako
+TigerhaiHvalhai   BrugdeDomenehaiHvithai OksehaiHammerhai
+BrugdeOksehaien   HammerhaiHvalhaiDomenehai HvithaiBrugde
+HvithaiJaws           HaiHvalhaiHammerhai BrugdeDomenehai
+DomenehaiTigerhaiHammerhaiHvithaiBrugdeOksehai HvalhaiHai
+TigerhaiHvithaiBrugdeHvalhaiOksehai Domenehai Hammerhaien
+BrugdeTigerhaiHammerhai   DomenehaiHvalhai OksehaiHvithai
+DomenehaiOksehaiSjøen     HammerhaiHvalhaiTigerhaiHåbrann
+Hammerhai HvithaiBrugde   OksehaiHvalhai BrugdeTigerhaien
+HvithaiBrugdeOksehaiHai   TigerhaiDomenehai HvalhaiBrugde
+HvalhaiOksehaiDomenehai   TigerhaiBrugde HammerhaiHvithai
+Tigerhai HvithaiOksehai   HammerhaiDomenehaiBrugdeHvalhai
+HvithaiOksehaiBrugde         Hammerhai Tigerhai Domenehai
+HvalhaiHammerhaiHvithaiBrugdeTigerhai OksehaiDomenehaiHai
+DomenehaiHvithaiBrugdeTigerhaiHammerhai Hvalhai Oksehaien
+OksehaiBrugdeBrugde         Hvithai DomenehaiTigerhaiApex
+HvalhaiHvithaiJaws   Haier   DomenehaiHammerhaiTigerhaien
+TigerhaiBrugdeOksehaiSjøen   Domenehai HvalhaiHammerhaien
+DomenehaiHammerhaiHavet     BrugdeOksehai HvithaiTigerhai
+HvalhaiHammerhaiHvithaiHai   Brugde Oksehaien Domenehaien
+DomenehaiBrugdeHai   Havet   Hammerhai Hvalhai Tigerhaien
+HvalhaiOksehaiBrugde        BrugdeDomenehaiTigerhaiBrugde
+Hvithai DomenehaiBrugdeHammerhaiTigerhaiHvalhai Oksehaien
+HvalhaiBrugdeHvithaiDomenehaiOksehai Tigerhai Hammerhaien
+BrugdeHvithaiBrugde         HammerhaiTigerhaiHvalhaiSjøen
+Domenehai Tigerhai   Sjøen   HvithaiHammerhai Brugde Jaws
+OksehaiBrugdeHvalhaiHvitha   Domenehai Tigerhai Hammerhai
+TigerhaiHammerhaiHavet     HvalhaiHvithai BrugdeDomenehai
+TigerhaiDomenehaiHammerhai   Hvalhai HvithaiOksehaiBrugde
+HvithaiDomenehaien   Finne   HammerhaiHvalhaiBrugdeBrugde
+BrugdeOksehaiBrugden        Hammerhai Hvithai Domenehaien
+HvithaiBrugde TigerhaiOksehaiDomenehaiHammerhai Hvalhaien
+DomenehaiHammerhaiOksehaiHvithaiHvalhai Brugde Tigerhaien
+HammerhaiTigerhai           DomenehaiHvithaiBrugdeHvalhai
+HvalhaiBrugdeHvit   Haier   OksehaiTigerhai Domenehai Hai
+OksehaiBrugdeHvithaiJaws   HavetDomenehai TigerhaiHvalhai
+DomenehaiHvithaiHåbrann   Hammerhai Brugde OksehaiHvalhai
+DomenehaiHvalhaiBrugde   OksehaiBrugdeHammerhai Hvithaien
+DomenehaiTigerhaiApex   Hammerhai Hvithai Hvalhai Oksehai
+OksehaiHammerhaiJaws   DomenehaiTigerhaiBrugdeHvalhaiJaws
+Hvalhai HvithaiTigerhaiDomenehaiBrugdeHammerhai Oksehaien
+Håbrann TigerhaiOksehaiHvithaiBrugdeHvalhaiHammerhaiHavet</pre>
+<h5>Solution 6</h6>There were two things to draw from this step. <em>The first was the URL to <code><a href="http://twitterhai.tech/min_hemmelige_mappe/">http://twitterhai.tech/min_hemmelige_mappe/</a></code>, and the second was the word <code>HAI1337</code> (shark 1337) hiding in all the tweets.</em>
+
+<h4>Step 7 - the Wireshark dump</h4><img style="width:400px;float:left;margin:20px" class="materialboxed responsive-img" title="Screenshot from Wireshark." data-caption="Screenshot from Wireshark." src="/images/pst03.png"/>The mentioned URL <code style="word-break:break-all;"><a href="http://twitterhai.tech/min_hemmelige_mappe/">http://twitterhai.tech/min_hemmelige_mappe/</a></code> was the URL to a directory containing a file called just <code>haimat</code> (shark food), and it was indeed shark food. Again the <a href="https://en.wikipedia.org/wiki/File_(command)"><code>file</code> command</a> proved a quick and simple way of determining the file type:
+<code>file haimat
+haimat: <em>pcap-ng capture file</em> - version 1.0</code>
+
+A pcap-ng capture file is a file with a packet capture format that contains a "dump" of data packets captured over a network - a file typically seen from the good old packet analyzer <a href="https://en.wikipedia.org/wiki/Wireshark">Wireshark</a>.
+
+Now, I'm no expert in Wireshark, but I have used it now and then to listen in on network traffic. I used it extensively while building the app for my HDL Buspro smart home - to see how the different components were talking together. Luckily this dump only contained 400+ packets.
+
+I might very well have missed stuff in the dump, but I did find two things. The first was a web browser visiting the root of a server and getting back the following HTML:<pre class="prettyprint lang-html">&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Sharky Secret Distributor&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    Her er dataene dine. Passordet har du allerede... &lt;a href="/secret_data.zip"&gt;secret_data.zip&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+The page said <i>Here's your data. You already have the password...</i> and linked to ZIP file.
+
+The second thing of interest was the response to the the request for the actual ZIP file. Wireshark lets you easily save files that been transferred over the wire.
+
+<h5>Solution 7</h5><em>The solution was to extract the ZIP file from the packet capture file.</em>
+
+<h4>Step 8 - the ZIP file</h4>Trying to unzip the ZIP file it asks for the password for the file <code>insignificant_shark.png</code>.
+
+<h5>Solution 8</h5>As hinted, you were already supposed to have the password. Yes, <em>the password was <code>HAI1337</code></em>.
+
+<h4>Step 9 - runes and steganography</h4>Of course the image was of a shark. The shark had what looked like <a href="https://en.wikipedia.org/wiki/Runes">runes</a> on its side. Looking at a <a href="https://snl.no/runer">table of a runic alphabet</a> <em>the three runes can be transliterated to <code>l s b</code></em>.
+
+What could the letters <code>LSB</code> mean in context of an image? <a href="https://en.wikipedia.org/wiki/Bit_numbering#Least_significant_bit">Least significant bit</a>. That matches the file name of <code>insignificant_shark.png</code>. <a href="https://en.wikipedia.org/wiki/Steganography">Steganography</a> is the practice of concealing a file, message, image, or video within another file, message, image, or video.
+
+There are many online tools for looking for secret messages in images.
+
+<h5>Detour 9</h5><img style="width:300px;float:left;margin:20px" class="materialboxed responsive-img" title="Decoding the image incorrectly the image would reveal a QR code." data-caption="Decoding the image incorrectly the image would reveal a QR code." src="/images/pst02.png"/>If you decoded the image incorrectly the image would reveal a QR code which was encoded with the helpful text <i>You thought we would hide anything of SIGNIFICANCE? Not the LEAST...</i>.
+
+<h5 style="clear:left;">Solution 9</h5><em>Decoding the image looking at the LSB reveals the URL <code><a href="http://twitterhai.tech/u_are_th3_winrar.jpg">http://twitterhai.tech/u_are_th3_winrar.jpg</a></code>.</em>
+
+<h4>Step 10 - Winrar</h4>The image at <code><a href="http://twitterhai.tech/u_are_th3_winrar.jpg">http://twitterhai.tech/u_are_th3_winrar.jpg</a></code> has the text <i>"Do we we have a winner?"</i>.
+
+The puzzle can't end with a question. What should we be looking for here? The URL says <i>"winrar"</i> and not <i>"winner"</i>. The simple image is a stunning 9 MB. It is possible to hide files at the end of images. <a href="https://en.wikipedia.org/wiki/WinRAR">WinRAR</a> is a file archiver utility for ZIP files and <a href="https://en.wikipedia.org/wiki/RAR_(file_format)">RAR files</a>.
+
+<h5>Solution 10</h5><em>The solution was to e.g. use WinRAR to extract the files <code>gratulerer.txt</code> and <code>gratulerer.gif</code> from the "image".</em>
+
+<h4>We have a winner</h4>I wouldn't be very surprised if there was another level of puzzles and solutions hidden here somewhere, but who knows. The file <code>gratulerer.txt</code> (congratulations.txt) contained a greeting telling that all the puzzles have been solved and included a (shark related, of course) code word that could be used as a proof of challenge completion. <code>gratulerer.gif</code> is GIF from the movie <a href="https://en.wikipedia.org/wiki/The_Great_Gatsby">The Great Gatsby</a>.
+
+<em>So does all this prove that you are ready for working as a digital forensics specialist for a national security agency?</em> Of course not in itself. But I suppose <em>it's a good starting baseline for applicants. Solving all the pieces shows a basic understanding of a wide area of topics like knowing a little bit of code, some basic cryptography, a bit networking and have some general smartness.</em> Of course, if you applied on January 8th or later you might expect some extra questions in regards of the solution as <em><a href="https://www.reddit.com/r/norge/comments/advuc7/la_oss_løse_gåten_sammen/">someone solved the challenge on Reddit</a></em> and there's also <a href="https://gist.github.com/BobuSumisu/501dafd4d7166d2a295a68c20bc3eb41">a write-up on GitHub</a>. 😀 I wanted to wait to publish this until after the application deadline.
+
+Giving a challenge like this also helps spread the word about the job opening, especially when it ends up on so many news paper front pages. I hope PST got some good candidates. :)
+`,
+                "images": ["/images/pst03.png", "/images/pst01.png", "/images/pst02.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Behind the news",
+                        "url": "/behind-the-news"
+                    },
+                    {
+                        "title": "Challenge",
+                        "url": "/challenge"
                     }
                 ]
             },
