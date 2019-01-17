@@ -5113,6 +5113,116 @@ Giving a challenge like this also helps spread the word about the job opening, e
                 ]
             },
             {
+                "title": "Case #20: It's getting hot in here",
+                "published": true,
+                "publishDate": "2019-01-16T14:00:00.000Z",
+                "summary": `It was possible to control Internet connected Mill heaters worldwide.`,
+                "niceUrl": "/2019/01/mill-heat",
+                "text": `<h4>tl;dr</h4>It was possible to control what seems to be all Internet connected Mill heaters worldwide.
+
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://www.millheat.com/">Mill</a></td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>October 2018</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Very good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>It was possible to control all Internet connected heaters</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div>
+<h4>Background</h4><img style="float:left;width:350px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/mill02.png"/>Mill is a company selling different heaters. If you've ever seen a heater that actually looks good it was probably a Mill heater. <em>Some of the heaters can be controlled with their app via the Internet. They also have Wi-Fi socket product that can be connected to good old "dumb" heaters.</em>
+
+Please note that this was originally not my finding. A friend of mine have a few Mill heaters and let me access what was needed to check out this issue.
+
+<h4 style="clear:left;">Approach (technical stuff)</h4><a class="skip-link" href="#security-issues"><u>Skip this part</u> 🙈</a>
+<img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/mill04.png"/>I downloaded <a href="https://play.google.com/store/apps/details?id=com.millheat.heater">Mill's Android app</a> and used the HTTP proxy <a href="https://www.charlesproxy.com/">Charles</a> to listen in on the traffic.
+
+The first thing that surprised me was that the app connected to a hostname that belongs to a Chinese "IoT platform" (Mill is Norwegian). The IP seems to belong to a machine running <a href="https://aws.amazon.com/ec2/">Amazon Elastic Compute Cloud (EC2)</a> in Germany.
+
+<em>The first thing that scared me was that they only used https for the authentication. All other communication was unencrypted.</em>
+
+During authentication the server gave the client an access token. The token seemed to be valid for a 24+ hours.
+
+When receiving information and sending commands the app sent some headers to prove the authenticity. There was a signature based on a nonce, a timestamp, the user id and the authentication token. The timestamp and nonce was also sent in the request. <em>There was one problem with the request headers. The exact same headers could be used again and again for both <a href="https://en.wikipedia.org/wiki/Replay_attack">replay attacks</a> and for any other different command or information retrieval. This was not the app you wanted to use from your sunbed on vacation while connected to the nearest open Wi-Fi network.</em>
+
+But then there was the real issue. I got an ID of an oven from my friend, with his blessing to try to adjust the temperature of it. And guess what, it was possible to do just that. <em>First one could get the status of the oven and check if the oven was online, then one could change the status it - including setting the temperature.</em>
+
+<em>The ovens were assigned an ID that seemed to be an incremental number. So once this issue was present it became a large scale one. It seemed like one could set the temperature of any and all online Mill ovens worldwide.</em>
+<pre class="prettyprint">curl -H 'Content-Type: application/x-zc-object' \\
+-H 'X-Zc-Content-Length: 85' \\
+-H 'X-Zc-Major-Domain: seanywell' \\
+-H 'X-Zc-Sub-Domain: milltype' \\
+-H 'X-Zc-Timestamp: 1939713271' \\
+-H 'X-Zc-Timeout: 300' \\
+-H 'X-Zc-Nonce: [some nounce]' \\
+-H 'X-Zc-User-Id: [your own user id]' \\
+-H 'X-Zc-User-Signature: [sha1 of time params, nounce and auth token]' \\
+-H 'Host: [Mill server]' \\
+--data-binary '{"homeType":0,"timeZoneNum":"+02:00","deviceId":[some oven id],"value":28,"key":"holidayTemp"}' \\
+'http://[Mill server]/millService/v1/changeDeviceInfo'</pre>
+<h4 id="security-issues">Security issues</h4>It was possible to get the status of up to 50,000 Internet connected Mill ovens and get data like the following:
+ - Online/offline status
+ - Current and target temperature
+ - User selected device name (could they reveal addresses/people?)
+ - Other status information
+
+It was possible to change the status - aka set the temperature - of the ovens. <em>What if someone had turned off the oven because they were e.g. temporarily storing something close to the oven, and then someone turned the oven to full via the Internet? Could that potentially cause a fire? Their user manuals specify minimum distances for the ovens and that they need to be kept away from flammable materials.</em>
+
+<h4>Reception and handling</h4><h5>Day zero</h5>At night I sent an e-mail to both their specified contact and Play Store e-mail address.
+
+<h5>Day 1</h5>The morning after, they responded thanking me for telling them about the issue and that they had started working on fixing it.
+
+At night - after business hours - I got a response that they had a solution that they were running some final tests on. They also asked for my opinion on some of the changes they were going to do.
+
+Not everything was fixed overnight at once, but <em>they showed they were on the ball, taking it serious and fixed the worst parts first</em>.
+
+<h4>Conclusion</h4>I live in a smart home, and I like the ease of being able to see the temperature of every room and control the heating from anywhere. I can understand why people use Mill's and other's solutions. And imagine having a cabin in the cold snowy mountains where you can adjust the heat so that it's pre-heated just before you arrive. It's perfect. On the other hand, I have so much respect for those not wanting to connect their lives or homes to the Internet, because it will fail at one or another point. It doesn't have to be a specific case like this, but we're also talking about privacy issues in regards of big companies and governments, and we're talking about surveillance from anything from burglars to jealous partners to governments.
+
+This was yet another one of many, many incidents of IoT security failing. <em>We must come up with up with some kind of labelling of IoT devices that can work as a statement that the vendors can use to say they have at least gone through some minimum efforts checklist and that they actively uses third-party companies to check their security. If some big companies in the industry get together and work out a simple framework for this we could start going down the right path.</em> I don't think we have time to wait for laws and regulations around the world.
+`,
+                "images": ["/images/mill02.png", "/images/mill01.png", "/images/mill03.png", "/images/mill04.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Internet of Things",
+                        "url": "/iot"
+                    },
+                    {
+                        "title": "OWASP 2017 A5",
+                        "url": "/owasp-2017-a5"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2018-01-01T04:30:00.000Z",
