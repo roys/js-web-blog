@@ -1,24 +1,32 @@
+html{
+    font-family: "Roboto", sans-serif;
+}
 body {
     background-color: #fafafa;
 }
-
+b, strong {
+    font-weight: bold;
+}
 nav, .page-footer {
     background-color: #673AB7;
 }
-
 h1, h2, h3, h4, h5, h6 {
     color: #673AB7;
 }
-
-.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating){
+.flow-text {
+    font-weight: 300;
+}
+.container .row {
+    margin-left: -.75rem;
+    margin-right: -.75rem;
+}
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
     color: #039be5;
 }
-
 ul {
     margin-top: 0px;
     margin-bottom: 0px;
 }
-
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -58,6 +66,9 @@ html {
 .carousel .carousel-item{
     height: 350px;
     width: 350px;
+}
+tr{
+    border-bottom: none;
 }
 .page-footer {
     padding-top: 0px;

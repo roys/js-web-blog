@@ -8,14 +8,14 @@
   <title>Roy Solberg - blog.roysolberg.com</title>
   <link rel="alternate" type="application/atom+xml" title="Feed for blog.roysolberg.com" href="/atom" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-  <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/materialize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdn.rawgit.com/roys/js-web-blog/4c063477/css/jqcloud.min.css" />
   <link type="text/css" rel="stylesheet" href="/css/blog.css?v=13" />
   <!--link type="text/css" rel="stylesheet" href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css"-->
   <script type="text/javascript" src="/contents_json.js?v=71"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/e6a5037/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script type="text/javascript" src="https://cdn.rawgit.com/roys/js-web-blog/4c063477/js/jqcloud.min.js"></script>
   <script type="text/javascript" src="/js/app.js?v=34"></script>
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -29,7 +29,7 @@
   <script async src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <!--script async type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script-->
   <script type='text/javascript'>
-    (function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery;//.noConflict(false);
+    (function ($) { window.fnames = new Array(); window.ftypes = new Array(); fnames[0] = 'EMAIL'; ftypes[0] = 'email'; fnames[1] = 'FNAME'; ftypes[1] = 'text'; fnames[2] = 'LNAME'; ftypes[2] = 'text'; }(jQuery)); var $mcj = jQuery;//.noConflict(false);
   </script>
   <script>
     window.SpaBlog = window.SpaBlog || {}; // Our namespace
@@ -143,8 +143,8 @@
     <div class="nav-wrapper">
       <div class="container">
         <ul id="nav-mobile" class="left">
-            <li data-bind="css: { active: shouldDisplayFrontpage }"><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">Home</a></li>
-            <li data-bind="css: { active: shouldDisplayPage('/about') }"><a href="/about" data-bind="click: function(){$root.goToPage('/about')}">About</a></li>
+          <li data-bind="css: { active: shouldDisplayFrontpage }"><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">Home</a></li>
+          <li data-bind="css: { active: shouldDisplayPage('/about') }"><a href="/about" data-bind="click: function(){$root.goToPage('/about')}">About</a></li>
         </ul>
         <ul id="nav-mobile" class="right prepare-print">
           <li><a class="grey-text text-lighten-4 right" href="https://twitter.com/roysolberg" title="Twitter"><i class="icon-twitter"></i></a></li>
@@ -153,7 +153,11 @@
       </div>
     </div>
   </nav>
-  <noscript><center><h5>Seriously, are you able to surf the web with JavaScript disabled? I'm, sorry, but that doesn't work on this site.</h5></center></noscript>
+  <noscript>
+    <center>
+      <h5>Seriously, are you able to surf the web with JavaScript disabled? I'm, sorry, but that doesn't work on this site.</h5>
+    </center>
+  </noscript>
   <div id="frontpage" style="display: none" class="container" data-bind="template: { name: 'frontpage-template', if: function(){ !$data.post() && !$data.category() && !$data.tag() }}, fadeVisible: $data.shouldDisplayFrontpage">
   </div>
   <div id="article" style="display: none" class="container" data-bind="template: { name: 'article-template', if: $data.post}, fadeVisible: $data.shouldDisplayArticle">
