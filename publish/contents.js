@@ -2854,8 +2854,8 @@ It's isn't a very hard task to break in. But that is actually part of the point.
                 "published": true,
                 "hot": true,
                 "publishDate": "2018-02-09T21:40:00.000Z",
-                "updateDate": "2018-06-02T17:40:00.000Z",
-                "summary": "Learn how to reverse engineer Android apps, alter them, and put them back together.",
+                "updateDate": "2019-01-29T14:30:00.000Z",
+                "summary": "Learn how to reverse engineer Android apps, alter them, and put them back together. No root needed.",
                 "niceUrl": "/2018/02/crack-android-apps",
                 "text": `<div style="white-space: normal;" class="col s12 m6 right">
                 <div id="mc_embed_signup" class="">
