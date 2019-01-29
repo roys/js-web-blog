@@ -2857,8 +2857,31 @@ It's isn't a very hard task to break in. But that is actually part of the point.
                 "updateDate": "2018-06-02T17:40:00.000Z",
                 "summary": "Learn how to reverse engineer Android apps, alter them, and put them back together.",
                 "niceUrl": "/2018/02/crack-android-apps",
-                "text": `<h4>tl;dr</h4>This tutorial for how to crack Android apps is one of my more technical posts. If you aren't a developer you might want to skip this one. :) I'm assuming some basic knowledge of UN*X, Java and Android.
-
+                "text": `<div style="white-space: normal;" class="col s12 m6 right">
+                <div id="mc_embed_signup" class="">
+                    <form action="https://roysolberg.us17.list-manage.com/subscribe/post?u=914df4966855c5c9ff1a2b5cb&amp;id=65ad1b4962" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                        <div id="mc_embed_signup_scroll">
+                            <h6>I'm writing an e-book about cracking android apps. Sign up now and be notified when it's done and get 30% discount!</h6>
+                            <div class="mc-field-group">
+                                <label for="mce-EMAIL">E-mail address</label>
+                                <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
+                            </div>
+                            <div id="mce-responses" class="clear">
+                                <div class="response" id="mce-error-response" style="display:none"></div>
+                                <div class="response" id="mce-success-response" style="display:none"></div>
+                            </div>
+                            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                            <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                                <input type="text" name="b_914df4966855c5c9ff1a2b5cb_65ad1b4962" tabindex="-1" value="">
+                            </div>
+                            <div class="clear">
+                                <input style="margin-top: 10px;" type="submit" value="Get notified" name="subscribe" id="mc-embedded-subscribe" class="btn waves-effect waves-light">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><h4>tl;dr</h4>This tutorial for how to crack Android apps is one of my more technical posts. If you aren't a developer you might want to skip this one. :) I'm assuming some basic knowledge of UN*X, Java and Android.
+             
 <h4>Why crack an app?</h4>Sometimes I like to check if online services I use really are secure. <a href="/category/security">I've presented quite a few cases to prove that they very often are not.</a> Mostly I can use very simple techniques to check the security as there are so many basic security vulnerabilities out there. When it comes to apps I often use a HTTP proxy like <a href="https://www.charlesproxy.com/">Charles</a> to take a look at the HTTP and HTTPS traffic. However, <b>once in a while there are apps that use e.g. <a href="https://en.wikipedia.org/wiki/HTTP_tunnel">HTTP tunneling</a> or <a href="https://en.wikipedia.org/wiki/HTTP_Public_Key_Pinning">certificate pinning</a>. In those cases you need to go one step further to be able to listen to the network traffic.</b>
 
 Other reasons to decompile apps could be to recover lost source code, to inject language translations or even fix a bug. But hey, remember, don't do anything you are not allowed to. Don't break the law. This guide is just for educational purposes when you have legitimate reasons to do what you do.
@@ -2969,6 +2992,30 @@ If you need to know the value of a string - e.g. a parameter - you can use <a hr
 
 <h5>Proguard</h5>Very often - but not in the case of my Developer Tools app - the code will be shrinked and obfuscated using <a href="https://developer.android.com/studio/build/shrink-code.html">ProGuard</a>. This makes the code a lot harder do read and understand. There aren't really any good ways around it, but doing the thread dump trick and taking your time to follow the code will eventually get you where you want to be.
 
+<div style="white-space: normal;margin-bottom:20px;" class="col s12">
+    <div id="mc_embed_signup" class="">
+        <form action="https://roysolberg.us17.list-manage.com/subscribe/post?u=914df4966855c5c9ff1a2b5cb&amp;id=65ad1b4962" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+            <div id="mc_embed_signup_scroll">
+                I'm writing an <em>e-book about cracking android apps</em>. Sign up now and be notified when it's done and <em>get 30% discount</em>!
+                <div class="mc-field-group">
+                    <label for="mce-EMAIL">E-mail address</label>
+                    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
+                </div>
+                <div id="mce-responses" class="clear">
+                    <div class="response" id="mce-error-response" style="display:none"></div>
+                    <div class="response" id="mce-success-response" style="display:none"></div>
+                </div>
+                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                    <input type="text" name="b_914df4966855c5c9ff1a2b5cb_65ad1b4962" tabindex="-1" value="">
+                </div>
+                <div class="clear">
+                    <input style="margin-top: 10px;" type="submit" value="Get notified" name="subscribe" id="mc-embedded-subscribe" class="btn waves-effect waves-light">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <h4>Wrapping it up</h4><img style="float:left;width:550px;margin-right:20px;" class="materialboxed responsive-img" title="The regular Developer Tools app on the left and the cracked one on the right." data-caption="The regular Developer Tools app on the left and the cracked one on the right." alt="The regular Developer Tools app on the left and the cracked one on the right." src="/images/cracked_app.jpg"/>If you have followed along the guide you would see the app change from the version on the left to something like the one on the right. One of the reasons I wrote this guide was for my own sake to have something to easily copy and paste from when doing some reverse engineering myself, but I thought this might be useful one for others as well. :)`,
                 "images": ["/images/cracked_app.jpg"],
                 "category":
@@ -5225,10 +5272,10 @@ This was yet another one of many, many incidents of IoT security failing. <em>We
             {
                 "title": "Case #XX: ",
                 "published": false,
-                "publishDate": "2018-01-01T04:30:00.000Z",
-                "updateDate": "2018-01-01T05:30:00.000Z",
+                "publishDate": "2019-01-01T04:30:00.000Z",
+                "updateDate": "2019-01-01T05:30:00.000Z",
                 "summary": ``,
-                "niceUrl": "/2018/XX/title",
+                "niceUrl": "/2019/XX/title",
                 "text": ``,
                 "hot": false,
                 "author": "Roy Solberg",
