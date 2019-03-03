@@ -22,6 +22,28 @@ I give both talks that are on a higher level (not technical) and on as a low lev
 <h5>Find me</h5><a class="deep-purple-text text-lighten-2 no-ext" href="https://twitter.com/roysolberg" title="Twitter"><i class="icon-twitter"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://stackoverflow.com/users/467650/roy-solberg" title="Stack Overflow"><i class="icon-stackoverflow"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://github.com/roys" title="GitHub"><i class="icon-github-circled"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://linkedin.com/in/roysolberg" title="LinkedIn"><i class="icon-linkedin"></i></a> <a class="deep-purple-text text-lighten-2 no-ext" href="https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/" onclick="window.open('https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=750,height=720'); return false;" title="Click to reveal my e-mail address"><i class="icon-mail-alt"></i></a>
 
 <h5>Stay up to date</h5>The best way to stay up to date is to either <a href="https://twitter.com/roysolberg">follow me on Twitter</a>, <a href="/atom">subscribe to my Atom (RSS) feed</a> or sign up for my mailing list in the form below:`
+            },
+            {
+                "title": "Screen capture service",
+                "summary": null,
+                "niceUrl": "/screen-capture-service",
+                "text": `Do you want to submit <a href="https://developers.facebook.com/docs/games/instant-games/guides/lightweight/">lightweight Facebook Instant Games</a>, but don't have a device to record a screen capture? Well, I can help you out.
+
+I offer up to 3 screencasts of gameplay of your game on a Samsung J1 Ace (SM-J110H) for a 100 USD. If you need more recordings to get your game approved I can give you up to 3 more screencasts for 50 USD.
+
+If you are interested <a href="https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/" onclick="window.open('https://spamty.eu/mail/v4/796/sx477Orkbc77ae0788/', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=750,height=720'); return false;" title="Click to reveal my e-mail address">send me an e-mail</a> or give me a word on <a href="https://twitter.com/roysolberg">Twitter</a>. :)
+
+These are the reference devices listed by Facebook:
+ - Samsung Grand Neo Plus (GT-I9060I)
+ - <em>Samsung J1 Ace (SM-J110H)</em>
+ - Samsung Galaxy S3 Neo (I9301I)
+ - Motorola Moto G (XT1033)
+ - Motorola Droid RazrM (XT907)
+ - Asus ZenFone C (Z007)
+ - Huawei Honor Holly (Hol-U19)
+ - HTC Desire
+ - Sony Xperia E4 (E2115)
+`
             }
         ];
     SpaBlog.posts =
