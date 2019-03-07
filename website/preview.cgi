@@ -31,6 +31,12 @@ if MATCH_OBJECT is not None:
             title = post['title'].encode('utf-8')
             summary = post['summary'].encode('utf-8')
             text = post['text'].encode('utf-8')
+            author = None
+            if 'author' in post:
+                author = post['author'].encode('utf-8')
+            if not author:
+                author = 'Roy Solberg'
+            category = post['category']['title'].encode('utf-8')
 
             escapedTitle = title.replace("\"", "&quot;")
             escapedSummary = summary.replace("\"", "&quot;")
@@ -39,5 +45,5 @@ if MATCH_OBJECT is not None:
             if len(post.get('images', [])):
                 imageUrl = BASE_URL + post['images'][0]
 
-            print PREVIEW_TEMPLATE.safe_substitute(escapedTitle=escapedTitle, imageUrl=imageUrl, escapedSummary=escapedSummary.decode('utf-8'), url=url, title=title, summary=summary.decode('utf-8'), text=text.decode('utf-8')).encode('utf-8')
+            print PREVIEW_TEMPLATE.safe_substitute(escapedTitle=escapedTitle, imageUrl=imageUrl, escapedSummary=escapedSummary.decode('utf-8'), author=author.decode('utf-8'), category=category.decode('utf-8'), url=url, title=title, summary=summary.decode('utf-8'), text=text.decode('utf-8')).encode('utf-8')
             break
