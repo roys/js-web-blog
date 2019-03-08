@@ -5292,6 +5292,91 @@ This was yet another one of many, many incidents of IoT security failing. <em>We
                 ]
             },
             {
+                "title": "Game *inside* browser developer tools",
+                "published": true,
+                "publishDate": "2019-03-07T20:20:00.000Z",
+                "summary": `This one is for you developers out there: Play a game inside local storage!`,
+                "niceUrl": "/2019/03/devtools-game",
+                "text": `<h4>tl;dr</h4><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Screenshot from playing Cookie Defender inside Developer Tools of Vivaldi (Image: CC BY 4.0)" data-caption="Screenshot from playing Cookie Defender inside Developer Tools of Vivaldi (Image: CC BY 4.0)" src="/images/cookiedefender01.png"/>I created a simple JavaScript space invaders like game using the browser's <a href="https://en.wikipedia.org/wiki/Web_storage#Local_and_session_storage">local storage</a> as "canvas". You need to open your <a href="https://en.wikipedia.org/wiki/Web_development_tools">developer tools</a> to be able to play it.
+
+<h4 style="clear:left;">Try it yourself...</h4><em>Open your developer tools, go to the local storage tab, click the button below</em>, position your windows and follow the instructions. :) <b>If you are on your mobile you will have to come back here once you are on your desktop computer.</b>
+
+<script src="/stuff/cookiedefender/cookiedefender.js"></script>
+<script>
+function updateSoundAndMusicSettings(){
+    if(window.cookieDefenderGame){
+        cookieDefenderGame.setPlaySounds(document.getElementById('cookiedefender-sound').checked);
+        //cookieDefenderGame.setPlayMusic(document.getElementById('cookiedefender-music').checked);
+    }
+}
+function startGame(){
+    try{
+        console.log('Launching game...');
+        window.cookieDefenderGame = new CookieDefenderGame();
+        cookieDefenderGame.start();
+        //cookieDefenderGame.setPlayerName('ROY 🇳🇴');
+        Materialize.toast('Launched! Now open that local storage of yours.<br/>(Typically by pressing F12 or CMD + OPT + I.)', 7000);
+        updateSoundAndMusicSettings();
+        console.log('Launched. Find that local storage of yours. :)');
+    }catch(error){
+        console.error('Got error trying to launch game:');
+        console.error(error.stack);
+    }
+}
+</script>
+<a onclick="ga('send','event','game','play','cookiedefender',1);return true;" href="javascript:startGame%28%29%3B;" class="waves-effect waves-light btn-large">Launch Cookie defender</a>
+<input type="checkbox" id="cookiedefender-sound" onchange="updateSoundAndMusicSettings();"/><label for="cookiedefender-sound">Sound</label>
+<!--input type="checkbox" id="cookiedefender-music" onchange="updateSoundAndMusicSettings();" /><label for="cookiedefender-music">Music</label-->
+
+<h5>Controls</h5>Control your player with your arrow keys or WASD.
+
+<h5>Browser support</h5>I've run the game <em>successfully on Chrome</em> 72 @ Mac + Windows 10, <em>Firefox</em> 65 @ Mac + Linux Mint, Firefox X @ Windows 7, <em>Vivaldi</em> 2.3 @ Mac and <em>Opera</em> 58 on Mac + Windows 10.
+
+It <em>does <b>not</b> work on Microsoft Edge 42</em> @ Windows 10 as their DevTools doesn't auto-refresh any of their web storages. Internet Explorer 11 (at least on Windows 7) doesn't have a proper <code>localStorage</code> viewer.
+
+<h4>...or just watch the video</h4><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/qjb7ABrlHow" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<h4>Fake Asked Questions (FAQ)</h4><h5>Why would anyone make this?</h5>Are you kidding me? Because it could be done, because it's something I haven't seen before, and because programming is tons of fun. When I got the idea I had to finish it.
+
+It is a bit annoying to play the game in Firefox's devtools as they have a (probably normally useful) feature of blinking every time the <code>localStorage</code> is updated.
+
+<h5>Where did you get the inspiration from?</h5>From somewhere completely elsewhere. I recently saw a <a href="https://news.ycombinator.com/item?id=19262529">Hacker News post</a> about an 11 year old <a href="https://en.wikipedia.org/wiki/Favicon">favicon</a> game called <a href="http://www.p01.org/defender_of_the_favicon/">Defender of the favicon</a>. I was a bit annoyed that I didn't come up with that idea (either before 2008 or any of the 11 following years..), so I wanted to create something nerdy and fun I hadn't seen before. Pretty quickly I came up with the idea of using the browser developer tools as the game "screen". First I thought about running the game in the cookies, but the JavaScript API for handling cookies is almost non-existing. Using the <code>localStorage</code> is so much simpler, and to my surprise all the browsers I first tested immediately updated the developer tools to show the contents of the local storage.
+
+<h5>Is the game open source?</h5>Yes! Just head over to <a href="https://github.com/roys/js-devtools-cookiedefender">my GitHub repository for the game</a>. Please note that while my game code is licensed under MIT License, the sound and music assets have their own licenses.
+
+<h5>Do you have any other fun stuff to try out?</h5>Why don't you try out my bookmarklet game <a href="/2017/10/dom2-bookmarklet">DOM II: JavaScript Hell</a>? 😎
+
+<h5>What's next?</h5>I hope that you will make Tetris or a car game for the browser devtools. That would be so cool. 😀
+
+<h4>Today I Learned (TIL)</h4>1. None of the developer tools I tried used a <a href="https://en.wikipedia.org/wiki/Monospaced_font">monospaced font</a> for the <code>localStorage</code>, making it really hard to make the game at all.
+
+2. Emojis might not be of the same width, but they are *almost* of the same width, making it easier to make the game.
+
+3. There's a <a href="https://en.wikipedia.org/wiki/Whitespace_character">whitespace character</a> called <a href="https://en.wiktionary.org/wiki/ideographic_space">ideographic space</a> that are about the same width as many emojis. Without that I don't think I could have made this game.
+
+4. Mozilla has a really nice <a href="https://hacks.mozilla.org/2017/03/internationalize-your-keyboard-controls/">description on how internationalize your keyboard controls</a> so that <a href="https://en.wikipedia.org/wiki/Arrow_keys#WASD_keys"><code>WASD</code></a> magically becomes <code>ZQSD</code> for people with <a href="https://en.wikipedia.org/wiki/AZERTY"><code>AZERTY</code></a> keyboards. (Hello 🇫🇷.)
+
+5. The world isn't ready for <a href="https://en.wikipedia.org/wiki/ECMAScript#6th_Edition_-_ECMAScript_2015">ES6</a>. This is no surprise I suppose. I started out going all classes, fields (ok, that's <a href="https://github.com/tc39/proposal-class-fields">TC39</a>), arrow functions, computed property names, various String functions, etc., but had to go back to good old days to make the code run everywhere.
+
+`,
+                "images": ["/images/cookiedefender01.png"],
+                "category":
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
+                "tags": [
+                    {
+                        "title": "JavaScript",
+                        "url": "/javascript"
+                    },
+                    {
+                        "title": "Game",
+                        "url": "/game"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2019-01-01T04:30:00.000Z",
