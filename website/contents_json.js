@@ -279,7 +279,7 @@ SpaBlog.posts=[
     {
         "title": "Case #5: Tell me your bank account no. and I'll tell you how rich you are",
         "published": true,
-        "hot": true,
+        "hot": false,
         "publishDate": "2017-09-11T05:00:00.000Z",
         "summary": "I'm sure you expect your bank accounts to be safe from prying eyes. For a while other customers knowing my bank account number could check my account balance.",
         "niceUrl": "/2017/09/skandiabanken-leak",
@@ -1315,6 +1315,7 @@ SpaBlog.posts=[
     {
         "title": "How to get a job interview with the Norwegian Police Security Service",
         "published": true,
+        "hot": true,
         "publishDate": "2019-01-14T05:45:00.000Z",
         "summary": "The Norwegian Police Security Service had a job posting with a \"digital riddle\" to find the right candidates for a job. Here's (hopefully) the solution.",
         "niceUrl": "/2019/01/pst-challenge",
@@ -1393,6 +1394,31 @@ SpaBlog.posts=[
             {
                 "title": "Game",
                 "url": "/game"
+            }
+        ]
+    },
+    {
+        "title": "Case #21: Leaving backup in the public",
+        "published": true,
+        "publishDate": "2019-03-11T05:40:00.000Z",
+        "summary": "A web shop left their backup of all shopping data and their site in a publicly available directory - indexed by Google.",
+        "niceUrl": "/2019/03/decentralized-backup",
+        "text": "<h4>tl;dr</h4>An e-commerce site had misconfigured their site which led to their backup of their entire site + database with all shopping and personal data to be available on the Internet. And you could find it with a simple Google search.\n\n<h4>Summary</h4><table class=\"summary\">\n<tr>\n    <td style=\"width:30%\">Who:</td>\n    <td>Anonymous, let's call them <a href=\"https://en.wikipedia.org/wiki/Fictional_company\">Acme5</a></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Severity level:</td>\n    <td><span class=\"red-text\">High</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reported:</td>\n    <td>September 2018</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reception and handling:</td>\n    <td><span class=\"green-text\">Very good</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Status:</td>\n    <td><span class=\"green-text\">Fixed</span></td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Reward:</td>\n    <td>A thank you</td>\n</tr>\n<tr>\n    <td style=\"width:30%\">Issue:</td>\n    <td>Website backup and database backup accessible by a simple Google search</td>\n</tr>\n</table>\n<div style=\"padding-top:80px;\" class=\"col s12 m5 l5 xl4 right\"><div class=\"card-panel light-blue darken-1\"><span style=\"text-decoration:underline;\" class=\"white-text\"><a class=\"white-text\" href=\"/2017/08/security-vulnerability-disclosures\">Background: The purpose of these posts</a></span></div></div>\n<h4>Background</h4>Acme5 is a Norwegian physical specialist store that also have an online web store.\n\nI briefly mentioned this case in the presentation I gave in October 2018 at <a href=\"https://event.dnd.no/siksymp/program-18-oktober-18/\">the security conference <i>Sikkerhetssymposiet</i></a>, but I never got around to writing about it. I have been wanting to do one or more write-ups on <a href=\"https://en.wikipedia.org/wiki/Google_hacking\">Google dorking</a>, that is, how to use Google to find security vulnerabilities. A good starting point for checking your own security is googling yourself. There are just endless and endless of vulnerabilities and secret stuff indexed by Google available for anyone using a simple Google search. While doing research for this kind of write-up I found the issue presented here.\n\n<h4 style=\"clear:left;\">Approach</h4><em>I searched for something along the lines of <code>intitle:\"index of\" intext:backup</code>.</em> <i>\"Index of\"</i> in the title is used by at least the <a href=\"https://httpd.apache.org/\">Apache web server</a> when a displaying directory listing. <i>\"backup\"</i> is an interesting name to see in a directory listing.\n\nEspecially one of the search results caught my attention. I clicked it and was a bit like <i>\"can this really be what it looks like?\"</i> Could it be a <a href=\"https://en.wikipedia.org/wiki/Honeypot_(computing)\">honeypot</a>? If I were to leave some fake data on the Internet I would leave it just like that.\n\nI clicked the files and took a quick peek. This was the real deal.\n\n<h4 id=\"security-issues\">Security issues</h4>The database backup of the web shop contained among other things <em>the following information about all their customers - approximately 1,000 persons:\n - Full name\n - Full address\n - E-mail address\n - Phone number\n - Hashed password\n - Password salt\n - Browser version\n - Full purchase history</em>\n\nThe website backup contained the <em>source code and configuration of the full site</em>. I don't think Acme5 could have much more to leak. At least the passwords were <a href=\"https://en.wikipedia.org/wiki/Cryptographic_hash_function\">hashed</a> with individual <a href=\"https://en.wikipedia.org/wiki/Salt_(cryptography)\">salt</a> defending against pre-computed <a href=\"https://en.wikipedia.org/wiki/Rainbow_table\">rainbow table attacks</a>, but having the database the hashes would still be open against <a href=\"https://en.wikipedia.org/wiki/Dictionary_attack\">dictionary attacks</a> and making it easier to <a href=\"https://en.wikipedia.org/wiki/Brute-force_attack\">brute force</a> them.\n\n<h4>Reception and handling</h4><h5>Day zero</h5>I was a bit amazed with this finding and considered a second if this was a case for <a href=\"https://en.wikipedia.org/wiki/Troy_Hunt\">Troy Hunt</a> and his service <a href=\"https://haveibeenpwned.com/\">Have I Been Pwned</a>. However, I ended up at just contacting the web shop by e-mail.\n\n1.5 hour later I received a reply from the IT company Acme5 was using, thanking me for alerting them and asking for confirmation that I had deleted the files. <em>They claimed to have web server access logs pre-dating the 3 months old backups and that the files were only downloaded once.</em> I confirmed that I no longer had the files. They said they would \"take the appropriate action in accordance Acme5's GDPR routines\". And that was it.\n\nNow, I have no idea if they did follow up the incident, if they reported anything to the Data Protection Authority or not. Maybe they felt like they didn't have to since they claimed that no one else had accessed the files.\n\n<h4>Anonymous you say?</h4>I have been in doubt if this is a case where the company should be named. I suppose this is the biggest leak where I haven't named the company. The reasons for not doing so are that Acme5 isn't that big, their IT vendor is a small company, and supposedly they can tell for sure that no one previously had accessed the data.\n\n<h4>Conclusion</h4>Technically it's incredible simple for a system administrator to do a mistake like this, but you just can't do it. (Sometimes you have to wonder if some leaks are intentional.)\n\nAs an IT company; please Google yourself. And please hire an external company to do penetration tests and regular security audits. And stay tuned for that blog post about Google hacking.\n",
+        "images": [
+            "/images/acme501.png"
+        ],
+        "category": {
+            "title": "Security",
+            "url": "/security"
+        },
+        "tags": [
+            {
+                "title": "Security Monday",
+                "url": "/security-monday"
+            },
+            {
+                "title": "OWASP 2017 A6",
+                "url": "/owasp-2017-a6"
             }
         ]
     },
