@@ -4941,7 +4941,6 @@ Of all the calendars that I tried out this year Sector Alarm was the only one wh
             {
                 "title": "How to get a job interview with the Norwegian Police Security Service",
                 "published": true,
-                "hot": true,
                 "publishDate": "2019-01-14T05:45:00.000Z",
                 "summary": `The Norwegian Police Security Service had a job posting with a "digital riddle" to find the right candidates for a job. Here's (hopefully) the solution.`,
                 "niceUrl": "/2019/01/pst-challenge",
@@ -5188,6 +5187,7 @@ Giving a challenge like this also helps spread the word about the job opening, e
                 "publishDate": "2019-01-16T14:00:00.000Z",
                 "summary": `It was possible to control Internet connected Mill heaters worldwide.`,
                 "niceUrl": "/2019/01/mill-heat",
+                "hot": true,
                 "text": `<h4>tl;dr</h4>It was possible to control what seems to be all Internet connected Mill heaters worldwide.
 
 <h4>Summary</h4><table class="summary">
@@ -5462,8 +5462,143 @@ As an IT company; please Google yourself. And please hire an external company to
                         "url": "/security-monday"
                     },
                     {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "OWASP 2017 A3",
+                        "url": "/owasp-2017-a3"
+                    },
+                    {
                         "title": "OWASP 2017 A6",
                         "url": "/owasp-2017-a6"
+                    }
+                ]
+            },
+            {
+                "title": "Case #22: Another booking leak",
+                "published": true,
+                "publishDate": "2019-03-18T05:45:00.000Z",
+                "summary": `Personal info like Social Security numbers and personal documents were available. While I mostly hail the City of Bergen's handling of this issue, here are also the details they didn't tell you.`,
+                "niceUrl": "/2019/03/aktiv-kommune-booking",
+                "text": `<h4>tl;dr</h4>Personal information and documents from thousands of individuals were leaked in a government booking system.
+
+<h4>Summary</h4><table class="summary">
+<tr>
+    <td style="width:30%">Who:</td>
+    <td><a href="https://www.aktiv-kommune.no/">Aktiv kommune</a> (<a href="https://www.bergen.kommune.no/english">City of Bergen</a>, <a href="https://www.stavanger.kommune.no/en/">City of Stavanger</a>, <a href="https://www.alesund.kommune.no/english">City of Ålesund</a>, <a href="https://www.fjell.kommune.no/">Fjell municipality</a>)</td>
+</tr>
+<tr>
+    <td style="width:30%">Severity level:</td>
+    <td><span class="orange-text">Medium</span> to <span class="red-text">High</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reported:</td>
+    <td>March 2019</td>
+</tr>
+<tr>
+    <td style="width:30%">Reception and handling:</td>
+    <td><span class="green-text">Very good</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Status:</td>
+    <td><span class="green-text">Fixed</span></td>
+</tr>
+<tr>
+    <td style="width:30%">Reward:</td>
+    <td>A thank you</td>
+</tr>
+<tr>
+    <td style="width:30%">Issue:</td>
+    <td>Leak of personal information</td>
+</tr>
+</table>
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1"><span style="text-decoration:underline;" class="white-text"><a class="white-text" href="/2017/08/security-vulnerability-disclosures">Background: The purpose of these posts</a></span></div></div>
+<h4>Background</h4><a href="https://www.youtube.com/watch?v=hxSCyOeW0Gc&t=31">Bergen is one the most beautiful cities in Norway.</a> And the City of Bergen offers this <a href="https://www.bergen.kommune.no/portico/bookingfrontend/?menuaction=bookingfrontend.uiresource.show&id=452">really cool "cabin" with a great view on its mount Fløyen</a> where families can spend a night for free. I was asked if we should try to book a night there. But when I saw the URL of the site the curious developer in me immediately got sidetracked...
+
+<img style="float:right;width:400px;margin-left:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/aktivkommune05.png"/>The booking site is run by a system shared between the municipalities Bergen, Stavanger, Ålesund and Fjell. <a href="https://www.aktiv-kommune.no/">Aktiv kommune</a> is some sort of collective site for this cooperation. <em>The booking system is used by organizations and individuals to book all kinds of facilities and equipment like sport courts, venues, meeting rooms, music instruments, etc. There are thousands of such "resources" that can be booked.</em>
+
+<h4 style="clear:left;">Approach (technical stuff)</h4><a class="skip-link" href="#security-issues"><u>Skip this part</u> 🙈</a>
+<h5>Problem 1</h5><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/aktivkommune01.png"/>I opened <a href="https://help.vivaldi.com/article/developer-tools/">Vivaldi developer tools</a> while browsing the site. There's a calendar on the site showing the availability of all a selected resource. The calendar data is loaded as JSON via <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a>. <em>I took me like 30 seconds to see that the server returned way too much data - including names, phone numbers, e-mail addresses, Social Security numbers etc.</em>
+
+This just so common - the server returns some kind of serialized data structure that contains much more information than what is used for the user interface. This reminded me of <a href="/2018/08/norconsult-soap-leak">the case where the garbage collection calendar app leaked personal data</a>.
+
+<h5>Problem 2 + 3</h5><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/aktivkommune02.png"/>Days after I reported the issue I was still curious of the site would be safe to use when that issue was fixed. I filled out the application form and uploaded an attachment. The URL to the finished application contained a "secret" so that no one should be able to guess the URL to your application. Other than that the ID seemed to be an incremental integer. But did the URL to the attached document in the application contain some kind of secret? Guess what, it didn't. <em>The URL to all documents uploaded by users was based on an incremental integer ID. One could systematically go through and download all the documents.</em>
+
+I just checked a few, but <em>to my surprise and horror the documents included photos of ID cards, passports, family photos and e-mails</em>. Now this was not the kind of data I wanted stored on my computer even though it was available openly on the Internet. Luckily I found <em>another unprotected URL which "just" listed the file names of all the uploaded documents</em>. This made it easier to document the vulnerability without actually downloading stuff. <em>The file list contained "interesting names" like full names, images with identifiers clearly pointing back to Facebook, words like <i>"passport"</i>, <i>"visa"</i>, <i>"e-mail"</i>, <i>"rental agreement"</i>, <i>"ticket"</i> etc.</em>
+
+<h4 id="security-issues">Security issues</h4>For years (City of Bergen estimates <em>8+ years</em>) it was possible to retrieve a variation of the following information about persons booking resources:
+<em> - Full name
+ - Phone number
+ - E-mail address
+ - Full address
+ - <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Social Security number</a></em>
+ - Comment
+ <em> - Attached documents</em>
+ - Gender and age groups (0-12, 13-19, 20+) of attendees</em>
+
+Among the available documents there were a few <em>ID cards, passports, tickets, visa, family photos, contracts and e-mails.</em>
+
+For the mentioned cabin you could see who were to stay there a given night - including age group and gender of each family member.
+
+According to the municipalities themselves there were leaked information about <em>3,142 individuals in City of Bergen, 628 in Fjell municipality and 16 in City of Ålesund. City of Stavanger seems to have "forgotten" to tell the number of persons of affected.</em> I suppose that in addition there were documents and other information about organizations available.
+
+<h4>Reception and handling</h4><h5>Day zero</h5>As the booking system was used by several municipalities on different URLs I wasn't sure what would be the best contact point. I sent an e-mail to Norwegian National Security Authority's (NSM) <a href="https://www.nsm.stat.no/norcert">NorCERT</a> (<a href="https://en.wikipedia.org/wiki/Computer_emergency_response_team">Computer Emergency Response Team</a>) and they said they could contact the right persons. The few times I have talked with NorCERT they have always been very helpful, responsive and effective.
+
+<h5>Day 2</h5>Two days later I got responses from NorCERT, Aktiv kommune (City of Stavanger) and City of Bergen. A project manager from Aktiv kommune thanked me and told me that they had fixed the issue and reported it to The Norwegian Data Protection Authority (DPA) - <a href="https://www.datatilsynet.no/en/">Datatilsynet</a>.
+
+<h5>Day 5</h5><em>I noticed the other issue</em> with documents being downloadable and at night reported that to Aktiv kommune and City of Bergen.
+
+<h5>Day 6</h5>Some e-mailing back and forth and the issue was fixed. Then <a href="https://www.bergen.kommune.no/hvaskjer/sistenytt/article-160810">City of Bergen</a>, <a href="https://www.stavanger.kommune.no/nyheter/sikkerhetshull-i-bestillingslosning/">City of Stavanger</a>, <a href="https://www.alesund.kommune.no/aktuelt/nyhetsarkiv/9956-sikkerhetshull-funnet-i-bookinglosning">City of Ålesund</a> and <a href="https://www.fjell.kommune.no/aktuelt/tryggleiksbrot-funne-i-bookingloysning/">Fjell municipality</a> posted each own news article describing the issue.
+
+<h5>What they didn't tell</h5>The problem with the news articles posted by the municipalities was that they seemed geared towards the issue reported initially. <em>They don't mention any of the leaked documents. No passports, no ID cards, no e-mails, no contracts, no nothing. I asked the City of Bergen about this, and that is actually the only e-mail they have not responded to.</em>
+
+The report from City of Bergen to the DPA is one of the most honest and best ones I have read. They mention 5 passports, but I believe that number to be incorrect. Yes, if you look quickly at the filenames (and assume equal filenames in a row are duplicates) you will see 5 files containing the word <i>"pass"</i>. But the ID cards and passport I saw had other types of filenames. They also say the quality on the images were low. Well, that cannot be said about the ones I saw. <em>In addition there were filenames with <i>"pasaporte"</i>, <i>"visa"</i>, <i>"flights"</i>, <i>"itinerary"</i> ,<i>"paszport"</i>, <i>"ticket"</i> and quite a few full names and what seems to be e-mails and contracts</em>. I hope they will report that as well.
+
+The report also doesn't say that someone externally reported the issue with the documents. And it doesn't say that this happened days after. The report starts out so honest, but then it becomes the questionable text that the DPA usually receives.
+
+<h5>Handling summary</h5> ✅ The issues were fixed quickly
+ ✅ The DPA was alerted
+ ✅ The individuals affected were informed by e-mail
+ ☑️ Mostly open about number of persons affected
+ ❌ City of Bergen's report to DPA seems lacking
+ ❌ Not mentioning document leak in news articles or e-mails
+ ❌ Not mentioning anywhere that one could also see the gender and age groups of the people accommodated
+
+<h4>Conclusion</h4>As we all know by now, leaks like this happen constantly. This is why I started publishing the issues that I trip over when I'm online. We need more focus on IT security in IT education, in IT projects and in IT companies. And people should be cautious about what information is left where.
+
+On a positive note, the handling of this issue on City of Bergen's hand was quite a few steps up from the last time they where in the media in regards of security issues.
+`,
+                "images": ["/images/aktivkommune01.png", "/images/aktivkommune02.png", "/images/aktivkommune03.png", "/images/aktivkommune04.png", "/images/aktivkommune05.png", "/images/aktivkommune06.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Security Monday",
+                        "url": "/security-monday"
+                    },
+                    {
+                        "title": "Information leak",
+                        "url": "/information-leak"
+                    },
+                    {
+                        "title": "PHP",
+                        "url": "/php"
+                    },
+                    {
+                        "title": "Social Security numbers",
+                        "url": "/ssn"
+                    },
+                    {
+                        "title": "OWASP 2017 A3",
+                        "url": "/owasp-2017-a3"
+                    },
+                    {
+                        "title": "OWASP 2017 A5",
+                        "url": "/owasp-2017-a5"
                     }
                 ]
             },
