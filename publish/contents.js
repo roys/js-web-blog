@@ -5605,15 +5605,14 @@ On a positive note, the handling of this issue on City of Bergen's hand was quit
             {
                 "title": "Smart meter part 1: Getting the meter data",
                 "published": true,
-                "publishDate": "2019-07-22T07:00:00.000Z",
+                "publishDate": "2019-07-22T08:30:00.000Z",
                 "summary": `Tag along while I show you how I got access to my realtime electricity usage connecting to my smart meter's HAN port.`,
                 "niceUrl": "/2019/07/smart-meter-1",
-                "text": `
-By now <a href="https://www.nve.no/energy-market-and-regulation/retail-market/smart-metering-ams">all electricity consumers in Norway are supposed to have got their electricity meters replaced</a> with new <a href="https://en.wikipedia.org/wiki/Smart_meter">smart meters</a>. (The smart meters are often referred to as AMS (Advanced Metering System)). The new smart meters register electricity consumption at least every hour and automatically sends it to the power company. There's no more use for manually reporting the usage.
+                "text": `By now <a href="https://www.nve.no/energy-market-and-regulation/retail-market/smart-metering-ams">all electricity consumers in Norway are supposed to have got their electricity meters replaced</a> with new <a href="https://en.wikipedia.org/wiki/Smart_meter">smart meters</a>. (The smart meters are often referred to as AMS (Advanced Metering System)). The new smart meters register electricity consumption at least every hour and automatically sends it to the power company. There's no more use for manually reporting the usage.
 
 What's interesting is that <em>the new smart meters all come with a so-called HAN port (short for <a href="https://en.wikipedia.org/wiki/Home_network">Home Area Network</a>). Using that port it's possible to get full access to your own electricity usage realtime</em>. While I'm sure great services (and APIs) for using this data will be provided by both my energy company and third party vendors I didn't want to sit back and wait. (You can today get access to a bit of delayed hourly usage if you log in to <a href="https://plugin.elhub.no/">https://plugin.elhub.no/</a>. They also have some nice Ajax calls which are easy to understand and tweak.)
 
-<h4>Step 1 - opening the HAN port</h4><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Smart meter with RJ-45 HAN port." data-caption="Smart meter with RJ-45 HAN port." src="images/ams01.jpg"/>By default the physical HAN ports of the smart meters are closed off and not sending any data. All you need to do is to contact customer support at your power company and they'll quickly open it remotely.
+<h4>Step 1 - opening the HAN port</h4><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Smart meter with RJ-45 HAN port." data-caption="Smart meter with RJ-45 HAN port." src="/images/ams01.jpg"/>By default the physical HAN ports of the smart meters are closed off and not sending any data. <em>All you need to do is to contact customer support at your power company and they'll quickly open it remotely.</em>
 
 My power company - Norgesnett - used almost a month to open it up as they said the newly installed meter had to first be registered in some computer system. Of course <a href="https://blog.roysolberg.com/2018/04/power-company-leak">I also noticed a pretty bad security vulnerability</a> while at it.
 
@@ -5623,7 +5622,7 @@ My power company - Norgesnett - used almost a month to open it up as they said t
 
 Not being an electrical engineer and not knowing how to debug or resolve this I just threw money at the problem and bought another converter.
 
-<h5>Hardware - second try</h5><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Raspberry Pi with M-Bus to USB converter connected to HAN port." data-caption="Raspberry Pi with M-Bus to USB converter connected to HAN port." src="images/ams02.jpg"/>Another commonly used <a href="https://www.ebay.com/itm/192765556270">M-Bus to USB master/slave from eBay</a> did the trick for me. I connected it to my good old <a href="https://www.komplett.no/product/774016">Raspberry Pi (Model B Rev 2)</a>. <em>The HAN port in the smart meters has a <a href="https://en.wikipedia.org/wiki/Modular_connector#8P8C">RJ-45</a> connector with the signal being transmitted on pin 1 + 2.</em> So I just used an old network cable to connect the smart meter and converter.
+<h5>Hardware - second try</h5><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Raspberry Pi with M-Bus to USB converter connected to HAN port." data-caption="Raspberry Pi with M-Bus to USB converter connected to HAN port." src="/images/ams02.jpg"/>Another commonly used <a href="https://www.ebay.com/itm/192765556270">M-Bus to USB master/slave from eBay</a> did the trick for me. I connected it to my good old <a href="https://www.komplett.no/product/774016">Raspberry Pi (Model B Rev 2)</a>. <em>The HAN port in the smart meters has a <a href="https://en.wikipedia.org/wiki/Modular_connector#8P8C">RJ-45</a> connector with the signal being transmitted on pin 1 + 2.</em> So I just used an old network cable to connect the smart meter and converter.
 
 <h4>Step 3 - reading raw data</h4><a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> is not my mother tongue, but it's a language I really like and enjoy writing. It's almost always available on whatever system you're on, and the standard library is pretty extensive. Do a simple <code><a href="https://packaging.python.org/guides/tool-recommendations/#installation-tool-recommendations">pip</a> install <a href="https://pythonhosted.org/pyserial/">pyserial</a></code> and you're ready to read data from the USB port.
 
@@ -5652,7 +5651,6 @@ while True:
         print(bytes)
     else:
         print('Got nothing')</pre>
-
 It would output something similar to this (I have anonymized the data a bit):
 <pre class="prettyprint lang-html">Connected to: /dev/ttyUSB0
 Got 228 bytes:
@@ -5666,7 +5664,6 @@ Got 228 bytes:
 06 00 00 00 88 09 06 01 01 33 07 00 FF 06 00 00 02 36 09 06 01 01 47
 07 00 FF 06 00 00 00 6D 09 06 01 01 20 07 00 FF 12 00 EB 09 06 01 01
 34 07 00 FF 12 00 EB 09 06 01 01 48 07 00 FF 12 00 EB 83 77 7E</pre>
-
 <h4>Step 4 - understanding OBIS</h4>So what are those bytes coming from the HAN port? They are following the DLMS (Device Language Message Specification) protocol and are sent inside HDLC frames and contains OBIS (Object Identification System) codes that describes the electricity usage. Everything is part of <a href="https://en.wikipedia.org/wiki/IEC_62056">IEC 62056</a> which is a set of standards for electricity metering data exchange.
 
 How often the messages arrives varies from one meter vendor to another. The same goes for the actual format of the messages. I don't know if there are any other vendors, but at least Aidon, Kaifa and Kamstrup have made smart meters for the Norwegian market, and they all provide documentation for their own OBIS messages.
@@ -5813,7 +5810,6 @@ Got 302 bytes:
 00 FF 06 00 38 DE 2A 09 06 01 01 02 08 00 FF 06 00 00 00 00 09 06 01
 01 03 08 00 FF 06 00 00 00 1F 09 06 01 01 04 08 00 FF 06 00 09 00 85
 83 77 7E</pre>
-
 I've left out the identical parts of the message:
 <pre class="prettyprint lang-html">
 Header:
@@ -5893,7 +5889,6 @@ Information:
 End:
 [...same as first message...]
 </pre>
-
 <em>The only part that I really care about is the <i>Active energy A+</i> (OBIS code 1.1.1.8.0.255), which is total power usage - in kilowatt hour (kWh) - since the installation of the smart meter. Keeping track of this value one knows the hourly power consumption.</em> This is the value you have to pay for. If you produce and exports power it would appear as <i>Active energy A-</i> (1.1.2.8.0.255).
 
 <h5>Error detection</h5>Error detection is supported through <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">cyclic redundancy check (CRC)</a> in both the header and footer of the frame. In the start there is a <a href="https://en.wikipedia.org/wiki/Header_check_sequence">header check sequence (HCS)</a>, and in the end there is a <a href="https://en.wikipedia.org/wiki/Frame_check_sequence">frame check sequence (FCS)</a>. <em>The checksum algorithm used is the CRC-16/X-25.</em> There are libraries for all kinds of programming languages implementing all sorts of checksum calculations. I have used the Python library <a href="https://pypi.org/project/crccheck">crccheck</a> which provides the class <code>CrcX25</code> which takes care of this.
