@@ -5622,7 +5622,7 @@ My power company - Norgesnett - used almost a month to open it up as they said t
 
 Not being an electrical engineer and not knowing how to debug or resolve this I just threw money at the problem and bought another converter.
 
-<h5>Hardware - second try</h5><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Raspberry Pi with M-Bus to USB converter connected to HAN port." data-caption="Raspberry Pi with M-Bus to USB converter connected to HAN port." src="/images/ams02.jpg"/>Another commonly used <a href="https://www.ebay.com/itm/192765556270">M-Bus to USB master/slave from eBay</a> did the trick for me. I connected it to my good old <a href="https://www.komplett.no/product/774016">Raspberry Pi (Model B Rev 2)</a>. <em>The HAN port in the smart meters has a <a href="https://en.wikipedia.org/wiki/Modular_connector#8P8C">RJ-45</a> connector with the signal being transmitted on pin 1 + 2.</em> So I just used an old network cable to connect the smart meter and converter.
+<h5>Hardware - second try</h5><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Raspberry Pi with M-Bus to USB converter connected to HAN port." data-caption="Raspberry Pi with M-Bus to USB converter connected to HAN port." src="/images/ams02.jpg"/>Another commonly used <a href="https://www.ebay.com/sch/i.html?_nkw=USB+MBUS+Slave+Module">M-Bus to USB master/slave from eBay</a>  (the exact same product from the same seller no longer exists, but it looks like <a href="https://i.ebayimg.com/00/s/ODAwWDgwMA==/z/ywgAAOSwfTlcHF5u/$_12.JPG">this</a> and can be found doing a <a href="https://www.ebay.com/sch/i.html?_nkw=USB+MBUS+Slave+Module">search</a>) did the trick for me. I connected it to my good old <a href="https://www.komplett.no/product/774016">Raspberry Pi (Model B Rev 2)</a>. <em>The HAN port in the smart meters has a <a href="https://en.wikipedia.org/wiki/Modular_connector#8P8C">RJ-45</a> connector with the signal being transmitted on pin 1 + 2.</em> So I just used an old network cable to connect the smart meter and converter.
 
 <h4>Step 3 - reading raw data</h4><a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> is not my mother tongue, but it's a language I really like and enjoy writing. It's almost always available on whatever system you're on, and the standard library is pretty extensive. Do a simple <code><a href="https://packaging.python.org/guides/tool-recommendations/#installation-tool-recommendations">pip</a> install <a href="https://pythonhosted.org/pyserial/">pyserial</a></code> and you're ready to read data from the USB port.
 
@@ -5905,6 +5905,171 @@ End:
 
 <h4>Rounding it up</h4>That's it. In this post I've shown how I connected to the HAN port of my smart meter, how I read the data and how to transform the byte arrays into meaningful information. <em>In the next post I'll discuss how I store the data and calculate the price of the electricity usage.</em>`,
                 "images": ["/images/ams02.jpg", "/images/ams01.jpg"],
+                "category":
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
+                "tags": [
+                    {
+                        "title": "Smart meter",
+                        "url": "/smart-meter"
+                    }
+                ]
+            },
+            {
+                "title": "Smart meter part 2: Data storage and price info",
+                "published": true,
+                "publishDate": "2019-07-29T06:55:00.000Z",
+                "summary": `To present the electricity usage in a nice way we first need store the data somewhere and get hold of the price information.`,
+                "niceUrl": "/2019/07/smart-meter-2",
+                "text":
+                    `In the <a href="/2019/07/smart-meter-1">previous post</a> I showed how I fetch and decode the power usage from my smart meter. Before the grand final I'll go through the middle step where I upload the data and make it available for querying. Also, usage in itself doesn't paint the whole picture, so the price information is also fetched and stored.
+
+<h4>Electricity price</h4><h5>Price structure</h5>In Norway we have to pay for both the electricity usage itself and a network tariff. The latter has two components; a fixed price and a cost per kWh. The price is different from power company to power company.
+
+At the time of writing the price for me was as follows:
+
+<table class="summary">
+<tr><td style="width:30%"><b>Tariff (🇳🇴: Nettleie)</b></td></tr>
+<tr>
+<td style="width:30%"> - Fixed component (Fastledd)</td>
+<td>NOK 2,615 per year</t>
+</tr>
+<tr>
+<td style="width:30%"> - Energy component (Energiledd)</td>
+<td>NOK 0.4202 per kWh</td>
+</tr>
+<tr>
+<td style="width:30%"><b>Electricity price</b></td>
+<td>NOK 0.4663 per kWh</td>
+</tr>
+<tr>
+</table>
+Most of the time I'm paying some variant of <a href="https://en.wikipedia.org/wiki/Spot_contract">spot price</a> for the electricity. It varies from day to day. The tariff is set yearly with its energy component being a bit cheaper in the summer than in the winter.
+
+<h5>Fetching the price info</h5>I didn't find a publicly available free API for the electricity spot price, so I used some power company website's <a href="https://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> call to get the updated price.
+
+Using <a href="https://pypi.org/project/requests/"><code>requests</code></a>, the Python script I have that uploads the usage also checks for the current price with a call to this <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a> endpoint every hour.
+
+I haven't looked that hard, but I haven't seen any APIs at all for the tariff at all. But being set once a year it doesn't take much time or energy to set it manually.
+
+<h4>Storing the data</h4>As I'm pretty familiar with <a href="https://firebase.google.com/products">Google's Firebase tech stack</a> I landed on using the NoSQL <a href="https://firebase.google.com/products/firestore/">Cloud Firestore</a> for storing the usage data.
+
+To my surprise I would have to recompile Python on my Raspberry Pi to be able to use the <a href="https://github.com/firebase/firebase-admin-python"><code>firebase-admin</code> client library</a> directly in my code. I didn't want to do that, so I decided to use <a href="https://firebase.google.com/products/functions/">Cloud Functions</a> for an endpoint that could receive the data from my Raspberry Pi.
+
+<h5>Function for storing data</h5>I've tweaked the code a bit here, but generally this is what the function does. Remember to add some level of authentication to not leave it wide open.
+<pre class="prettyprint lang-js">const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
+
+exports.registerReading = functions.https.onRequest((request, response) => {
+    try {
+        let incomingReadings = request.body;
+        let db = admin.firestore();
+        let dbReadings = [];
+        for (const incomingReading of incomingReadings) {
+            if (isValid(incomingReading)) {
+                let dbReading = {
+                    "meterId": incomingReading["meterId"],
+                    "parseTimeUtc": incomingReading["parseTimeUtc"],
+                    "dataTimeLocal": incomingReading["dataTimeLocal"],
+                    "meterType": incomingReading["meterType"],
+                    "activePower+": incomingReading["activePower+"],
+                    "activePower-": incomingReading["activePower-"],
+                    "l1Voltage": incomingReading["l1Voltage"],
+                    "l2Voltage": incomingReading["l2Voltage"],
+                    "l3Voltage": incomingReading["l3Voltage"],
+                    "price": incomingReading["price"],
+                    "priceTimeUtc": incomingReading["priceTimeUtc"],
+                    "raw": incomingReading["raw"] // The raw bytes coming from the meter
+                }
+                var collectionId = incomingReading.meterId; // We use the meter id as the collection ID
+                if (incomingReading["activeEnergy+"] || incomingReading["activeEnergy-"]) { // Hourly reading
+                    dbReading["activeEnergy+"] = incomingReading["activeEnergy+"];
+                    dbReading["activeEnergy-"] = incomingReading["activeEnergy-"];
+                    collectionId += '-energy'; // We use a different collection for when having the hourly energy readings
+                }
+                let docRef = db.collection(collectionId).doc();
+                docRef.set(dbReading);
+                dbReadings.push(dbReading);
+            } else {
+                // [...error handling...]
+            }
+        }
+    } catch (e) {
+        // [...error handling...]
+    }
+    // [...]
+});
+</pre>
+I soon discovered that uploading the usage every 10 second blew the daily free <a href="https://cloud.google.com/functions/quotas">Functions quota</a> of 5,000 function invocations. So I changed to uploading two readings in one go - ending up on ~4,300 invocations a day.
+
+<h4>Querying the data</h4>Now that the data is safely stored in Firestore it's ready to be queried and presented in any way desired. For me it was easiest to Cloud Functions for reading the data back out as well.
+
+<h5>Function for querying data</h5>Here's a very basic quick and dirty example of doing some querying of the data.
+<pre class="prettyprint lang-js">
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+
+admin.initializeApp(functions.config().firebase);
+
+exports.getReadings = functions.https.onRequest((request, response) => {
+    try {
+        let db = admin.firestore();
+        var meterRef = db.collection('2200567223197714-energy');
+        var responseStr = "Today's first reading: \\n";
+        var queryRef = meterRef.where('dataTimeLocal', '>=', '2019-07-29T00:00:00')
+            .where('dataTimeLocal', '<', '2019-07-30T00:00:00')
+            .orderBy('dataTimeLocal')
+            .limit(1);
+        queryRef.get().then(snapshot => {
+            if (snapshot.empty) {
+                responseStr += 'No matches\\n';
+            } else {
+                snapshot.forEach(doc => {
+                    responseStr += JSON.stringify(doc.data(), null, 4) + '\\n';
+                });
+            }
+            return true;
+        }).then(() => {
+            responseStr += "Today's latest reading: \\n";
+            queryRef = meterRef.where('dataTimeLocal', '>=', '2019-07-29T00:00:00')
+                .where('dataTimeLocal', '<', '2019-07-30T00:00:00')
+                .orderBy('dataTimeLocal', 'desc')
+                .limit(1);
+            queryRef.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        responseStr += 'No matches\\n';
+                    } else {
+                        snapshot.forEach(doc => {
+                            responseStr += JSON.stringify(doc.data(), null, 4) + '\\n';
+                        });
+                    }
+                    response.send(responseStr);
+                    return true;
+                })
+                .catch(err => {
+                    responseStr += 'Error: ' + err + '\\n';
+                    response.send(responseStr);
+                    console.error(err.stack);
+                });
+            return true;
+        }).catch(err => {
+            responseStr += 'Error: ' + err + '\\n';
+            response.send(responseStr);
+            console.error(err.stack);
+        });
+    } catch (e) {
+        responseStr += 'Error: ' + err + '\\n';
+        response.send(responseStr);
+        console.error(err.stack);
+    }
+});</pre>
+<h4>The final part</h4>So now we have of reading, decoding, storing and querying the power usage data. That's all nice and well, but it doesn't give much value in itself. <em>In the next post I'll show the end product - how I chose to present the data in what I felt was a meaningful and valuable way. For me that is the most interesting and fun part.</em>
+`,
+                "images": ["/images/ams03.png"],
                 "category":
                 {
                     "title": "Software development",

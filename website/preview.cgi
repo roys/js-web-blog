@@ -9,7 +9,7 @@ from string import Template
 
 sys.stderr = sys.stdout
 
-print 'Content-type: text/html\r\n'
+print('Content-type: text/html\r\n')
 
 BASE_URL = 'https://blog.roysolberg.com'
 PATTERN = re.compile(
@@ -45,5 +45,5 @@ if MATCH_OBJECT is not None:
             if len(post.get('images', [])):
                 imageUrl = BASE_URL + post['images'][0]
 
-            print PREVIEW_TEMPLATE.safe_substitute(escapedTitle=escapedTitle, imageUrl=imageUrl, escapedSummary=escapedSummary.decode('utf-8'), author=author.decode('utf-8'), category=category.decode('utf-8'), url=url, title=title, summary=summary.decode('utf-8'), text=text.decode('utf-8')).encode('utf-8')
+            print(PREVIEW_TEMPLATE.safe_substitute(escapedTitle=escapedTitle.decode('utf-8'), imageUrl=imageUrl, escapedSummary=escapedSummary.decode('utf-8'), author=author.decode('utf-8'), category=category.decode('utf-8'), url=url, title=title, summary=summary.decode('utf-8'), text=text.decode('utf-8')).encode('utf-8'))
             break
