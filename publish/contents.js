@@ -6083,6 +6083,104 @@ exports.getReadings = functions.https.onRequest((request, response) => {
                 ]
             },
             {
+                "title": "Smart meter part 3: Hey Google, how much electricity am I using?",
+                "published": true,
+                "publishDate": "2019-08-05T21:10:00.000Z",
+                "updateDate": "2019-08-06T05:40:00.000Z",
+                "summary": `I can ask Google about my power consumption and what my next electricity bill will be.`,
+                "niceUrl": "/2019/08/smart-meter-3",
+                "text": `In the two previous posts I showed how I <a href="/2019/07/smart-meter-1">read and decode the power usage from my smart meter</a> and also <a href="/2019/07/smart-meter-1">fetch the price info and upload it all to the cloud</a>.
+<div style="padding-top:98px;font-size:smaller;" class="col s12 pull-m3 m9 pull-l6 l6 xl4 right"><div class="card-panel light-blue darken-1 white-text">Smart meter series:
+- <span style="text-decoration:underline;" class=""><a class="white-text" href="/2019/07/smart-meter-1">Part 1: Getting the meter data</a></span>
+- <span style="text-decoration:underline;" class=""><a class="white-text" href="/2019/07/smart-meter-2">Part 2: Storage and price info</a></span>
+- <span style="text-decoration:underline;" class=""><a class="white-text" href="/2019/08/smart-meter-3">Part 3: Google Home integration</a></span></div></div>
+<h4 title="Too long; didn't read">tl;dr</h4><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/bjRufJndgsg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+I have published a <a href="https://www.youtube.com/watch?v=bjRufJndgsg">YouTube demo (in Norwegian) showing off the Google Assistant integration</a> on my 10" <a href="https://www.lenovo.com/us/en/smart-display">Lenovo Smart Display</a> and on my phone. There are also some screenshots in the end of this post.
+
+<h4>Turning data into information</h4>Many - maybe most - of the smart meter integrations I've seen have been focusing on showing a lot of data in some kind of dashboard. While that's powerful and often useful I want to have all the data transformed into meaningful information.
+
+I think <a href="https://assistant.google.com/">Google Assistant</a> on <a href="https://assistant.google.com/intl/no_no/platforms/speakers/">Google Home</a> and <a href="https://assistant.google.com/intl/no_no/platforms/phones/">phones</a> can be a great platform for that. You can get the important information extracted and query the data with human language.
+
+<h4>Learning the Google Assistant platform</h4>It's not very straight forward to make "actions" (apps) for the Google Assistant, but <a href="https://developers.google.com/actions/">the documentation</a> is pretty good so it isn't hard to at least get started. It's impossible for me to describe the whole process here, but I'll give an overview.
+
+I have made a few actions so far; a simple way of <a href="https://assistant.google.com/services/a/uid/0000006c18c886e8?hl=en">getting the latest Premier League team news from FotMob</a>, <a href="https://assistant.google.com/services/a/uid/000000d00fb80fe8?hl=no">the game hangman</a>, and a <a href="https://sbanken.no/aktuelt/info/lanserer-talestyrt-bank/">voice-controlled bank</a> (to be published in September). This experience means that it's relatively quick for me to create an action for this purpose.
+
+<h4>Step 0 - getting an overview</h4>If you want to create something for yourself and you haven't done anything with the Google Assistant platform before you really should <a href="https://developers.google.com/actions/overview">get an overview</a> and in this case especially of the <a href="https://developers.google.com/actions/conversational/overview">custom conversational actions</a>. Also knowing a bit of <a href="https://designguidelines.withgoogle.com/conversation/">conversation design</a> will help you make better user experiences.
+
+<h4>Step 1 - creating the action</h4><img style="float:left;width:250px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Actions on Google console" data-caption="Actions on Google console" src="/images/ams05.png"/>The first step is to create a new project at the <a href="https://console.actions.google.com/">Actions on Google console</a>. The project type you want is <i>conversional</i>. Then you only have to add some basic information about the action, like the name you want to use.
+
+<h4 style="clear:left;">Step 2 - creating the Dialogflow agent</h4><img style="float:left;width:250px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Actions on Google console" data-caption="Actions on Google console" src="/images/ams06.png"/>Just following the flow you'll be asked to create your first action; a <i>custom intent</i>. That'll send you to Dialogflow. That is where the fun part starts.
+
+<a href="https://dialogflow.com/">Dialogflow</a> is a Google-owned platform for <a href="https://en.wikipedia.org/wiki/Natural-language_understanding">Natural-language understanding (NLU)</a> and it provides great tools creating the <a href="https://en.wikipedia.org/wiki/Conversational_user_interfaces">conversational user interfaces</a> for the action.
+
+<h5>Intents</h5><img style="float:left;width:400px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Much of the work in Dialogflow is done within the 'Intents' menu." data-caption="Much of the work in Dialogflow is done within the 'Intents' menu." src="/images/ams08.png"/>Most of the Dialogflow part is about <i>intents</i>. Intents can be seen as commands that the user can give to the action. <i>"How much power am I consuming now?"</i> and <i>"What is the electricity price?"</i> would be routed to two different intents.
+
+You'll be able to train the Dialog agent by giving it some example phrases it should recognize. With the combination of NLU and machine learning it'll magically understand the intention of the user.
+
+<img style="float:right;width:400px;margin-left:20px;margin-bottom:20px;clear:left;" class="materialboxed responsive-img" title="Adding training data to the 'Usage' intent." data-caption="Adding training data to the 'Usage' intent." src="/images/ams09.png"/>The intents I started out with were these:
+ - Current usage
+ - Usage/cost (at a give time or period)
+ - Price (at a give time or period)
+ - Estimate (of the next electricity bill)
+ - Records (lowest/highest usages/costs)
+ 
+<h4 style="clear:left;">Step 3 - coding the backend webhook</h4>You can't do much advanced functionality for the responses back to the user inside Dialogflow. For that you want to use a so-called <i>fulfillment</i>, i.e. a HTTP endpoint.
+
+It wasn't a coincidence that I <a href="/2019/07/smart-meter-2">in the previous post</a> showed how to query the data using <a href="https://firebase.google.com/products/functions/">Cloud Functions</a>. That function can now be tweaked to handle the Dialogflow intents and return a response to the user.
+
+Here's how I route the different intents Dialogflow have figured out that the user meant:
+<pre class="prettyprint lang-js">const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const { dialogflow } = require('actions-on-google');
+
+admin.initializeApp(functions.config().firebase);
+
+const app = dialogflow({ debug: false });
+
+app.intent('Default Welcome Intent', (conv) => require('./intent_welcome')(conv));
+app.intent('Current usage', (conv) => require('./intent_current_usage')(conv));
+app.intent('Usage', (conv, { time }) => require('./intent_usage')(conv, time));
+app.intent('Estimate', (conv) => require('./intent_estimate')(conv));
+app.intent('Price', (conv, { time }) => require('./intent_price')(conv, time));
+
+exports.dialogflowFulfillment = functions.https.onRequest(app);</pre>
+Also notice how Dialogflow have parsed the <code>time</code> parameter. The time can be unspecified, a specific timestamp or a time period. For for example the <code>Usage</code> intent, I take the parameter and query the database for the usage for the specified time.
+
+<img style="float:right;width:400px;margin-left:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="'How much will my next electricity bill be?'" data-caption="'How much will my next electricity bill be?'" src="/images/ams12.png"/>I utilize different <a href="https://developers.google.com/actions/assistant/responses">response types</a> depending on the intent. I use a little bit of <a href="https://developers.google.com/actions/reference/ssml">SSML</a> (Speech Synthesis Markup Language) and if the user has a screen available I often show graphs for details. I landed on using the <a href="https://www.image-charts.com/">imagecharts</a> service for creating the charts I wanted to display.
+
+<b>And that's really it.</b> That's how I've made my Google Assistant app.
+
+<h4 style="clear:left;">Next steps</h4>As more data become available it'll be easier to tell if the usage in a given period is high/expensive and it'll be possible to give a heads up if the usage/price is estimated to be higher than desired or expected.
+
+Actions can <a href="https://developers.google.com/actions/assistant/updates/notifications">push notifications to users</a>. I would like to be notified by Google Assistant whenever the power consumption is a bit too high or if the electricity becomes expensive.
+
+<a href="/2017/08/my-dumb-smart-home">Living in a smart home</a> I have the current temperature for both outside and every room in my house. I also have a few <a href="https://en.wikipedia.org/wiki/Lux">lux</a> sensors which will tell if the sun is shining or not. It would be interesting to add some of that data when uploading the power usage and price information.
+
+<h4>Final reflection</h4><img style="float:left;width:200px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="" data-caption="" src="/images/ams14.jpg"/>Earlier when I lived in a house built in 1981 I had a mechanical power meter in the kitchen that was connected to the power cabinet. It showed the current power consumption. With just a glance you always knew if you were consuming too much energy. There was no need for the Internet, Ebay parts, Raspberry Pi, Python, Firebase, Google Home, etc. It sure was simpler times...
+<div class="carousel"><a class="carousel-item" href="#1" onclick="return false;"><img src="https://blog.roysolberg.com/images/ams10.png"></a><a class="carousel-item" href="#2" onclick="return false;"><img src="https://blog.roysolberg.com/images/ams11.png"></a><a class="carousel-item" href="#3" onclick="return false;"><img src="https://blog.roysolberg.com/images/ams12.png"></a><a class="carousel-item" href="#4" onclick="return false;"><img src="https://blog.roysolberg.com/images/ams13.png"></a></div><script>
+$(document).ready(function(){
+    $('.carousel').carousel({indicators:true,noWrap:true});
+});
+</script>
+`,
+                "images": ["/images/ams10.png"],
+                "category":
+                {
+                    "title": "Software development",
+                    "url": "/software-development"
+                },
+                "tags": [
+                    {
+                        "title": "Smart meter",
+                        "url": "/smart-meter"
+                    },
+                    {
+                        "title": "Internet of Things",
+                        "url": "/iot"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2019-01-01T04:30:00.000Z",
