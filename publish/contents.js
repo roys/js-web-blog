@@ -4941,6 +4941,7 @@ Of all the calendars that I tried out this year Sector Alarm was the only one wh
             {
                 "title": "How to get a job interview with the Norwegian Police Security Service",
                 "published": true,
+                "hot": true,
                 "publishDate": "2019-01-14T05:45:00.000Z",
                 "summary": `The Norwegian Police Security Service had a job posting with a "digital riddle" to find the right candidates for a job. Here's (hopefully) the solution.`,
                 "niceUrl": "/2019/01/pst-challenge",
@@ -5187,7 +5188,6 @@ Giving a challenge like this also helps spread the word about the job opening, e
                 "publishDate": "2019-01-16T14:00:00.000Z",
                 "summary": `It was possible to control Internet connected Mill heaters worldwide.`,
                 "niceUrl": "/2019/01/mill-heat",
-                "hot": true,
                 "text": `<h4>tl;dr</h4>It was possible to control what seems to be all Internet connected Mill heaters worldwide.
 
 <h4>Summary</h4><table class="summary">
@@ -6177,6 +6177,157 @@ $(document).ready(function(){
                     {
                         "title": "Internet of Things",
                         "url": "/iot"
+                    }
+                ]
+            },
+            {
+                "title": "Another job opportunity at the Police Security Service",
+                "published": true,
+                "publishDate": "2019-10-14T04:25:00.000Z",
+                "summary": `Here's a walk-through of the Norwegian Police Security Service's latest job ad riddle. Were you able to crack the code?`,
+                "niceUrl": "/2019/10/pst-challenge-2",
+                "text": `
+<h4>Background 👮</h4>The <a href="https://en.wikipedia.org/wiki/Norwegian_Police_Security_Service">Norwegian Police Security Service</a> (with the Norwegian abbreviation <a href="https://www.pst.no/">PST</a> which I'll use for this write-up) is the police <a href="https://en.wikipedia.org/wiki/Security_agency">security agency</a> of Norway. Once in a while they have job ads with some more or less hidden challenges - almost <a href="https://en.wikipedia.org/wiki/Capture_the_flag#Computer_security">Capture the Flag</a> style.
+
+<h5>Previous shark sighting 🦈</h5>In December 2018 they posted a job listing were they included a riddle that they wanted people to solve. I didn't hear of the job posting until it suddenly in January was on the front page of most Norwegian newspapers. <a href="/2019/01/pst-challenge">I published my version of the solution</a> just after the application deadline. The solution was also translated to Norwegian and <a href="https://www.kode24.no/kodenytt/losningen-pa-pst-sin-jobbannonse-gate/70660113">published at kode24.no</a> - a site for Norwegian developers.
+
+PST themselves approved the walk-through:
+<blockquote class="twitter-tweet" data-lang="en" data-dnt="true"><p lang="en" dir="ltr">The solution to PSTs shark riddle advert perfectly explained by <a href="https://twitter.com/roysolberg?ref_src=twsrc%5Etfw">@roysolberg</a> <a href="https://t.co/Fsejj3NWgi">https://t.co/Fsejj3NWgi</a> <a href="https://twitter.com/LeoDiCaprio?ref_src=twsrc%5Etfw">@LeoDiCaprio</a> <a href="https://twitter.com/hashtag/hungryshark?src=hash&amp;ref_src=twsrc%5Etfw">#hungryshark</a> <a href="https://t.co/1qNImmhQms">pic.twitter.com/1qNImmhQms</a></p>&mdash; PST (@PSTnorge) <a href="https://twitter.com/PSTnorge/status/1085138559722536960?ref_src=twsrc%5Etfw">January 15, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+To my surprise and amusement, screenshots from that <a href="https://kode24.no">kode24.no</a> post was shown for some seconds on a show on the Norwegian TV channel <a href="https://en.wikipedia.org/wiki/NRK">NRK</a>:
+<blockquote class="twitter-tweet" data-lang="en" data-dnt="true"><p lang="en" dir="ltr">Things I did not expect: Seeing my own JavaScript code live on the TV channel <a href="https://twitter.com/NRKno?ref_src=twsrc%5Etfw">@NRKno</a> a Saturday night. Achievement unlocked. 😂 CC: <a href="https://twitter.com/kode24no?ref_src=twsrc%5Etfw">@kode24no</a> <a href="https://twitter.com/PSTnorge?ref_src=twsrc%5Etfw">@PSTnorge</a> <a href="https://t.co/FIN0afWgYW">pic.twitter.com/FIN0afWgYW</a></p>&mdash; Roy Solberg (@roysolberg) <a href="https://twitter.com/roysolberg/status/1091807598951706624?ref_src=twsrc%5Etfw">February 2, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+Now, I didn't expect to do another one of these walk-throughs this soon, but all of the sudden the interesting Twitter handle <a href="https://twitter.com/twitt3rhai"><code>twitt3rhai</code></a> (=Twitter shark) tweeted what might appear as random characters. <code>Twitt3rhai</code> was part of <a href="/2019/01/pst-challenge">the challenge in December</a>. Of course I had to try to figure what the tweet was all about..
+
+Luckily this turned out to be less of a challenge than the previous one.
+
+<h4>The job ad</h4>It all starts with PST's <a href="https://1005007.webcruiter.no/Main/Recruit/Public/4134047982">job ad where they want both digital forensics specialists and a system developer</a>. The text in the job advertisement doesn't hint about any challenges as I could see, but there is an interesting header image:
+<img class="materialboxed responsive-img" title="The header image from the job ad containing the challenge. (Source: webcruiter.no)" data-caption="The header image from the job ad containing the challenge. (Source: webcruiter.no)" alt="Screenshot with challenge" src="/images/pst201.jpg">
+It's got all the nerdy details you'd want: A <a href="https://en.wikipedia.org/wiki/pcap">pcap</a> (packet capture) hat, lotsa computer screens, some file dump or something, some code, and more.
+
+<h4>Step 1 - understanding the code</h4>While the image doesn't have the world's highest resolution you can see that the person in the image (possibly nicknamed <i><a href="https://knowyourmeme.com/memes/hackerman">HackerMan</a></i>) has got the following <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> 3 code file named <code>encrypt.py</code> open:
+<pre class="prettyprint lang-py">#!/usr/bin/python3
+from base64 import b64encode
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+
+def get_primes(count):
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61]
+    return(primes[0:count])
+
+with open('plain.txt', 'rb') as f:
+    plaintext = f.read()
+
+iv = ""
+for i in get_primes(16):
+    iv += chr(plaintext[i + 16])
+
+key = b'\\xba\\xda\\x55 HackerMan \\x13\\x37'  # <----- DESTROY AFTER USE
+
+cipher = AES.new(key, AES.MODE_CBC, IV=iv)
+ciphertext_b64 = b64encode(cipher.encrypt(pad(plaintext, AES.block_size))).decode('utf-8')
+print(ciphertext_b64)
+
+#TODO: automate posting of ciphertext to twitter.com/twitt3rhai</pre>
+Now, this is some interesting code. Let's follow the flow of it:
+1. It reads the contents of the file <code>plain.txt</code> (aka <a href="https://en.wikipedia.org/wiki/Plaintext">unencrypted information</a>) into a variable <code>plaintext</code>.
+2. It creates a variable <code>iv</code> by using 16 characters from <code>plaintext</code> offset by 16 + a <a href="https://en.wikipedia.org/wiki/Prime_number">prime number</a>.
+3. It defines a variable <code>key</code> (nerd bonus for using the hex numbers <a href="https://en.wiktionary.org/wiki/badass">BA, DA, 55</a>, <a href="https://en.wikipedia.org/wiki/Leet">13, 37</a>) which is indicated that should be deleted later on.
+4. It creates an <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> <a href="https://en.wikipedia.org/wiki/Cipher">cipher</a> with <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_Block_Chaining_(CBC)">CBC</a> mode using the <code>key</code> variable as key and the <code>iv</code> variable as <a href="https://en.wikipedia.org/wiki/Initialization_vector">initialization vector</a>.
+5. The cipher is then used to encrypt the <a href="https://en.wikipedia.org/wiki/Padding_(cryptography)">padded</a> plaintext before the <a href="https://en.wikipedia.org/wiki/Ciphertext">ciphertext</a> is <a href="https://en.wikipedia.org/wiki/Base64">Base64</a> encoded.
+6. Notingly there is a <a href="https://en.wikipedia.org/wiki/Time_management#Implementation_of_goals">TODO</a> about posting the ciphertext to <a href="https://twitter.com/twitt3rhai"><code>twitt3rhai</code></a>. (And what do you know, the same Twitter handle is also in that header image.)
+
+<h4>Step 2 - getting the ciphertext</h4>Our ultimate goal seems to be to get the plaintext to see what it says. So lets start by heading over to Twitter:
+<blockquote class="twitter-tweet" data-dnt="true"><p lang="pl" dir="ltr">/lb0WZDpaIDJVJwy+Q04LCqERqVj7AUItWGREJuXJeWtZN77yP6grehn1gRif31hjTEjLNFyxESweea81/QluWUyhZV9vmabm8NYkkSc6JJWuylGJKQJzA/wC2cM2ScrQQ8gV7GcnVyBCh7eq/N0jUm/L4xrX6IUIDi5CAkVZ9xSS5Tb4o01onOTbGWLd1EZwzZOMlq88wsTPZ6zY7dqj+LKq3Pj6SKlZfaR9eo6PXrRUOARCe9sQVtWVKc5DJfI</p>&mdash; twitt3rhai (@twitt3rhai) <a href="https://twitter.com/twitt3rhai/status/1175023446696386560?ref_src=twsrc%5Etfw">September 20, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+This does indeed seem like it could be some Base64 encoded text and can be assumed to be the ciphertext. Now we've got quite a few pieces of the puzzle.
+
+<h4>Step 3 - decrypting the ciphertext</h4>So, how can we decrypt the ciphertext in the tweet? Let's just tweak the <code>encrypt.py</code> to make our own <code>decrypt.py</code>:
+<pre class="prettyprint lang-py">#!/usr/bin/python3
+from base64 import b64encode, b64decode
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+
+def get_primes(count):
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61]
+    return(primes[0:count])
+
+# TODO: automate reading of ciphertext from twitter.com/twitt3rhai ;)
+ciphertext_b64 = '/lb0WZDpaIDJVJwy+Q04LCqERqVj7AUItWGREJuXJeWtZN77yP6grehn1gRif31hjTEjLNFyxESweea81/QluWUyhZV9vmabm8NYkkSc6JJWuylGJKQJzA/wC2cM2ScrQQ8gV7GcnVyBCh7eq/N0jUm/L4xrX6IUIDi5CAkVZ9xSS5Tb4o01onOTbGWLd1EZwzZOMlq88wsTPZ6zY7dqj+LKq3Pj6SKlZfaR9eo6PXrRUOARCe9sQVtWVKc5DJfI'
+ciphertext = b64decode(ciphertext_b64.encode('utf-8'))
+
+iv = " " * 16  # Must be 16 bytes
+
+key = b'\\xba\\xda\\x55 HackerMan \\x13\\x37'
+
+cipher = AES.new(key, AES.MODE_CBC, IV=bytes(iv, 'utf-8'))
+plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
+
+print(plaintext)  # Output: b'\\x15\\x01Tx)5,d%,*<&:u%erer! Du klarte det! Beklager, men denne gangen har vi ikke laget flere oppgaver. H\\xc3\\xa5per du vil s\\xc3\\xb8ke jobben. Hvis du blir ansatt kan vi love deg mange utfordrende oppgaver.'</pre>
+Here's what the script does:
+1. Decodes the Base64 encoded cipertext.
+2. Creates just an empty initialization vector as we don't have the plaintext to create it.
+3. Decrypts the ciphertext and unpads the output again.
+4. Prints the plaintext.
+
+The output is the following:<blockquote><code>b'\\x15\\x01Tx)5,d%,*<&:u%erer! Du klarte det! Beklager, men denne gangen har vi ikke laget flere oppgaver. H\\xc3\\xa5per du vil s\\xc3\\xb8ke jobben. Hvis du blir ansatt kan vi love deg mange utfordrende oppgaver.'</code></blockquote>
+Success, right? Well, almost!
+
+<h5>Creating the initialization vector</h5>When I did the challenge I was at first happy with getting most of the plaintext. And I was thinking that the first part missing probably was the start of the word <i>"Gratulerer"</i> (=congratulations).
+
+But what is an "initialization vector" and why is it used here? AES (Advanced Encryption Standard) is a <a href="https://en.wikipedia.org/wiki/Block_cipher">block cipher</a>, meaning that the algorithm is operating on a fixed-length groups of bits (blocks). To avoid equal plaintext blocks to become equal ciphertext blocks many of the "modes of operation" of the encryption algrithms use some part of the previous block part of the input to the following one. The mode used here is <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CBC">Cipher Block Chaining (CBC)</a>. In this mode each block of plaintext is <a href="https://en.wikipedia.org/wiki/Exclusive_or">XORed</a> with the previous ciphertext block before being encrypted. To produce distinct ciphertexts even if the same plaintext is encrypted multiple times - and to protect the first block - there must be some be some unique input to the first block; an initialization vector.
+
+Looking at the output there are actually 16 bytes that are "garbage" (the AES' block size). That means that the first word can't just be <i>"Gratulerer"</i>.
+
+But how can we get hold of that initialization vector? The answer lies in the code. It is generated from the plaintext - and luckily for us it only uses plaintext above character number 16, meaning that we have everyhting we need. So let's tweak the script:
+<pre class="prettyprint lang-py">#!/usr/bin/python3
+from base64 import b64encode, b64decode
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+
+def get_primes(count):
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61]
+    return(primes[0:count])
+
+# TODO: automate reading of ciphertext from twitter.com/twitt3rhai ;)
+ciphertext_b64 = '/lb0WZDpaIDJVJwy+Q04LCqERqVj7AUItWGREJuXJeWtZN77yP6grehn1gRif31hjTEjLNFyxESweea81/QluWUyhZV9vmabm8NYkkSc6JJWuylGJKQJzA/wC2cM2ScrQQ8gV7GcnVyBCh7eq/N0jUm/L4xrX6IUIDi5CAkVZ9xSS5Tb4o01onOTbGWLd1EZwzZOMlq88wsTPZ6zY7dqj+LKq3Pj6SKlZfaR9eo6PXrRUOARCe9sQVtWVKc5DJfI'
+ciphertext = b64decode(ciphertext_b64.encode('utf-8'))
+
+iv = " " * 16  # Must be 16 bytes
+
+key = b'\\xba\\xda\\x55 HackerMan \\x13\\x37'
+
+cipher = AES.new(key, AES.MODE_CBC, IV=bytes(iv, 'utf-8'))
+plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
+
+iv = ""
+for i in get_primes(16):
+    iv += chr(plaintext[i + 16])
+
+cipher = AES.new(key, AES.MODE_CBC, IV=bytes(iv, 'utf-8'))
+plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size).decode('utf-8')
+
+print(iv)  # Output: er uate!k,mngn i
+print(plaintext)  # Output: PST-haien gratulerer! Du klarte det! Beklager, men denne gangen har vi ikke laget flere oppgaver. Håper du vil søke jobben. Hvis du blir ansatt kan vi love deg mange utfordrende oppgaver.</pre>
+The script now does the decryption in two rounds; first without knowing the init vector, and then again with it correctly initialized.
+
+Success!
+
+<h4>The solution</h4>The solution to the challenge is this:<blockquote>PST-haien gratulerer! Du klarte det! Beklager, men denne gangen har vi ikke laget flere oppgaver. Håper du vil søke jobben. Hvis du blir ansatt kan vi love deg mange utfordrende oppgaver.</blockquote>
+English:<blockquote>The PST shark congratulates you! You made it! Sorry, but this time we haven't created any more challenges. Hope you will apply for the job. If you get hired we can promise you many challenging assignments.</blockquote>
+So that's it. Not as much work to do as <a href="/2019/01/pst-challenge">the previous challenge</a>, but still a fun challenge I personally enjoyed a lot. 🙂 I hope PST got the candidates they need. 🕵️‍
+                `,
+                "images": ["/images/pst202.png", "/images/pst201.jpg"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Behind the news",
+                        "url": "/behind-the-news"
+                    },
+                    {
+                        "title": "Challenge",
+                        "url": "/challenge"
                     }
                 ]
             },
