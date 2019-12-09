@@ -64,7 +64,7 @@ I expected to settle with a medium.com blog. However, it isn't possible to have 
 
 <h4>Blogger</h4>I looked at Google's <a href="https://blogger.com">blogger.com</a>. Customizing the layout and templates I thought I was getting there. They have some really nice features. But I couldn't make it look and feel exactly right. And it felt cumbersome to do all the adjustments to get where I wanted.
 
-<h4>Good old days</h4>I knew I didn't want to reinvent the wheel. If this had been somewhere from 2000 to 2007 I probably would have mashed something together using PHP and MySQL. But the thought of doing that in 2017 repelled me. I didn't want any database setup, SQLs or stuff that takes time from creating the actual product.
+<h4>Good old days</h4>I knew I didn't want to reinvent the wheel. If this had been somewhere from 2000 to 2007 I probably would have mashed something together using PHP and MySQL. But the thought of doing that in 2017 repelled me. I didn't want any database setup, SQL or stuff that takes time from creating the actual product.
 
 <h4>Cloud hosting</h4>Further on I didn't want some hosting at one of the big companies offering "free" (they tend to end up costing a few bucks) backend hosting with all the hassle of setting up a new environment and installing some SDKs that needs to be constantly updated or suddenly removes support for some version of whatever you use.
 
@@ -133,15 +133,15 @@ The purpose of posting these vulnerabilities is fivefold:
    - When logged in I have used my own personal account
    - I have not tried to fly under the radar in regards of staying out of logs etc.
  - Not looked for or used security holes in operating systems, app servers, networking equipment, etc.
- - Not interferred with the operation of the webapps or companies
+ - Not interfered with the operation of the web apps or companies
  - Not altered or deleted any data
  - Not stored any personal data or even tried accessing anything beyond proving the weakness
 
-<h4>Information sensitivity</h4>The levels of the sensitivity in the information leaks I found vary. They go all the way from <i>"Nah, I dont really care"</i> to <i>"0hly shit, this is not cool"</i>. But I think they all represent some unique points in respect of vulnerabilities and in respect of type of personal information.
+<h4>Information sensitivity</h4>The levels of the sensitivity in the information leaks I found vary. They go all the way from <i>"Nah, I don't really care"</i> to <i>"0hly shit, this is not cool"</i>. But I think they all represent some unique points in respect of vulnerabilities and in respect of type of personal information.
 
-<h4>Reponsible disclosure</h4>I'm all for <a href="https://en.wikipedia.org/wiki/Responsible_disclosure">responsible disclosure</a> and have immediately reported my findings. Generally I'm not publishing any details the problem has been confirmed fixed. However, sadly, in some cases there's just no interest or response from the other party.
+<h4>Responsible disclosure</h4>I'm all for <a href="https://en.wikipedia.org/wiki/Responsible_disclosure">responsible disclosure</a> and have immediately reported my findings. Generally I'm not publishing any details the problem has been confirmed fixed. However, sadly, in some cases there's just no interest or response from the other party.
 
-If you want more thoughts about responsible disclosure I would recommand reading <a href="https://www.troyhunt.com/kids-pass-just-reminded-us-how-hard-responsible-disclosure-is/">Troy Hunt's site</a> (and maybe especially the video in that link).
+If you want more thoughts about responsible disclosure I would recommend reading <a href="https://www.troyhunt.com/kids-pass-just-reminded-us-how-hard-responsible-disclosure-is/">Troy Hunt's site</a> (and maybe especially the video in that link).
 `,
                 "category":
                 {
@@ -163,7 +163,7 @@ If you want more thoughts about responsible disclosure I would recommand reading
                 "updateDate": "2017-08-17T16:50:00.000Z",
                 "summary": `Using only the plate number of a Norwegian car you can find the name, address, Social Security number, etc. of the owners.`,
                 "niceUrl": "/2017/08/get-your-ssn-here",
-                "text": `<h4>tl;dr</h4>While <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Norway's version of the Social Security number (SSN)</a> isn't considered sensitive personal information, it can still be used for ID theft and is sometimes treated as an authenticator and not only used for indentification. Knowing (or systematically picking) a car's number plate you can get quite a bit of personal information about the owners. Also, services hosted alongside the one in question seem to have dubious security.
+                "text": `<h4>tl;dr</h4>While <a href="https://en.wikipedia.org/wiki/National_identification_number#Norway">Norway's version of the Social Security number (SSN)</a> isn't considered sensitive personal information, it can still be used for ID theft and is sometimes treated as an authenticator and not only used for identification. Knowing (or systematically picking) a car's number plate you can get quite a bit of personal information about the owners. Also, services hosted alongside the one in question seem to have dubious security.
 
 <h4>Summary</h4><table class="summary">
     <tr>
@@ -352,9 +352,9 @@ I got a "snap" of 5 scratch tickets from a friend that he got from Acme for repo
 
 <h4>Approach (technical stuff)</h4>This was a quick one I did while grabbing some lunch one Saturday.
 
-<h5>Browser developer tools</h5>I logged in to Acme using BankID and having <a href="https://developers.google.com/web/tools/chrome-devtools/">Chrome DevTools</a> open. I surfed back and forth and got an impression of the webapp and got a list of URLs that was being called + headers and cookies and whatnot.
+<h5>Browser developer tools</h5>I logged in to Acme using BankID and having <a href="https://developers.google.com/web/tools/chrome-devtools/">Chrome DevTools</a> open. I surfed back and forth and got an impression of the web app and got a list of URLs that was being called + headers and cookies and whatnot.
 
-As with most webapps today there were a lot of Ajax calls going on, transfering JSON. I then tried replacing some IDs in URLs. In general stuff seemed pretty good. The security seemed to be in place.
+As with most web apps today there were a lot of Ajax calls going on, transferring JSON. I then tried replacing some IDs in URLs. In general stuff seemed pretty good. The security seemed to be in place.
 
 Then I saw this sort of "task list" where you have these set tasks - and can create new ones - for stuff you need to do with your home. You can also share them with third parties so they can do them for your and sign of on the work done. Once finished can set the task to status <i>Done</i>.
 
@@ -376,7 +376,7 @@ curl 'https://example.com/UpdateTask' \\
     --compressed</pre>
 <b>And bingo, the server returned HTTP 200 and the task was changed.</b>
 
-<h5>Session management</h5>Returning to my computer some time after doing this, the browser told me I got logged out because of the session being timed out. I tried one of the Curl commands one more time and saw that the HTTP request went through and returned HTTP 200. <b>Appearantly I was still logged in and had a valid session even though my browser told me otherwise.</b>
+<h5>Session management</h5>Returning to my computer some time after doing this, the browser told me I got logged out because of the session being timed out. I tried one of the Curl commands one more time and saw that the HTTP request went through and returned HTTP 200. <b>Apparently I was still logged in and had a valid session even though my browser told me otherwise.</b>
 
 <h4>Classical issue</h4><b>I think this is one of the more common issues in web apps today. When authorization of GETting data is in place, one have a tendency not to check if the client is allowed to do what he's telling the server when PUTting data back.</b>
 
@@ -3354,7 +3354,7 @@ The list of hotels affected by this security vulnerability in Ariane's system is
  
 Ariane has stated that <a href="https://nrkbeta.no/2018/04/19/gjester-ved-to-norske-hotellkjeder-kan-ha-fatt-sine-bookingdetaljer-eksponert/">most affected hotels are in Germany and France</a> (Norwegian link). In the same article they are quoted saying that they cannot be sure that this issue has already been taken advantage of.
 
-<img style="float:left;width:450px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Screenshot from one of the bookings." data-caption="creenshot from one of the bookings." src="/images/hotel01.png"/>
+<img style="float:left;width:450px;margin-right:20px;margin-bottom:20px;" class="materialboxed responsive-img" title="Screenshot from one of the bookings." data-caption="Screenshot from one of the bookings." src="/images/hotel01.png"/>
 
 <h4 style="clear:left;">Reception and handling</h4><h5>Day zero</h5>I couldn't immediately see who was responsible for the whole system so in the afternoon I sent an e-mail to Thon Hotels' customer service. I got an automatic response giving me a hint that they would not read that e-mail until the day after, so I also sent them a direct message on Twitter saying that they probably wanted to check out the issue right away.
 
@@ -3477,7 +3477,7 @@ These are some of my GSIN tracking numbers:
 
 The 707 prefix is Norway according to <a href="https://en.wikipedia.org/wiki/List_of_GS1_country_codes">List of GS1 country codes on Wikipedia</a> (700-709 = Norway). Both my PostNord tracking codes and the one from Posten Norge have the same 707 prefix. Other tracking codes I have in e-mails from Posten Norge seems to have 707 prefix. I had one with 704 and Roy found one with 705 prefix.
 
-I have not been able to identify what prefixes PostNord uses, if large e-commerce companies like Komplett have their own prefix or what prefix Posten Norge have. I still belive the tracking number are largly auto increments.
+I have not been able to identify what prefixes PostNord uses, if large e-commerce companies like Komplett have their own prefix or what prefix Posten Norge have. I still believe the tracking number are largely auto increments.
 
 <b>27th of May - Update regarding time frame:</b>
 
@@ -3758,7 +3758,7 @@ And yet again we can see our personal data open for anyone to steal…
 
 I have <a href="/2018/02/crack-android-apps">my guide on how to crack Android apps</a> which I take a quick glance at when doing this stuff. This was easy enough though. I downloaded the APK from <a href="https://apkmonk.com">apkmonk.com</a> and decompiled it with <a href="http://www.javadecompilers.com/apk">javadecompilers.com</a>. The end result was a an full access to the source code and resources.
 
-<span class="markup">Normally I would probably just've used a HTTP proxy to intercept the traffic, but in this case where I didn't have the necessary hardware (the tracker) I wouldn't be able to use all functions, so I needed the source code to discover all possible HTTP calls. Also the source code sometimes include hidden gems like unused endpoints, test servers and more.</span>
+<span class="markup">Normally I would probably just have used a HTTP proxy to intercept the traffic, but in this case where I didn't have the necessary hardware (the tracker) I wouldn't be able to use all functions, so I needed the source code to discover all possible HTTP calls. Also the source code sometimes include hidden gems like unused endpoints, test servers and more.</span>
 
 I was a bit surprised by the how clean the code was and how it used modern patterns and libraries. The UI isn't that nice and often I find there to be a correlation..
 
