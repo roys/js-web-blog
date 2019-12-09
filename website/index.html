@@ -143,7 +143,7 @@
     <div class="nav-wrapper">
       <div class="container">
         <ul id="nav-mobile" class="left">
-            <li data-bind="css: { active: shouldDisplayFrontpage }"><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix }, click: function(){$root.goToFrontpage()}">Home</a></li>
+            <li data-bind="css: { active: shouldDisplayFrontpage }"><a data-bind="attr: { href: window.SpaBlog.config.blogUrlPrefix || '/' }, click: function(){$root.goToFrontpage()}">Home</a></li>
             <li data-bind="css: { active: shouldDisplayPage('/about') }"><a href="/about" data-bind="click: function(){$root.goToPage('/about')}">About</a></li>
         </ul>
         <ul id="nav-mobile" class="right prepare-print">
