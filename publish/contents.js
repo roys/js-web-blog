@@ -6332,6 +6332,1618 @@ So that's it. Not as much work to do as <a href="/2019/01/pst-challenge">the pre
                 ]
             },
             {
+                "title": "Capture the flag with the Norwegian Police Security Service",
+                "published": true,
+                "publishDate": "2020-01-02T15:10:00.000Z",
+                "updateDate": "2020-01-02T16:45:00.000Z",
+                "summary": `Here's a write-up showing how to solve the challenges of the Norwegian Police Security Service's CTF advent calendar.`,
+                "niceUrl": "/2020/01/pst-challenge-3",
+                "text": `
+<h4>Background 👮</h4>The <a href="https://en.wikipedia.org/wiki/Norwegian_Police_Security_Service">Norwegian Police Security Service</a> (with the Norwegian abbreviation <a href="https://www.pst.no/">PST</a> which I'll use for this write-up) is the police <a href="https://en.wikipedia.org/wiki/Security_agency">security agency</a> of Norway. Once in a while they have job ads with some more or less hidden challenges - almost <a href="https://en.wikipedia.org/wiki/Capture_the_flag#Computer_security">Capture the Flag (CTF)</a> style. I've done posts on them back <a href="/2019/01/pst-challenge">in January</a> and <a href="/2019/01/pst-challenge-2">in October</a> 2019. This time they went all in with a CTF advent calendar.
+
+<h4>The theme 🎅</h4>PST added an N in front of their name and created the imaginary <i>Northern Polar Security Service</i> (Nordpolar sikkerhetstjeneste = NPST). NPST's role is supposedly to protect Santa Claus, his elfs and Christmas itself. PST posted a <a href="https://finn.no/163738125">fake job ad</a> where they said to be looking for elf officers (="alvebetjent") for a temporary position to help out NPST. Of course big and small media sites took notice and published stories on this (<a href="https://www.nrk.no/troms/pst-la-ut-annonse-pa-finn.no-om-ledig-jobb-som-snikende-alvebetjent-1.14794574">NRK</a>, <a href="https://www.tv2.no/a/11017666/">TV 2</a>, <a href="https://www.vg.no/nyheter/innenriks/i/JowQQb/pst-soeker-snikende-alvebetjent-paa-svalbard">VG</a>, <a href="https://www.politiforum.no/artikler/pst-med-ny-kreativ-stillingsannonse-soker-snikende-alvebetjent-br/479744">Politiforum</a>). Everything went down on <a href="https://npst.no/">npst.no</a> from December 1st to December 24th.
+
+<h4>Challenges and solutions</h4>Let's jump straight in. Click on a challenge to expand it.
+<a class="skip-link" href="#" aria-hidden="true" onclick="var c=$('.collapsible');var shouldOpen=c.children('.active').length === 0;for(var i=0;i<c.children().length;i++){c.collapsible(shouldOpen ? 'open' : 'close', i);}return false;"><u>Expand/collapse all</u></a><ul class="collapsible expandable" data-collapsible="expandable"><li><div class="collapsible-header">December 1st - Welcome to NPST - 10 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The first challenge was not much of a challenge. It just lets you get started by telling you to log in at the system running at <a href="https://login.npst.no">https://login.npst.no</a> using username <code>bruker</code> and password <code>Advent2019</code>.
+
+<h6>Solution</h6>There was not much to do here other than entering the login information. The flag you'd get back was <code>PST{a7966bf58e23583c9a5a4059383ff850}</code>. I'd script it, but it would mostly have been about extracting the returned token with the step information and posting it back. Fun fact: <code>a7966bf58e23583c9a5a4059383ff850</code> is the <a href="https://en.wikipedia.org/wiki/MD5">MD5</a> hash of <code><a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">Hello, world</a></code>.</span>
+</div></li><li><div class="collapsible-header">December 1st - Change password - 15 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The first real challenge is to change the password from the previous task. The new password needs to have at least one character from each of the following groups:
+ - <code>[a-z]</code>
+ - <code>[A-Z]</code>
+ - <code>[0-9]</code>
+ - <code>[*@!#%&()^~{}]</code>
+The characters must be sorted by its ASCII values, and the sum of ASCII values <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">modulo</a> 128 must equal 24.
+
+<h6>Solution</h6>If you take a look at the <a href="https://en.wikipedia.org/wiki/ASCII#Character_set">ASCII table</a> you'll notice that the character groups themselves are not in incremental order and the last group's characters are not in order and also actually split into values before and after the other groups.
+
+To generate a valid password you could do something like this: <pre class="prettyprint lang-py">#!/usr/bin/python3
+import string
+
+# The char groups we have to use:
+group1 = string.ascii_lowercase
+group2 = string.ascii_uppercase
+group3 = string.digits
+group4 = '*@!#%&()^~{}'
+
+for a1 in group1:
+    for a2 in group2:
+        for a3 in group3:
+            for a4 in group4:
+                sum = ord(a1) + ord(a2) + ord(a3) + ord(a4) # Sum of integer values of code points
+                if sum % 128 == 24:
+                    password = a1 + a2 + a3 + a4
+                    password = ''.join(sorted(password)) # Sorts the string
+                    print(password) # Prints '6@Aa'
+                    exit(0)
+</pre>
+One of the valid passwords is <code>6@Aa</code>. The flag returned was <code>PST{6a0f0731d84afa4082031e3a72354991}</code> (MD5 hash of <code><a href="https://knowyourmeme.com/memes/hunter2">hunter2</a></code>).
+</span></div></li><li><div class="collapsible-header">December 1st - Password recovery - 20 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to log in at <a href="https://login.npst.no">https://login.npst.no</a> with a user we have this information about:
+Username: <code>admin</code>
+???: <code>42f82ae6e57626768c5f525f03085decfdc5c6fe</code>
+
+<h6>Solution</h6>The unknown part above looks a lot like output from a <a href="https://en.wikipedia.org/wiki/Hash_function">hash function</a>. What kind of cryptographic hash function produces 40 hex characters (20 bytes) output? The good old no-longer-considerd-secure <a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a>. You could find this hash value's input from a <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table</a> or a tool like <a href="https://en.wikipedia.org/wiki/Hashcat">hashcat</a>. Luckily we don't face any <a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">salt</a> in this case.
+
+Since the password is on a system where we know the current password rules we can take advantage of that and try <a href="https://en.wikipedia.org/wiki/Brute-force_attack">brute force</a> to find the password. If we are luky the password is as short as the one in the previous challenge and we can tweak the script we just used: <pre class="prettyprint lang-py">#!/usr/bin/python3
+import string
+from hashlib import sha1
+from time import time
+
+# The char groups we have to use:
+group1 = string.ascii_lowercase
+group2 = string.ascii_uppercase
+group3 = string.digits
+group4 = '*@!#%&()^~{}'
+
+hash_to_find = '42f82ae6e57626768c5f525f03085decfdc5c6fe'
+
+counter = 0
+time_start = time()
+for a1 in group1:
+    for a2 in group2:
+        for a3 in group3:
+            for a4 in group4:
+                sum = ord(a1) + ord(a2) + ord(a3) + ord(a4)
+                if sum % 128 == 24:
+                    counter += 1
+                    password = (a1 + a2 + a3 + a4)
+                    password = ''.join(sorted(password))
+                    hash = sha1(password.encode('utf-8')).hexdigest()
+                    if(hash == hash_to_find):
+                        time_spent = round(1000 * (time() - time_start))
+                        # Prints something like 'Found password )9Fp in 42 millis after 856 trials.':
+                        print('Found password %s in %s millis after %d trials.' % (password, time_spent, counter))
+                        exit(0)
+</pre>
+The password for the admin account is <code>)9Fp</code>. The flag returned was <code>PST{36044221cd3e991ffc56eb2f1e368ca0}</code> (MD5 hash of <code>CastleKeys</code> (<a href="https://www.mariowiki.com/Castle_Key">Mario reference?</a>)).
+</span></div></li><li><div class="collapsible-header">December 3rd - Pen and paper encryption - 0 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to crack the code <code>KNO fmwggkymyioån 30å6ø8432æå54710a9æ09a305å7z9829 fmwggkymyioån ngpoo</code>.
+
+<h6>Solution</h6>This is a 0 points challenge saying that the encryption is meant for pen and paper and there's no entering of data at <code>login.npst.no</code>. This means that we should get the flag directly and that it should be a fairly simple task.
+
+Knowing that the flag should usually start with <code>PST</code> and the <a href="https://en.wikipedia.org/wiki/Ciphertext">ciphertext</a> starts with <code>KNO</code> it's easy to see that this is a some <a href="https://en.wikipedia.org/wiki/Substitution_cipher">substitution cipher</a> variant of <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar cipher</a>. What's interesting is the usage of Norwegian letters and repeated letters.
+
+Again we can solve this easily using an online tool, but it's much more fun to use code: <pre class="prettyprint lang-py">#!/usr/bin/python3
+import string
+
+lowercase_alphabet = string.ascii_lowercase + 'æøå'  # Norwegian alphabet
+ciphertext = 'KNO fmwggkymyioån 30å6ø8432æå54710a9æ09a305å7z9829 fmwggkymyioån ngpoo'
+shift = ord('P') - ord('K')  # ASCII shift between K and P as we assume KNO=PST
+plaintext = ''
+
+for c in ciphertext:
+    index = lowercase_alphabet.find(c.lower())
+    if index != -1:
+        isupper = c.isupper()
+        c = lowercase_alphabet[(shift + index) % len(lowercase_alphabet)]
+        if isupper:
+            c = c.upper()
+    plaintext += c
+
+plaintext = plaintext.replace('krøllparantes slutt', '}').replace('krøllparantes', '{').replace(' ', '')
+print(plaintext)  # Prints 'PST{30e6d8432ce54710f9c09f305e7b9829}'
+</pre>
+The flag printed is <code>PST{30e6d8432ce54710f9c09f305e7b9829}</code> (MD5 hash of <code>Julius</code> (as in Caesar)).
+</span></div></li><li><div class="collapsible-header">December 5th - Emoji API - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to send commands to a crazy emoji API to get out the flag. The available emojis/commands are <code>✨, ⚡, 🔑, 🤷</code> and you can send in a combination of those.
+
+<h6>Solution</h6>This one annoyed me quite a bit, because I never fully understood the pattern here or what the rules are. But here's what I did figure out:
+🤷 = Lists out available commands. Not intended to be used in combination with other commands.
+🔑 = Should be used at the end of commands. Makes the <code>message</code> field return the current active <code>state</code>.
+⚡✨ = These two are the main switches/commands that determines the <code>state</code>.
+
+This is how I interpret the JSON fields returned from the API:
+<code>error</code> = <code>boolean</code> telling if there's an error (like if you send more than 20 emojis or several 🔑 emojis).
+<code>state</code> = <code>String</code> list with some kind of selector telling the current state. I have no idea why the order changes. The emojis used are 🐴, 🚩, 🍉, 🐟, 🚀 and 🍕.
+<code>message</code> = <code>String</code> with extra info. Returns the current state.
+
+Our goal is to make the active <code>state</code> be the flag (🚩). Then the <code>message</code> will be the flag (as in <code>PST{...}</code>).
+
+I didn't find any other sensible way to do this other than brute forcing the commands. What I didn't look at was if e.g. the API really does some kind of bitwise operation or something on the emojis. There are several combinations of ⚡ and ✨ that returns the flag.
+
+Here's some code that can be used to get the flag. Remember to always be careful not flooding the server with requests when doing this sort of thing.<pre class="prettyprint lang-py">import requests
+import itertools
+import re
+import time
+
+li = ['✨', '⚡']
+pattern = re.compile("PST{.*}") # Regex for our flag
+for i in range(1, 20):
+    combs = [''.join(comb) for comb in itertools.product(li, repeat=i)]  # Gives us all combinations of the emojis
+    for command in combs:
+        response = requests.get('https://npst.no/api/🙃.js?commands=' + command + '🔑')
+        json = response.json()
+        print(command + ': ' + str(json)) # Prints out stuff like ⚡⚡⚡⚡✨: {'error': False, 'state': '[🐟, 🚀, 🍉, 🐴, >🚩<, 🍕]', 'message': 'PST{ba323c3f5b3f1b536461d41cc7f1ba60}'}
+        if pattern.match(json['message']):
+            exit(0)
+        time.sleep(.300)
+</pre>
+It seems like every combination of 4 ⚡ and that the command ends with ⚡✨ gives out the flag. Anyways, the flag printed is <code>PST{ba323c3f5b3f1b536461d41cc7f1ba60}</code> (MD5 hash of <code>emoji</code>).
+</span></div></li><li><div class="collapsible-header">December 6th - Pen and paper encryption version 2 - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>We're back for another round of Caesar cipher, but this time it's worth 5 and not 0 points, and there are strong hints that <a href="https://en.wikipedia.org/wiki/Leet">leetspeak</a> is involved.
+
+The challenge is to crack the "version 2" of the pen an paper encryption, represented by the ciphertext <code>KNO fmw55k8m7i179 z98øyåz8æy67aåy0å6æ7aø1å1438åa5a fmw55k8m7i179 95p11</code>.
+
+<h6>Solution</h6>Here we have the to keep in mind that we have already solved a similar challenge. Again we know that the flag usually starts with <code>PST</code> and the <a href="https://en.wikipedia.org/wiki/Ciphertext">ciphertext</a> starts with <code>KNO</code>. It should be also be some <a href="https://en.wikipedia.org/wiki/Substitution_cipher">substitution cipher</a> variant of <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar cipher</a>. Again there is the usage of Norwegian letters and repeated letters.
+
+(It's worth mentioning that for this challenge there was a time frame of maybe 18 hours where the cipertext was slightly incorrect, and also that they misspelt the word <i>parentes</i> (=parenthesis) in the previous Caesar cipher challenge's ciphertext.)
+
+What's new in this challenge is that what earlier became the output <code>krøllparentes</code> (=curly bracket) and <code>krøllparentes slutt</code> (=curly bracket end) now contains some numbers: <code>fmw55k8m7i179 95p11</code> vs <code>fmwggkymyioån ngpoo</code>. If we mix both letters and numbers in the alphabet things don't add up. So it's best to split it into two rounds of decryption.
+
+For me it was a good help to use <a href="https://cryptii.com/pipes/caesar-cipher">Caesar cipher tool at Cryptii</a>. It makes things so visual and easier to grasp and to play around with the encryption.
+
+We can reuse the code we had earlier to get the flag for this one: <pre class="prettyprint lang-py">#!/usr/bin/python3
+import string
+
+lowercase_alphabet = string.ascii_lowercase + 'æøå'  # Norwegian alphabet
+ciphertext = 'KNO fmw55k8m7i179 z98øyåz8æy67aåy0å6æ7aø1å1038åa5a fmw55k8m7i179 95p11'
+shift = ord('P') - ord('K')  # ASCII shift between K and P as we assume KNO=PST
+ciphertext2 = ''
+
+for c in ciphertext:
+    index = lowercase_alphabet.find(c.lower())
+    if index != -1:
+        isupper = c.isupper()
+        c = lowercase_alphabet[(shift + index) % len(lowercase_alphabet)]
+        if isupper:
+            c = c.upper()
+    ciphertext2 += c
+print(ciphertext2)  # Prints 'PST krø55p8r7n179 b98daeb8ca67fea0e6c7fd1e1038ef5f krø55p8r7n179 95u11'
+
+digits = string.digits  # It's time for a round of digits
+shift = ord('1') - ord('5')  # ASCII shift between 5 and 1 as we assume krø55p8r7n179 = leet krø11p4r3n735
+plaintext = ''
+
+for c in ciphertext2:
+    index = digits.find(c.lower())
+    if index != -1:
+        isupper = c.isupper()
+        c = digits[(shift + index) % len(digits)]
+        if isupper:
+            c = c.upper()
+    plaintext += c
+print(plaintext)  # Prints 'PST krø11p4r3n735 b54daeb4ca23fea6e2c3fd7e7694ef1f krø11p4r3n735 51u77'
+
+plaintext = plaintext.replace('krø11p4r3n735 51u77', '}').replace('krø11p4r3n735', '{').replace(' ', '')
+print(plaintext)  # Prints 'PST{b54daeb4ca23fea6e2c3fd7e7694ef1f}'
+</pre>
+The flag printed is <code>PST{b54daeb4ca23fea6e2c3fd7e7094ef1f}</code> (MD5 hash of <code>jul1u5</code> (as in Julius (Caesar))).
+</span></div></li><li><div class="collapsible-header">December 7th - Santa's workshop - 2 points</div><div class="collapsible-body"><span><h6>Challenge</h6>Santa's workshop has become digital - represented by the webpage <a href="https://verksted.npst.no">https://verksted.npst.no</a>. The goal here is to spot the flag among many, many images. Every image has it's own MD5 hash filename which is the flag, so we just need to find the right image.
+
+<h6>Solution</h6>This challenge can be solved by scrolling through 12,202 images and spotting the image of the flag. Of course, it's more fun to make the computer do the job for us. There's a <a href="https://verksted.npst.no/verksted.npst.no.2c3ecc69.js">JavaScript file with an array of all the image filenames</a>. Many images - even though they have different filenames - are of the same item. And luckily they have the same <a href="https://en.wikipedia.org/wiki/Checksum">file checksum</a>.
+
+Knowing that we can easily just run this script to get the flag: <pre class="prettyprint lang-py">#!/usr/bin/python3
+import requests
+import os
+from time import sleep
+import hashlib
+
+prefix = 'https://verksted.npst.no/images/'
+postfix = '.png'
+images = [
+    "ad4702626c8a8ce8386a2f59d9b45f0e",
+    "3f6cfe9ad6220c32868d931d70f0cd7d",
+    "88fd8baf0e91d6d109ea6559e684ff43",
+    "09fa082d154fbcc8132d9758d625a6b1",
+    # ...
+    # The array has been shortened a bit as it originally contains 12,202 images
+    # ...
+    "b30b4add25b97721ebf0e7ad2eb26eb9",
+    "e5b5c486f20f06798a94a6b16aef5f2f",
+    "8798e1f0a271b09750a6531686fc621b",
+    "7254408c81470abdbabd40e850b5274d"
+]
+
+
+def get_hash(url):
+    ''' Requests URL and returns MD5 hash of data downloaded. '''
+    m = hashlib.md5()
+    try:
+        r = requests.get(url)
+    except Exception as e:
+        # It's handy to just swallow the error here so we can just retry the URL manually instead of stopping the script in case of temp. network issues.
+        print('Unexpected error while trying to load image %s. Returning empty hash. Error: %s' % (url, e))
+        return ''
+    for data in r.iter_content(8192):
+        m.update(data)
+    return m.hexdigest()
+
+
+hashes = {}
+
+for image in images:
+    url = prefix + image + postfix
+    hash = get_hash(url)
+    if hash not in hashes:
+        # Prints something like 'Found new checksum 4aacc09b8f52fd1b6f2bfbe18d4f17b6 for url https://verksted.npst.no/images/b30b4add25b97721ebf0e7ad2eb26eb9.png':
+        print('Found new checksum %s for url %s' % (hash, url)) 
+        # Not necessary, but nice to keep an eye on while the script is running:
+        os.system('open ' + url)  # Opens the image (command will differ depending on OS)
+        flag = 'PST{%s}' % image
+        hashes[hash] = {
+            'url': url,
+            'flag': flag,
+            'seen': 1
+        }
+    else:
+        hashes[hash]['seen'] = hashes[hash]['seen'] + 1
+    sleep(0.3)
+
+# Prints something like 'Found 63 different checksums among 12202 images.':
+print('Found %d different checksums among %d images.' % (len(hashes), len(images)))
+print('Following images were only seen once:')
+for hash in hashes:
+    if hashes[hash]['seen'] == 1:
+        # Prints something like 'PST{8798e1f0a271b09750a6531686fc621b} - https://verksted.npst.no/images/8798e1f0a271b09750a6531686fc621b.png'
+        print('%s - %s' % (hashes[hash]['flag'], hashes[hash]['url']))
+</pre>
+The flag that has been <code>PST{8798e1f0a271b09750a6531686fc621b}</code>.
+</span></div></li><li><div class="collapsible-header">December 7th - Industrial espionage - 2 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The only info we get for this challenge is that there's suspicion of ongoing espionage in Santa's workshop that we should take a look at.
+
+<h6>Solution</h6>Again we're looking at the images at <a href="https://verksted.npst.no">https://verksted.npst.no</a>. Is there something that doesn't belong at the North Pole?
+
+Well, luckily for us - if we let the script in the previous solution finish - we already have the answer. It's the penguin that doesn't belong. The flag for that image is <code>PST{b30b4add25b97721ebf0e7ad2eb26eb9}</code>.
+</span></div></li><li><div class="collapsible-header">December 8th - Polar bear sighting - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>We're told that <a href="https://en.wikipedia.org/wiki/Rudolph_the_Red-Nosed_Reindeer">Rudolph the Red-Nosed Reindeer</a> observed a suspicious polar bear when he took a detour while out jogging with Santa. The challenge is to report the location of this sighting.
+
+<h6>Solution</h6>The text doesn't leave much clue as to where to look, but the image above the text shows Santa's smart phone with the app <a href="https://strava.com">Strava</a> open. Strava is a social fitness network, primarily used to track cycling and running exercises. It doesn't take long to find both <a href="https://www.strava.com/athletes/48179976">Santa's profile</a> and <a href="https://www.strava.com/athletes/48180031">Rudolph's profile</a>.
+
+They have been out running and it's possible to do a <a href="https://labs.strava.com/flyby/viewer/#2910407508,nDN5rQ==">"flyby" of their workout</a>. If you follow their track you can see that Rudolph did take a detour. And cross checking Strava's map with e.g. Google Maps you can see that the place he is closest by is the <a href="http://www.northpolemuseum.com/">North Pole Expedition Museum</a> (and the museum actually has got a figure of a polar bear outside). That is also the flag and solution we need: <code>PST{NORTH POLE EXPEDITION MUSEUM}</code>
+</span></div></li><li><div class="collapsible-header">December 8th - Spy activity - 15 points</div><div class="collapsible-body"><span><h6>Challenge</h6>There's information about possible spy activity from <a href="https://spst.no">Southern Polar Security Service</a> (Sydpolar sikkerhetstjeneste = SPST) agents on Svalbard in same time period as Santa and Rudolph's run. The challenge is identify one of the agents.
+
+<h6>Solution</h6>Going back to the <a href="https://labs.strava.com/flyby/viewer/#2910407508,nDN5rQ==">"flyby" of the workout</a> in the previous challenge you can see that there's another person in the area. Someone is out on a <a href="https://www.strava.com/activities/2910413144">afternoon stalk</a>, and that person is someone named Pen Gwyn. <a href="https://www.strava.com/athletes/48201643">His profile</a> is pretty open about his affiliation and it also shows the flag we're after: <code>PST{69d26031ea5dbbeb56f22d9647f7c98e}</code>
+</span></div></li><li><div class="collapsible-header">December 8th - Mysterious profiles - 20 points</div><div class="collapsible-body"><span><h6>Challenge</h6>NPST's analysts suspect that Pen Gwyn has reported home to his contacts at the South Pole. The challenge is to decode some of that communication.
+
+<h6>Solution</h6>We're still on Pen Gwyn's Strava profile. He's got <a href="https://www.strava.com/activities/2910553320">one activity that contains an image</a>. This image contains data that we want to decode. I looked long and hard at the bars as binary ASCII data and then <a href="https://en.wikipedia.org/wiki/Barcode#Types_of_barcodes">all sorts of barcodes</a>, but this is actually <a href="https://en.wikipedia.org/wiki/Morse_code">morse code</a>.
+
+While I did initially decode the image with pen and paper it's cooler to do so with code. It's a bit challenging because of the <a href="https://en.wikipedia.org/wiki/Compression_artifact">compression artifcats</a> in the image, but at the same time, binary's strength is that it can handle quite a bit of noise:<pre class="prettyprint lang-py">#!/usr/bin/python3
+from PIL import Image  # pip3 install pillow
+
+MORSE_CODE = {'▄ ▄▄▄': 'A', '▄▄▄ ▄ ▄ ▄': 'B', '▄▄▄ ▄ ▄▄▄ ▄': 'C', '▄▄▄ ▄ ▄': 'D',
+              '▄': 'E', '▄ ▄ ▄▄▄ ▄': 'F', '▄▄▄ ▄▄▄ ▄': 'G', '▄ ▄ ▄ ▄': 'H',
+              '▄ ▄': 'I', '▄ ▄▄▄ ▄▄▄ ▄▄▄': 'J', '▄▄▄ ▄ ▄▄▄': 'K', '▄ ▄▄▄ ▄ ▄': 'L',
+              '▄▄▄ ▄▄▄': 'M', '▄▄▄ ▄': 'N', '▄▄▄ ▄▄▄ ▄▄▄': 'O', '▄ ▄▄▄ ▄▄▄ ▄': 'P',
+              '▄▄▄ ▄▄▄ ▄ ▄▄▄': 'Q', '▄ ▄▄▄ ▄': 'R', '▄ ▄ ▄': 'S', '▄▄▄': 'T',
+              '▄ ▄ ▄▄▄': 'U', '▄ ▄ ▄ ▄▄▄': 'V', '▄ ▄▄▄ ▄▄▄': 'W', '▄▄▄ ▄ ▄ ▄▄▄': 'X',
+              '▄▄▄ ▄ ▄▄▄ ▄▄▄': 'Y', '▄▄▄ ▄▄▄ ▄ ▄': 'Z', '▄ ▄▄▄ ▄▄▄ ▄▄▄ ▄▄▄': '1',
+              '▄ ▄ ▄▄▄ ▄▄▄ ▄▄▄': '2', '▄ ▄ ▄ ▄▄▄ ▄▄▄': '3', '▄ ▄ ▄ ▄ ▄▄▄': '4',
+              '▄ ▄ ▄ ▄ ▄': '5', '▄▄▄ ▄ ▄ ▄ ▄': '6', '▄▄▄ ▄▄▄ ▄ ▄ ▄': '7',
+              '▄▄▄ ▄▄▄ ▄▄▄ ▄ ▄': '8', '▄▄▄ ▄▄▄ ▄▄▄ ▄▄▄ ▄': '9', '▄▄▄ ▄▄▄ ▄▄▄ ▄▄▄ ▄▄▄': '0',
+              '▄▄▄ ▄▄▄ ▄ ▄ ▄▄▄ ▄▄▄, ': ',', '▄ ▄▄▄ ▄ ▄▄▄ ▄ ▄▄▄': '.',
+              '▄ ▄ ▄▄▄ ▄▄▄ ▄ ▄': '?', '▄▄▄ ▄ ▄ ▄▄▄ ▄': '/', '▄▄▄ ▄ ▄ ▄ ▄ ▄▄▄': '-',
+              '▄▄▄ ▄ ▄▄▄ ▄▄▄ ▄': '(', '▄▄▄ ▄ ▄▄▄ ▄▄▄ ▄ ▄▄▄': ')'}
+
+im = Image.open('report.jpg')
+pix = im.load()
+
+binary_string = ''
+for i in range(0, im.size[0]):  # Runs through all pixels on top row
+    t = pix[i, 0]  # Colour tuple
+    if t[0] < 200 and t[1] < 200 and t[2] < 200:  # Relatively dark colour
+        binary_string += '1'
+    else:  # Relatively white colour
+        binary_string += '0'
+print(binary_string, '\\n')
+
+
+def replace(input, old, new, count_from, count_to):
+    for i in reversed(range(count_from, count_to + 1)):
+        input = input.replace(old * i, new)
+    return input
+
+
+morse_string = binary_string
+
+morse_string = replace(morse_string, '1', '▄▄▄', 5, 10)  # Replace wide bars with dash
+morse_string = replace(morse_string, '1', '▄', 1, 4)  # Replace narrow bars with dot
+morse_string = replace(morse_string, '0', '       ', 15, 30)  # Replace very wide whitespaces with word separator
+morse_string = replace(morse_string, '0', '   ', 5, 15)  # Replace medium wide whitespaces with letter separator
+morse_string = replace(morse_string, '0', ' ', 1, 4)  # Replace narrow whitespaces with in-letter separator
+
+print(morse_string, '\\n')
+
+plaintext = ''
+for morse_word in morse_string.split('       '):
+    for morse_letter in morse_word.split('   '):
+        try:
+            plaintext += MORSE_CODE[morse_letter.strip()]  # Stripping in case of leading or trailing spaces
+        except KeyError:
+            print('Unknown morse code [%s]' % morse_letter)
+    plaintext += ' '
+
+print(plaintext, '\\n')
+
+plaintext = plaintext.replace('KROLLPARENTES SLUTT', '}').replace('KROLLPARENTES', '{').replace(' ', '')
+
+print(plaintext, '\\n')  # Prints PST{E06531D19FF020A479520EF28C8D1E2C}
+</pre>
+The flag printed is <code>PST{E06531D19FF020A479520EF28C8D1E2C}</code> (MD5 hash of <code>christmasrun</code>).
+</span></div></li><li><div class="collapsible-header">December 10th - Vige vs. Nere - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>There's a polar chess championship going on at the North Pole. We're given the following <a href="https://en.wikipedia.org/wiki/Portable_Game_Notation">PGN (Portable Game Notation)</a> for a chess game between two South Pole players called Vige and Nere:
+<pre class="prettyprint">1. a3 e6 2. b3 Ke7 3. Ra2 d5 4. h3 h6 5. f4 Qd6 6. Nc3 Qa6 7. Nf3 g5 8. Nb1 b5
+9. d4 Qa5+ 10. Bd2 Kd6 11. g4 Bg7 12. Bc3 f5 13. Nh2 Ba6 14. Qd2 Bc8 15. Qc1 Qb6 16. Ba1 b4
+17. Nd2 Ke7 18. Ndf3 Nd7 19. axb4 Ngf6 20. gxf5 Ne5 21. Ng4 c5 22. Nh4 Qd6 23. Nf2 Ng8 24. Bg2 a5
+25. Ra4 Qd8 26. Be4 Qe8 27. Ra3 Kf7 28. b5 Qe7 29. O-O exf5 30. Nxf5 Ba6 31. Ng3 Qf6 32. Nd1 Ra7
+33. Kg2 Nc4 34. bxa6 Qb6 35. Nb2 Nxa3 36. Nh5 Qxb3 37. Nxg7 Nb5 38. Nd1 Qe3 39. Rh1 Qa3 40. Re1 Rc7
+41. Ne8 Kxe8 42. Qb1 Rhh7 43. dxc5 Rce7 44. Rg1 Re5 45. fxg5 Nf6 46. gxh6 Kf8 47. a7 Ng4 48. Kh1 Nc7
+49. Bxd5 Qb4 50. Kg2 Qa3 51. c6 Qc5 52. Qb8+ Re8 53. Be5 Ne6 54. Nc3 Rf7 55. Qxe8+ Kxe8 56. Bf4 Rf6
+57. Bg3 Kf7 58. Be1 1-0</pre>
+We're also given the link to <a href="https://lichess.org/yDDc9bR0">https://lichess.org/yDDc9bR0</a> where the same game is set up.
+
+<h6>Solution</h6>Because we got a square and the players were called Vige and Nere I was so sure this was just a step up from the Caesar cipher with a relatively simple <a href="https://en.wikipedia.org/wiki/Vigenère_cipher">Vigenère cipher</a> challenge. That cost me a lot time.
+
+<a href="https://incoherency.co.uk/blog/stories/chess-steg.html">Hiding messages in a chess game</a> is actually a thing. You can take a message and encode it into a valid chess game and get valid PGN out on the other end. As James Stanley says in that blog post he's got a  <a href="https://incoherency.co.uk/chess-steg/">nice online tool for this</a>. Decoding the PGN actually gives a relatively meaningful output: <code>HHL DJDWEDESKWCLXK u02s104y2s665t5v3w2619v6184su50t CGGXDAHTJTFMWH KEMIL</code>
+
+The output is pretty close to the format of the flags from previous challenges. And remembering the players' names, this is where the Vigenère cipher comes in. Knowing that we want the flag to start with <code>PST</code> it isn't very hard to crack the code.
+
+Conveniently Jonas Enge has made a <a href="https://github.com/Alheimsins/chess-steg-cli">command-line implementation</a> which we can use in combination with e.g. <a href="https://blog.npmjs.org/post/162869356040/introducing-npx-an-npm-package-runner">npx</a> and a small Python script:
+<pre class="prettyprint lang-py">#!/usr/bin/python3
+import string
+import subprocess
+
+pgn = """1. a3 e6 2. b3 Ke7 3. Ra2 d5 4. h3 h6 5. f4 Qd6 6. Nc3 Qa6 7. Nf3 g5 8. Nb1 b5 \\
+9. d4 Qa5+ 10. Bd2 Kd6 11. g4 Bg7 12. Bc3 f5 13. Nh2 Ba6 14. Qd2 Bc8 15. Qc1 Qb6 16. Ba1 b4 \\
+17. Nd2 Ke7 18. Ndf3 Nd7 19. axb4 Ngf6 20. gxf5 Ne5 21. Ng4 c5 22. Nh4 Qd6 23. Nf2 Ng8 24. Bg2 a5 \\
+25. Ra4 Qd8 26. Be4 Qe8 27. Ra3 Kf7 28. b5 Qe7 29. O-O exf5 30. Nxf5 Ba6 31. Ng3 Qf6 32. Nd1 Ra7 \\
+33. Kg2 Nc4 34. bxa6 Qb6 35. Nb2 Nxa3 36. Nh5 Qxb3 37. Nxg7 Nb5 38. Nd1 Qe3 39. Rh1 Qa3 40. Re1 Rc7 \\
+41. Ne8 Kxe8 42. Qb1 Rhh7 43. dxc5 Rce7 44. Rg1 Re5 45. fxg5 Nf6 46. gxh6 Kf8 47. a7 Ng4 48. Kh1 Nc7 \\
+49. Bxd5 Qb4 50. Kg2 Qa3 51. c6 Qc5 52. Qb8+ Re8 53. Be5 Ne6 54. Nc3 Rf7 55. Qxe8+ Kxe8 56. Bf4 Rf6 \\
+57. Bg3 Kf7 58. Be1 1-0"""
+
+ciphertext = subprocess.check_output('npx --quiet chess-steg-cli --unsteg "%s"' % pgn, encoding='UTF-8', shell=True).strip()
+
+print('Ciphertext:', ciphertext)  # Prints 'Ciphertext: HHL DJDWEDESKWCLXK u02s104y2s665t5v3w2619v6184su50t CGGXDAHTJTFMWH KEMIL'
+
+suspected_plaintext = 'PST KROELLPARENTES'
+plaintext = ''
+key = ''
+
+for i, s in enumerate(suspected_plaintext):
+    index = string.ascii_lowercase.find(s.lower())
+    if index != -1:  # Char in alphabet
+        key += chr(((ord(ciphertext[i]) - ord(s)) % len(string.ascii_lowercase)) + ord('A'))
+        if len(key) % 2 == 0 and key[:len(key)//2] == key[len(key)//2:]:  # Key is probably repeating itself
+            key = key[:len(key)//2]
+            break
+print('Key:', key)  # Prints 'Key: SPST'
+
+i = 0
+for c in ciphertext:
+    index = string.ascii_lowercase.find(c.lower())
+    if index != -1:
+        islower = c.islower()
+        c = chr(((ord(c.upper()) - ord(key[i % len(key)])) % len(string.ascii_lowercase)) + ord('A'))
+        if islower:
+            c = c.lower()
+        i += 1
+    plaintext += c
+print('Plaintext:', plaintext)  # Prints 'Plaintext: PST KROELLPARENTES f02a104f2a665e5d3d2619d6184dc50a KROELLPARENTES SLUTT'
+print('Flag:', plaintext.replace('KROELLPARENTES SLUTT', '}').replace('KROELLPARENTES', '{').replace(' ', ''))  # Prints 'Flag: PST{f02a104f2a665e5d3d2619d6184dc50a}'
+</pre>
+The key is <code><a href="https://spst.no/">SPST</a></code>. The flag is <code>PST{f02a104f2a665e5d3d2619d6184dc50a}</code>.
+</span></div></li><li><div class="collapsible-header">December 11th - 1337 - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to decode <a href="https://kalender.npst.no/melding.txt">a message sent to a spy</a>.
+
+<h6>Solution</h6>The title and text of the challenge hints a lot about <a href="https://en.wikipedia.org/wiki/Prime_number">prime numbers</a> and <a href="https://en.wikipedia.org/wiki/Factorization">factorization</a>. The message has 1337 bits (just like the title). <code>1337</code> is a prime number and can be factorized by the prime numbers <code>7</code> and <code>191</code>. Because of that the bits can't be divided into bytes of 8 bits. But that's fine as e.g. <a href="https://en.wikipedia.org/wiki/ASCII">ASCII</a> used to originally only have 7 bits per character.
+
+This is where I dug in the wrong direction. I spent quite a bit of time thinking that the prime number and factorization hints meant that this text was <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA encrypted</a> (<code>n=1337, p=7, r=191</code>).
+
+But the text is supposed to be divided into 191 columns and 7 lines. Then a pattern emerges. 🤦 I have changed the zeros to spaces to make it more readable:<pre class="prettyprint lang-py">111   11  11111    1  1     111 1   1 11111 1111  1111  11111   1   1   1       1 11111       11111 1 1     1           1   1  111  1   1       1   1   1   1   1 11111       1 11111 1  1    
+1  1 1  1   1     1   1      1  11  1 1     1   1 1   1 1      1 1  1  1        1   1           1   1 1     1           1   1 1   1 1   1       11 11  1 1  1  1  1           1   1   1   1   
+1  1 1      1     1   1      1  1 1 1 1     1   1 1   1 1     1   1 1 1         1   1           1   1 1     1            1 1  1   1 1   1       1 1 1 1   1 1 1   1           1   1   1   1   
+111   11    1    1    1      1  1 1 1 1111  1111  1111  1111  1   1 11          1   1           1   1 1     1             1   1   1 1   1       1   1 1   1 11    1111        1   1   1    1  
+1       1   1     1   1      1  1  11 1     1   1 1 1   1     11111 1 1         1   1           1   1 1     1             1   1   1 1   1       1   1 11111 1 1   1           1   1   1   1   
+1    1  1   1     1   1      1  1   1 1     1   1 1  1  1     1   1 1  1        1   1           1   1 1     1             1   1   1 1   1       1   1 1   1 1  1  1           1   1       1   
+1     11    1      1  11111 111 1   1 11111 1111  1   1 11111 1   1 1   1 11111 1   1   11111   1   1 11111 11111 11111   1    111   111  11111 1   1 1   1 1   1 11111 11111 1   1   1  1    
+</pre>
+I have to admit this was not my favourite challenge. It's hard to relate this to anything IT security really.
+
+The flag was <code>PST{LINEBREAK_IT_TILL_YOU_MAKE_IT!}</code>.
+</span></div></li><li><div class="collapsible-header">December 12th - Arbitrary code - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>We're told there's <a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7BgetFlag()%7D%3C%2Fpre%3E%60">public available API endpoint at SPST's site</a> that seems to be vulnerable to <a href="https://en.wikipedia.org/wiki/Arbitrary_code_execution">arbitrary code execution</a>. We're asked to look at it and report back any flags.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Arbitrær kode">Challenge</a>
+ - <a href="https://kalender.npst.no/12/">Daily brief</a>
+ - <a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7BgetFlag()%7D%3C%2Fpre%3E%60">API endpoint</a>
+
+<h6>Solution</h6>I found this challenge quite entertaining. The &lt;pre&gt; tag in the given URL isn't a coincident as it makes the output more readable in the browser as we progress. It's possible to solve this either by just using the API endpoint all the time or by running the code locally.
+
+The first step is to find the source code of the <code>getFlag()</code> method. As this turns out to be plain JavaScript we are able to get the source code of the functions when they are printed. A clue to solve this challenge is to take note of the comments in the code.
+
+If we start out with <a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7BgetFlag%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{getFlag}&lt;/pre&gt;&#96;</a>:<pre class="prettyprint lang-js">function getFlag() {
+    // Det er sikkert smartere å kryptere flagget først, og bare skrive inn det
+    // krypterte resultatet her, enn å kryptere på serveren hver gang.
+    // 11.12.19: Kryptert flagget nå. Vi kan sikkert slette encrypt-funksjonen?
+    return "e5a8aadb885cd0db6c98140745daa3acf2d06edc17b08f1aff6daaca93017db9dc8d7ce7579214a92ca103129d0efcdd";
+  }
+</pre>
+We can see that the flag returned is encrypted and is the ciphertext <code style="overflow-wrap: break-word;">e5a8aadb885cd0db6c98140745daa3acf2d06edc17b08f1aff6daaca93017db9dc8d7ce7579214a92ca103129d0efcdd</code>.
+
+The comments refer to <a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7Bencrypt%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{encrypt}&lt;/pre&gt;&#96;</a>:<pre class="prettyprint lang-js">function encrypt(input) {
+    // Bruk &#96decrypt&#96 for å dekryptere
+  
+    const algorithm = "aes-192-cbc";
+    // 06.12.19: husk å oppdatere denne hver dag!!!
+    // 09.12.19: dette var sykt slitsomt. kan vi finne en bedre løsning?
+    // 11.12.19: Krypteres permanent med dagens passord nå.
+    // Denne funksjonen trengs vel ikke lenger?
+    const password = getPassword("10.12.19");
+  
+    // 09.12.19: pepper er ikke et salt. Når vi på sikt krypterer utenfor serveren
+    // burde vi oppdatere dette til noe mer vitenskapelig korrekt.
+    // Natriumhydrogensulfat?
+    // 11.12.19: Oppdatert med den kjemiske formelen ;)
+    const key = crypto.scryptSync(password, formatSalt("pepper"), 24);
+  
+    const iv = Buffer.alloc(16, 0);
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    
+    let encrypted = cipher.update(input, "utf8", "hex");
+    encrypted += cipher.final("hex");
+  
+    return encrypted;
+}
+</pre>
+Reading the comments we see that the salt used for the encryption of the flag is <code><a href="https://en.wikipedia.org/wiki/Sodium_bisulfate">NaHSO4</a></code>.
+
+The comments also refer to <a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7BgetPassword%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{getPassword}&lt;/pre&gt;&#96;</a>:<pre class="prettyprint lang-js">function getPassword(date) {
+    const passwords = {
+      "06.12.19": "passord-" + getSecretPasswordNumber(3),
+      "07.12.19": "passord-" + getSecretPasswordNumber(5),
+      "08.12.19": "passord-" + getSecretPasswordNumber(8),
+      "09.12.19": "passord-" + getSecretPasswordNumber(13),
+      "10.12.19": "passord-" + getSecretPasswordNumber(21)
+    };
+    // 06.12.19: vi har ikke flere passord etter 10. Burde vurdere alternative
+    // løsninger.
+    return passwords[date] || &#96;fant ikke passord for &#36;{date}&#96;;
+}
+</pre>
+Notice how the method uses the <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci sequence</a> when calling <code>getSecretPasswordNumber()</code>.
+
+If we want to run the code locally we need the <code>getSecretPasswordNumber()</code>, <code>decrypt()</code> and <code>formatSalt()</code> functions too.
+
+<a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7BgetSecretPasswordNumber%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{getSecretPasswordNumber}&lt;/pre&gt;&#96;</a>:<pre class="prettyprint lang-js">function getSecretPasswordNumber(n) {
+    return Math.PI.toFixed(48).toString().split(".")[1].slice(n, n+2);
+}
+</pre>
+<a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7Bdecrypt%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{decrypt}&lt;/pre&gt;&#96;</a>:<pre class="prettyprint lang-js">function decrypt(password, salt, input) {
+    const algorithm = "aes-192-cbc";
+    
+    const key = crypto.scryptSync(password, formatSalt(salt), 24);
+    
+    const iv = Buffer.alloc(16, 0);
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    
+    let decrypted = decipher.update(input, 'hex','utf8');
+    decrypted += decipher.final('utf8');
+    
+    return decrypted;
+}
+</pre>
+<a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7BformatSalt%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{formatSalt}&lt;/pre&gt;&#96;</a>:<pre class="prettyprint lang-js">function formatSalt(salt) {
+    return salt.toLowerCase();
+}
+</pre>
+With all this information and pasting in the code from the server we can run the following code: <pre class="prettyprint lang-js">const crypto = require('crypto');
+const password = 'passord-' + getSecretPasswordNumber(34); // Ref. Fibonacci numbers and getPassword()
+const salt = 'NaHSO4'
+const ciphertext = getFlag();
+const plaintext = decrypt(password, salt, ciphertext);
+
+console.log('Password:', password);
+console.log('Salt:', salt);
+console.log('Ciphertext:', ciphertext);
+console.log('Plaintext:', plaintext);
+</pre>
+The output is as follows:<pre class="prettyprint lang-js">Password: passord-61
+Salt: NaHSO4
+Ciphertext: e5a8aadb885cd0db6c98140745daa3acf2d06edc17b08f1aff6daaca93017db9dc8d7ce7579214a92ca103129d0efcdd
+Plaintext: PST{24e592de8b20fe09938916d79b08854e}
+</pre>
+Instead of running the code locally we can just visit <a style="overflow-wrap: break-word;" href="https://api.spst.no/eval?eval=%60%24%7Bdecrypt(%27passord-61%27%2C%27NaHSO4%27%2C%27e5a8aadb885cd0db6c98140745daa3acf2d06edc17b08f1aff6daaca93017db9dc8d7ce7579214a92ca103129d0efcdd%27)%7D%60">https://api.spst.no/eval?eval=&#96;&#36;{decrypt('passord-61','NaHSO4','e5a8aadb885cd0db6c98140745daa3acf2d06edc17b08f1aff6daaca93017db9dc8d7ce7579214a92ca103129d0efcdd')}&#96;</a>
+
+Since this is real <code>eval()</code> it is also possible solving this challenge a bit more effectively by going to e.g. <a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7Brequire(%27fs%27).readdirSync(%27.%27).toString()%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{require('fs').readdirSync('.').toString()}&lt;/pre&gt;&#96;</a> and <a href="https://api.spst.no/eval?eval=%60%3Cpre%3E%24%7Brequire(%27fs%27).readFileSync(%27eval.js%27).toString()%7D%3C%2Fpre%3E%60">https://api.spst.no/eval?eval=&#96;&lt;pre&gt;&#36;{require('fs').readFileSync('eval.js').toString()}&lt;/pre&gt;&#96;</a>
+
+As seen, the flag is <code>PST{24e592de8b20fe09938916d79b08854e}</code> (MD5 hash of <code>passord123</code>).
+</span></div></li><li><div class="collapsible-header">December 13th - Token effort - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>Another entertaining challenge. Santa has an online naughty and nice list. Seemingly one of the API keys have been compromised and we're given <a href="https://en.wikipedia.org/wiki/7z">7z</a> archive files with access logs to investigate the issue. The elf that has archived the files is not very technical and also has forgotten the password of the archive files. However, the password should be mentioned as one of the technologies in one of PST's job ads. The challenge is to find out which of the API keys that have been compromised.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Token effort">Challenge</a>
+ - <a href="https://kalender.npst.no/13/">Daily brief</a>
+ - <a href="https://www.finn.no/165416216">Job ad</a>
+ - <a href="https://kalender.npst.no/logger.7z.001">https://kalender.npst.no/logger.7z.001</a>
+ - <a href="https://kalender.npst.no/logger.7z.002">https://kalender.npst.no/logger.7z.002</a>
+ - <a href="https://kalender.npst.no/logger.7z.003">https://kalender.npst.no/logger.7z.003</a>
+ - <a href="https://kalender.npst.no/logger.7z.004">https://kalender.npst.no/logger.7z.004</a>
+
+<h6>Solution</h6>The challenge can be solved like this:
+1. Unzip the 7z files using tech words mentioned in job ad
+2. Continue to unzip stuff (no worries, it actually isn't a <a href="https://en.wikipedia.org/wiki/Zip_bomb">zip bomb</a>) until you have all four log files (I spent a bit too long when I only had one log file available)
+3. Look for entries that stands out among the 1,031,074 log lines to find the compromised API key.
+
+Easy right? Let's try to script it:<pre class="prettyprint lang-py">#!/usr/bin/python3
+import os
+import subprocess
+import re
+import glob
+
+
+def unzip(filename):
+    print('\\nTrying to unzip [%s].' % filename)
+    try:
+        output = subprocess.check_output('jar xvf ' + filename, encoding='UTF-8', shell=True).strip()
+        print(output)
+        if output:
+            for line in output.split('\\n'):
+                filename = line.split(': ')[1]
+                if filename.endswith('.zip'):
+                    unzip(filename)
+                    if DELETE_ZIP_FILES:
+                        os.remove(filename)
+                elif filename.endswith('.gz'):
+                    gunzip(filename)
+                else:
+                    print('Unknown file type for file named [%s]. Skipping.' % filename)
+    except subprocess.CalledProcessError as e:
+        print(e)
+
+
+def gunzip(filename):
+    print('\\nTrying to gunzip [%s].' % filename)
+    try:
+        output = subprocess.check_output('gunzip --force ' + filename, encoding='UTF-8', shell=True).strip()
+        print(output)
+    except subprocess.CalledProcessError as e:
+        print(e)
+
+
+def get_wordlist(filename):
+    with open(filename, 'r') as f:
+        return set(f.read().split())
+
+
+def unar(filename, wordlist):
+    print('\\nTrying to unar [%s].' % filename)
+    for word in wordlist:
+        word = word.replace('(', '').replace(')', '').replace('.', '').replace(',', '').replace(':', '').replace('?', '').replace('"', '')
+        print('Trying password: [%s]' % word)
+        try:
+            # Using https://theunarchiver.com/command-line
+            output = subprocess.check_output('./unar -force-overwrite -password "' + word + '" ' + filename, encoding='UTF-8', shell=True).strip()
+            print(output)
+        except subprocess.CalledProcessError:
+            continue
+        else:
+            print('Password [%s] was correct.' % word)  # Prints 'Password [Graylog] was correct.'
+            return
+
+
+def update_data(name, matcher):
+    if name not in counts:
+        counts[name] = {}
+        lengths[name] = {}
+
+    group = matcher.group(name)
+    if not group in counts[name]:
+        counts[name][group] = {'count': 1, 'line': matcher.string}
+    else:
+        counts[name][group]['count'] = counts[name][group]['count'] + 1
+
+    length = 0 if group is None else len(group)
+    if not length in lengths[name]:
+        lengths[name][length] = {'count': 1, 'line': matcher.string}
+    else:
+        lengths[name][length]['count'] = lengths[name][length]['count'] + 1
+
+
+def parse(filename):
+    print('\\nParsing [%s]' % filename)
+    with open(filename) as file:
+        for line in file:
+            line = line.strip()
+            m = re.search(r'(?P<ip>.*?) - - \[(?P<date>.*?)\] \"(?P<method>.*?) (?P<url>.*?)(\?)?(jw_token=(?P<token>.*?))?(&)?(id=(?P<id>.*?))?(&)?(page=(.*?))? (?P<http>.*?) (?P<status>.*?) (?P<size>.*?) \"-\" \"(?P<ua>.*?)\"', line)
+            if not m:
+                print(line)
+                print(m)
+                exit(0)
+            update_data('ua', m)
+            update_data('url', m)
+            update_data('status', m)
+            update_data('size', m)
+            update_data('http', m)
+            update_data('method', m)
+            update_data('id', m)
+            update_data('token', m)
+
+
+def analyze_counts():
+    """
+    Looks for lines query param values that stand out
+    """
+    for name in counts:
+        print('\\nAnalyzing counts of %s' % name)
+        interesting = []
+        for group in counts[name]:
+            if counts[name][group]['count'] < 10:
+                line = counts[name][group]['line']
+                interesting.append(line)
+        if len(interesting) == 0:
+            print('  Found nothing of interest.')
+        elif len(interesting) < 10:
+            for line in interesting:
+                # Prints lines like '10.80.116.24 - - [2019-12-07T07:00:00.000Z] "BREW /brew/coffee HTCPCP/1.0" 418 0 "-" "polarbucks/9000.1"'
+                print('  Found interesting log line:\\n    %s' % line)
+        else:
+            print('  Found too many unique items. Not printing any.')
+
+
+def analyze_lengths():
+    """
+    Looks for lines query param value lengths that stand out
+    """
+    for name in lengths:
+        print('\\nAnalyzing string lengths of %s' % name)
+        interesting = []
+        for group in lengths[name]:
+            length = 0 if group is None else group
+            if lengths[name][length]['count'] < 10:
+                line = lengths[name][length]['line']
+                interesting.append(line)
+        if len(interesting) == 0:
+            print('  Found nothing of interest.')
+        elif len(interesting) < 10:
+            for line in interesting:
+                # Prints lines like '10.87.113.12 - - [2019-12-09T11:51:19.031Z] "DELETE /lister/snille.php?id=jule_nissen&jw_token=67e49727affdee991ec58180ee657b28 HTTP/1.1" 403 24 "-" "curl/7.61.1"'
+                print('  Found interesting log line:\\n    %s' % line)
+        else:
+            print('  Found too many unique items. Not printing any.')
+
+
+DELETE_ZIP_FILES = False
+
+# job_ad.txt contains the text from the job ad
+unar('logger.7z.001', get_wordlist('job_ad.txt'))
+
+unzip('access.log.zip')
+
+for filename in glob.glob('*.access.log'):
+    counts = {}
+    lengths = {}
+    parse(filename)
+    analyze_counts()
+    analyze_lengths()
+</pre>
+From this we get some interesting log lines:<pre class="prettyprint lang-bsh">Trying to unar [logger.7z.001].
+Trying password: [oppgaver]
+...
+Trying password: [Graylog]
+logger.7z.001: 7-Zip
+  access.log.zip  (34231284 B)... OK.
+Successfully extracted to "./access.log.zip".
+Password [Graylog] was correct.
+
+...
+
+Trying to unzip [access.log.zip].
+inflated: 2019-12-07.access.log.11.zip
+
+...
+
+Parsing [2019-12-07.access.log]
+
+Analyzing counts of ua
+  Found interesting log line:
+    10.80.116.24 - - [2019-12-07T07:00:00.000Z] "BREW /brew/coffee HTCPCP/1.0" 418 0 "-" "polarbucks/9000.1"
+...
+Analyzing string lengths of id
+  Found interesting log line:
+    10.87.113.12 - - [2019-12-09T11:41:07.197Z] "DELETE /lister/slemme.php?id=gwyn HTTP/1.1" 401 275 "-" "curl/7.61.1"
+  Found interesting log line:
+    10.87.113.12 - - [2019-12-09T11:42:13.574Z] "DELETE /lister/slemme.php?id=gwyn&jw_token=f6d1ab9cebe6c5d734989151ec073bfe HTTP/1.1" 401 275 "-" "curl/7.61.1"
+  Found interesting log line:
+    10.87.113.12 - - [2019-12-09T11:51:19.031Z] "DELETE /lister/snille.php?id=jule_nissen&jw_token=67e49727affdee991ec58180ee657b28 HTTP/1.1" 403 24 "-" "curl/7.61.1"
+...
+</pre>
+
+We are actually able to get out the log lines we need (and it's also always nice to see a reference to <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418">418 I'm a teapot</a></code>). If you look closer at the log lines from that same IP address 10.87.113.12 you'll see someone (probably good old Pen Gwyn) do this:
+1. Delete himself from the naughty list without a API key and get 401 back
+2. Delete himself from the naughty list with an invalid API key and get 401 back
+3. Delete himself from the naughty list with a valid API key (the flag) and get 200 back
+4. Add himself to the nice list with a valid API key and get 200 back
+5. Delete Santa from the nice list with a valid API key and get 403 back
+
+The flag is <code>PST{67e49727affdee991ec58180ee657b28}</code>.
+</span></div></li><li><div class="collapsible-header">December 14th - Data leak - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>NPST has been able to get their hands on a hard drive marked with <code>U+2295/U+22BB</code>. The hard drive contains contains the following document and the text also hints about <a href="https://en.wikipedia.org/wiki/Hamming_distance">hamming distance</a>:
+<code style="font-size:60%;overflow-wrap: break-word;">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</code>
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Lekket data">Challenge</a>
+ - <a href="https://kalender.npst.no/14/">Daily brief</a>
+
+<h6>Solution</h6>The unicode characters <code>U+2295/U+22BB</code> or <code><a href="https://en.wikipedia.org/wiki/⊕">⊕</a>/<a href="https://en.wiktionary.org/wiki/⊻">⊻</a></code> are often used to symbolize <a href="https://en.wikipedia.org/wiki/Exclusive_or">exclusive or</a>, strongly hinting to <a href="https://en.wikipedia.org/wiki/XOR_cipher">XOR cipher</a> in our case.
+
+The document is Base64 encoded. So we can assume we should decode it and then we can try to brute force the the key we to find the plaintext. It only takes a few lines of Python. The way I did it was to check the number of proper/expected plaintext chars I got for different keys:<pre class="prettyprint lang-py">#!/usr/bin/python3
+import base64
+import string
+from time import time
+
+cipher_base64 = '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'
+cipher_hex = base64.b64decode(cipher_base64)
+
+
+def xor(data, key):
+    key = bytes(key * (len(data) // len(key) + 1), encoding='utf8')
+    return bytearray(a ^ b for a, b in zip(*map(bytearray, [data, key])))
+
+
+def count_chars(s, chars):
+    return sum(s.count(ord(c)) for c in chars)
+
+
+time_start = time()
+max_key_length = 16  # Assuming that key length won't be longer than 16 chars
+alphabet = string.ascii_letters + 'æøåÆØÅ .,{}' + string.whitespace + string.digits  # Assuming these should be most of the chars in the text
+
+best_key = None
+best_key_score = 0
+for key_length in range(1, max_key_length + 1):  # Trying key lengths 1-max
+    print('Checking key size %d.' % key_length)
+    key = 'a' * key_length  # Default starting key
+    for i in range(1, key_length + 1):
+        best_letter_score = 0
+        best_letter = None
+        for l in alphabet:
+            key = key[0:i - 1] + l + key[i: len(key)]
+            score = count_chars(xor(cipher_hex, key), alphabet)  # Scoring the key by the number of expected chars the plaintext contains
+            if score >= best_letter_score:
+                best_letter_score = score
+                best_letter = l
+        key = key[0:i - 1] + best_letter + key[i: len(key)]  # Keeping the best letter for each position
+    score = count_chars(xor(cipher_hex, key), alphabet)
+    if score >= best_key_score:
+        best_key_score = score
+        best_key = key
+        # Prints stuff like 'Found new best key [lelTeeerle] (score: 1931).':
+        print('Found new best key [%s] (score: %d).' % (best_key, best_key_score))
+
+time_spent = round(time() - time_start)
+
+# Prints stuff like 'Found key [JulenErTeit] in 38 seconds:'
+print('\\nFound key [%s] in %d seconds:' % (best_key, time_spent))
+print(xor(cipher_hex, best_key).decode("latin-1"))
+</pre>
+
+The key we get is <code>JulenErTeit</code> and plaintext is an internal daily brief from SPST:
+<code style="font-size:60%;">SPST
+13.12.19
+
+Operasjoner rettet mot NPST
+Som kanskje mange her i SPST har fått med seg så har SPST foretatt operasjoner på Nordpolarske territorium i den siste tiden. Under følger en oppsummering av disse operasjonene.
+Lederen av NPST, Jule Nissen, heretter omtalt som KLAUS har vært objekt for flere av disse operasjonene.
+
+- Tirsdag 03.12.19 klarte våre dyktige hackere å dekryptere ønskelister som var sendt til KLAUS. Vi jobber fortsatt hardt med å analysere innholdet i disse ønskelistene.
+- Onsdag 04.12.19 foretok en agent et vellykket spaningsoppdrag mot KLAUS, lederen av NPST. KLAUS var ute på joggetur til postkontoret med en av hans reinsdyr. Etter alt å dømme så benyttes postkontoret for å sende ønskelister fra "snille" barn. Det virker som om NPST ikke har noen anelse om at dette foregår på deres territorie.
+- Fredag 06.12.19 så skiftet NPST til en ny krypteringsalgoritme som gjorde at vi ikke lenger får tilgang til innholdet i ønskelistene. Våre hackere jobber på spreng for å finne en vei rundt denne nye krypteringen.
+- Lørdag 07.12.19 infiltrerte en agent KLAUS sitt verksted og rotet for å sabotere juleforberedelsene, men verkstedet var allerede veldig rotete. Forhåpentligvis forsinker dette forberedelsene nok til at befolkningen blir usikker på om det blir en god jul.
+- Tirsdag 10.12.19 leverte en agent et parti julebrus til en potensiell kilde i NPST. Dette ble gjort etter at vår tidligere kilde på innsiden fikk sparken etter at han ble oppdaget. Vi er usikre på om smøringsforsøket har fungert ettersom alven ser ut til å ha meldt dette internt.
+- Torsdag 12.12.19 snappet vi opp en melding om at KLAUS har blitt syk. Forhåpentligvis vil dette bety at verkstedet til KLAUS havner enda lengre bak på forberedelsene sine til jul.
+
+
+Dataangrep mot SPST
+Stordatamaskinen vår har blitt utsatt for et dataangrep i natt som ser ut til å stamme fra en gruppe frivillige som jobber for NPST. Vi ber alle ansatte unngå å benytte seg av tjenestene fra stordatamaskinen frem til administrasjonsteamet har fått sikret løsningen.
+
+
+Ukens ansatt
+Pen Gwyn for utmerket undercover arbeid mot NPST.
+
+
+Takk til alle for utmerket arbeid den siste tiden.
+Sjef SPST, Keiserpingvinen
+
+NB:
+Kantinen vil være stengt de neste to dagene etter klager på dårlig kvalitet på fisken. Vi leter etter en ny leverandør som kan levere bedre råvarer.
+PST{a392960421913165197845f34bf5d1a8}</code>
+
+The flag is <code>PST{a392960421913165197845f34bf5d1a8}</code> (MD5 hash of <code>xor</code>).
+</span></div></li><li><div class="collapsible-header">December 15th - Flash drive - 10 points</div><div class="collapsible-body"><span><h6>Challenge</h6>NPST has gotten their hands on a flash drive originally belonging to SPST's Pen Gwyn. It seems to be private and contain vacation pictures, but they are stored in a password protected ZIP file. The challenge is to find the flag on the flash drive.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#15. desember">Challenge</a>
+ - <a href="https://kalender.npst.no/15/">Daily brief</a>
+ - <a href="https://kalender.npst.no/spst_minnepinne.tar.gz">Flash drive image file</a>
+
+<h6>Solution</h6>There are probably cooler ways to go about it, but I just retrieved the flag by using the <code><a href="https://en.wikipedia.org/wiki/Strings_(Unix)">strings</a></code> command. One string stood out and looked like Base64:<pre class="prettyprint lang-bsh">$ strings spst_minnepinne.dd
+# ...
+"RXQga2plbXBlbGFuZ3QgcGFzc29yZCBzb20gYWxkcmkgdmlsIGt1bm5lIGdqZXR0ZXMgYXYgTlBTVCEgOik="
+
+$ echo RXQga2plbXBlbGFuZ3QgcGFzc29yZCBzb20gYWxkcmkgdmlsIGt1bm5lIGdqZXR0ZXMgYXYgTlBTVCEgOik= | base64 --decode
+Et kjempelangt passord som aldri vil kunne gjettes av NPST! :)
+</pre>
+The flag is <code>PST{Et kjempelangt passord som aldri vil kunne gjettes av NPST! :)}</code> (=<i>A very long password NPST will never be able to guess! :)</i>).
+</span></div></li><li><div class="collapsible-header">December 15th - Alternatives - 15 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to find the one letter character where the password from the previous challenge was found. It's only possible to guess the flag 20 times.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Alternativer">Challenge</a>
+ - <a href="https://kalender.npst.no/15/">Daily brief</a>
+ - <a href="https://kalender.npst.no/spst_minnepinne.tar.gz">Flash drive image file</a>
+
+<h6>Solution</h6>Because of the way I solved the previous challenge this was pretty hard. There was no way (I think) I would get the answer to this one using <code>strings</code> or even a hex editor or by looking in the mounted disk drive.
+
+What I finally did was to use <a href="https://en.wikipedia.org/wiki/Autopsy_(software)">Autopsy</a> and <a href="https://en.wikipedia.org/wiki/The_Sleuth_Kit">The Sleuth Kit</a> in a <a href="https://www.kali.org/">Kali</a> image.
+
+Now it was pretty easy to see that the Base64 encoded flag was located in a file called <code>C:/feriebilder.zip:_</code>:
+
+<img class="materialboxed responsive-img" title="" data-caption="" alt="" src="/images/pst301-autopsy.png"/>
+<img class="materialboxed responsive-img" title="" data-caption="" alt="" src="/images/pst302-autopsy.png"/>
+
+The character that was needed was <code>_</code>. The full flag after getting the md5 sum of it was <code>PST{b14a7b8059d9c055954c92674ce60032}</code>.
+</span></div></li><li><div class="collapsible-header">December 15th - Vacation photos - 20 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to find a flag from one of the three vacation photos located inside the ZIP file on the disk image.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Feriebilder">Challenge</a>
+ - <a href="https://kalender.npst.no/15/">Daily brief</a>
+ - <a href="https://kalender.npst.no/spst_minnepinne.tar.gz">Flash drive image file</a>
+
+<h6>Solution</h6>We have the password for the ZIP file containing the photos from the previous challenge. We just have to mount the disk and extract the files first: 
+<pre class="prettyprint lang-bsh">$ hdiutil attach -imagekey diskimage-class=CRawDiskImage -nomount spst_minnepinne.dd
+/dev/disk3          	FDisk_partition_scheme         	
+/dev/disk3s1        	Windows_NTFS                   	
+
+$ hdiutil mount /dev/disk3s1 
+/dev/disk3s1        	Windows_NTFS                   	/Volumes/SPST
+
+$ unar -password "Et kjempelangt passord som aldri vil kunne gjettes av NPST! :)" /Volumes/SPST/feriebilder.zip 
+/Volumes/SPST/feriebilder.zip: Zip
+  huskelapp.png  (1418810 B)... OK.
+  måltid.png  (2534140 B)... OK.
+  varm dag på stranda.png  (1722473 B)... OK.
+Successfully extracted to "feriebilder".
+</pre>
+In one of the pictures - <code>måltid.png</code> - there's what appears to be a red <a href="https://en.wikipedia.org/wiki/Herring">herring</a>, and that's not just a <a href="https://en.wikipedia.org/wiki/Red_herring">red herring</a> actually. The base for the flag could be found using e.g. an <a href="https://incoherency.co.uk/image-steganography/">online tool for image steganography</a>. The file <code>strand.png</code> hid an image with the text <code>PST{md5(red_herring)}</code>. The solution was to get the md5 sum of the file itself: <code>md5 måltid.png</code> = <code>07385aacc9264738cd7c32e76f3b81a5</code>. The flag was <code>PST{07385aacc9264738cd7c32e76f3b81a5}</code>.
+</span></div></li><li><div class="collapsible-header">December 17th - Password database - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The elfs working in the canteen uses a home made password database. The problem is that they seem to have forgotten the password to it. The challenge is to find that password.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Passorddatabase">Challenge</a>
+ - <a href="https://kalender.npst.no/17/">Daily brief</a>
+ - <a href="https://kalender.npst.no/p2w">Database executable</a>
+
+<h6>Solution</h6>Instead of just disassembling the executable and make sense of that I went for using the <a href="https://www.gnu.org/software/gdb/">GNU Debugger (GDB)</a>/<a href="https://github.com/longld/peda">peda</a> (Python Exploit Development Assistance for GDB). This was my first time using GDB (<a href="https://blog.roysolberg.com/2018/02/crack-android-apps">I have more experience cracking Android apps</a>), but it wasn't very hard to make sense of what was happening in this small application.
+
+My approach was this:
+1. Trying out the application
+2. Disassembling the executable and get a feel for the flow
+3. Adding a breakpoint where I thought the password was checked
+4. Making sense of the strings in memory
+
+<pre class="prettyprint lang-bsh">$ wget https://kalender.npst.no/p2w
+
+$ file p2w
+p2w: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=758ae2fdb3384d82e1c697e0977354612bce94bf, not stripped
+
+$ chmod u+x p2w
+
+$ ./p2w
+Passord: npst
+Feil, pigg av!
+
+$ gdb ./p2w
+GNU gdb (Debian 7.12-6+b1) 7.12.0.20161007-git
+# [...]
+Reading symbols from ./p2w...(no debugging symbols found)...done.
+
+gdb-peda$ r
+Starting program: /root/p2w 
+# [...]
+Passord: test
+Feil, pigg av!
+[Inferior 1 (process 17124) exited normally]
+Warning: not running
+
+gdb-peda$ disas main
+Dump of assembler code for function main:
+   0x00005555555547c0 <+0>:	push   rbp
+   0x00005555555547c1 <+1>:	mov    rbp,rsp
+   0x00005555555547c4 <+4>:	sub    rsp,0x90
+   0x00005555555547cb <+11>:	mov    BYTE PTR [rbp-0x60],0xfd
+# [...]
+   0x00005555555558b1 <+4337>:	call   0x555555554650 <printf@plt>
+   0x00005555555558b6 <+4342>:	mov    rdx,QWORD PTR [rip+0x200793]        # 0x555555756050 <stdin@@GLIBC_2.2.5>
+   0x00005555555558bd <+4349>:	lea    rax,[rbp-0x30]
+   0x00005555555558c1 <+4353>:	mov    esi,0x21
+   0x00005555555558c6 <+4358>:	mov    rdi,rax
+   0x00005555555558c9 <+4361>:	call   0x555555554660 <fgets@plt>
+   0x00005555555558ce <+4366>:	lea    rdx,[rbp-0x90]
+   0x00005555555558d5 <+4373>:	lea    rax,[rbp-0x30]
+   0x00005555555558d9 <+4377>:	mov    rsi,rdx
+   0x00005555555558dc <+4380>:	mov    rdi,rax
+   0x00005555555558df <+4383>:	call   0x555555554670 <strcmp@plt>
+   0x00005555555558e4 <+4388>:	test   eax,eax
+   0x00005555555558e6 <+4390>:	jne    0x5555555558f6 <main+4406>
+   0x00005555555558e8 <+4392>:	lea    rax,[rbp-0x60]
+   0x00005555555558ec <+4396>:	mov    rdi,rax
+   0x00005555555558ef <+4399>:	call   0x555555554640 <puts@plt>
+   0x00005555555558f4 <+4404>:	jmp    0x555555555902 <main+4418>
+   0x00005555555558f6 <+4406>:	lea    rdi,[rip+0xa1]        # 0x55555555599e
+   0x00005555555558fd <+4413>:	call   0x555555554640 <puts@plt>
+   0x0000555555555902 <+4418>:	mov    eax,0x0
+   0x0000555555555907 <+4423>:	leave  
+   0x0000555555555908 <+4424>:	ret    
+End of assembler dump.
+
+gdb-peda$ b *0x00005555555558b6
+Breakpoint 1 at 0x5555555558b6
+
+gdb-peda$ r
+Starting program: /root/p2w 
+#[...]
+[----------------------------------registers-----------------------------------]
+RAX: 0x9 ('\t')
+RBX: 0x0 
+RCX: 0x0 
+RDX: 0x0 
+RSI: 0x20 (' ')
+RDI: 0x555555757269 --> 0x0 
+RBP: 0x7fffffffe200 --> 0x555555555910 (<__libc_csu_init>:	push   r15)
+RSP: 0x7fffffffe170 ("625b2055fe2dcda72e418940599b881d")
+RIP: 0x5555555558b6 (<main+4342>:	mov    rdx,QWORD PTR [rip+0x200793]        # 0x555555756050 <stdin@@GLIBC_2.2.5>)
+R8 : 0x555555757260 ("Passord: ")
+R9 : 0x9 ('\t')
+R10: 0x410 
+R11: 0x3f ('?')
+R12: 0x555555554690 (<_start>:	xor    ebp,ebp)
+R13: 0x7fffffffe2e0 --> 0x1 
+R14: 0x0 
+R15: 0x0
+EFLAGS: 0x202 (carry parity adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5555555558a5 <main+4325>:	lea    rdi,[rip+0xe8]        # 0x555555555994
+   0x5555555558ac <main+4332>:	mov    eax,0x0
+   0x5555555558b1 <main+4337>:	call   0x555555554650 <printf@plt>
+=> 0x5555555558b6 <main+4342>:	mov    rdx,QWORD PTR [rip+0x200793]        # 0x555555756050 <stdin@@GLIBC_2.2.5>
+   0x5555555558bd <main+4349>:	lea    rax,[rbp-0x30]
+   0x5555555558c1 <main+4353>:	mov    esi,0x21
+   0x5555555558c6 <main+4358>:	mov    rdi,rax
+   0x5555555558c9 <main+4361>:	call   0x555555554660 <fgets@plt>
+[------------------------------------stack-------------------------------------]
+0000| 0x7fffffffe170 ("625b2055fe2dcda72e418940599b881d")
+0008| 0x7fffffffe178 ("fe2dcda72e418940599b881d")
+0016| 0x7fffffffe180 ("2e418940599b881d")
+0024| 0x7fffffffe188 ("599b881d")
+0032| 0x7fffffffe190 --> 0x0 
+0040| 0x7fffffffe198 --> 0xf0b5ff 
+0048| 0x7fffffffe1a0 ("PST{f3ad88918fd18414cc773271f586f6a9}")
+0056| 0x7fffffffe1a8 ("88918fd18414cc773271f586f6a9}")
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+
+Breakpoint 1, 0x00005555555558b6 in main ()
+gdb-peda$ continue
+Continuing.
+Passord: 625b2055fe2dcda72e418940599b881d
+PST{f3ad88918fd18414cc773271f586f6a9}
+# [...]
+</pre>
+The password for the program is <code>625b2055fe2dcda72e418940599b881d</code>. The is <code>PST{f3ad88918fd18414cc773271f586f6a9}</code> (MD5 hash of <code>rudolf2</code>).
+</span></div></li><li><div class="collapsible-header">December 19th - Pen and paper encryption version 3 - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>A new version of the "pen and paper" encryption has been developed. The challenge is to check if all previous weaknesses are fixed. (Oh well, the real challenge is to break it and get the flag.) We are given some ciphertext and its plaintext: <code>PPKv3("Pompøst og metodisk") → øMSijrt Mc SÅtMZPrU</code>
+
+The ciphertext to break is this: <code>ømQ UæjEEi4æÅktÅr i4æÅktÅr SZG tWM tPSÅ i4Z i4æÅktÅr rE0tt UæjEEi4æÅktÅr rE0tt</code>
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#PPKv3">Challenge</a>
+ - <a href="https://kalender.npst.no/19/">Daily brief</a>
+
+<h6>Solution</h6>It's best to just work with what we've got and map the known cipher and plain texts. That in addition to knowing a bit about typical formulations in these text we can build on that first iteration. Here's my script:<pre class="prettyprint lang-py">#!/usr/bin/python3
+import string
+
+ciphertext = 'ømQ UæjEEi4æÅktÅr i4æÅktÅr SZG tWM tPSÅ i4Z i4æÅktÅr rE0tt UæjEEi4æÅktÅr rE0tt'
+translation_map = {}
+
+
+def update_translation_map(known_ciphertext, known_plaintext):
+    for i in range(len(known_ciphertext)):
+        translation_map[known_ciphertext[i]] = known_plaintext[i]
+
+
+def decrypt(ciphertext):
+    plaintext = ''
+    for l in ciphertext:
+        if l in translation_map:
+            plaintext += translation_map[l]
+        else:
+            plaintext += '?'
+    return plaintext.replace(' krøllparentes slutt', '}').replace(' krøllparentes', '{').replace(' parentes slutt', ')').replace(' parentes ', '(')
+
+
+# The known plaintext from the challenge:
+update_translation_map('øMSijrt Mc SÅtMZPrU', 'Pompøst og metodisk')
+
+# Prints 'P?? k?ø??p??e?tes p??e?tes md? t?o time p?d p??e?tes s??tt k?ø??p??e?tes s??tt':
+print(decrypt(ciphertext))
+
+# Assumptions after first iteration of decryption:
+update_translation_map('ømQ UæjEEi4æÅktÅr rE0tt G W', 'PST krøllparentes slutt 5 w')
+
+# Prints 'PST{(md5 two time pad)}'
+print(decrypt(ciphertext))
+</pre>
+And since they mention two-time pad: This encryption would have been good if this was an <a href="https://en.wikipedia.org/wiki/Substitution_cipher#The_one-time_pad">one-time pad</a>, but the key has been reused for at least two ciphertexts and the key is not random as the letters seem to use a simple substitution.
+
+The text printed is <code>PST{(md5 two time pad)}</code>. That makes the flag <code>PST{4a0fc5f3c88874cab11c64e965dff58d}</code>.
+</span></div></li><li><div class="collapsible-header">December 20th - Mysterious card - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>NPST has intercepted a postcard with source code that needs to be decoded. The card is marked with <code>360</code>.
+
+The code we are given is this:
+<code>1020 2020 0010 2012 2001 2200 1020 0000 0800 0200 0001 200A 2001 2200 1020 0C00 0300 0008 0800 1012</code>
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Mystisk kort">Challenge</a>
+ - <a href="https://kalender.npst.no/20/">Daily brief</a>
+
+<h6>Solution</h6>The text strongly hints about old hardware and <a href="https://en.wikipedia.org/wiki/Punched_card">punch cards</a>. It doesn't take much investigation to figure out that the system in question is the <a href="https://en.wikipedia.org/wiki/IBM_System/360">IBM System/360</a> dating all the way back to 1964. That system had the <a href="https://en.wikipedia.org/wiki/EBCDIC">EBCDIC charset</a> which is an eight-bit character encoding. It descended from the code used with punched cards and corresponding six-bit binary-coded decimal code. Knowing that and looking at the relatively low hex numbers we can decode the hex into a good old punched card and see what it says.
+
+I found <a href="https://www.masswerk.at/keypunch/">https://www.masswerk.at/keypunch/</a> to be a good source to learn more of the encoding of punch cards. It also lets you enter the hex numbers we have to translate, but there's a bug (or feature I don't understand) that makes the punched card not display the letters we need to solve the challenge.
+
+While I mostly did the mapping from holes to letters manually I have since also added a binary to alphabet mapping to the script I used for this challenge:<pre class="prettyprint lang-py">#!/usr/bin/python3
+# Sources:
+# https://stackoverflow.com/a/52616459/467650
+# http://www.jwdp.com/colbin1.html
+# https://www.masswerk.at/keypunch/
+
+input = '1020 2020 0010 2012 2001 2200 1020 0000 0800 0200 0001 200A 2001 2200 1020 0C00 0300 0008 0800 1012'
+cols_count = 80
+rows_count = 12
+
+
+def get_row(row_num):
+    row = ''
+    for cols in card:
+        row += cols[row_num]
+    return row
+
+
+LETTERS = {
+    0b100000000000: '&',    0b010000000000: '-',    0b001000000000: '0',
+    0b000100000000: '1',    0b000010000000: '2',    0b000001000000: '3',
+    0b000000100000: '4',    0b000000010000: '5',    0b000000001000: '6',
+    0b000000000100: '7',    0b000000000010: '8',    0b000000000001: '9',
+    0b000000000000: ' ',    0b100100000000: 'A',    0b100010000000: 'B',
+    0b100001000000: 'C',    0b100000100000: 'D',    0b100000010000: 'E',
+    0b100000001000: 'F',    0b100000000100: 'G',    0b100000000010: 'H',
+    0b100000000001: 'I',    0b010100000000: 'J',    0b010010000000: 'K',
+    0b010001000000: 'L',    0b010000100000: 'M',    0b010000010000: 'N',
+    0b010000001000: 'O',    0b010000000100: 'P',    0b010000000010: 'Q',
+    0b010000000001: 'R',    0b001100000000: '/',    0b001010000000: 'S',
+    0b001001000000: 'T',    0b001000100000: 'U',    0b001000010000: 'V',
+    0b001000001000: 'W',    0b001000000100: 'X',    0b001000000010: 'Y',
+    0b001000000001: 'Z',    0b100010000010: '¢',    0b100001000010: '.',
+    0b100000100010: '<',    0b100000010010: '(',    0b100000001010: '+',
+    0b100000000110: '|',    0b010010000010: '!',    0b010001000010: '$',
+    0b010000100010: '*',    0b010000010010: ')',    0b010000001010: ';',
+    0b010000000110: '¬',    0b001001000010: ',',    0b001000100010: '%',
+    0b001000010010: '_',    0b001000001010: '>',    0b001000000110: '?',
+    0b000010000010: ':',    0b000001000010: '#',    0b000000100010: '@',
+    0b000000010010: '\\'',   0b000000001010: '=',    0b000000000110: '"'
+}
+
+
+def get_letter(b):
+    try:
+        return LETTERS[b]
+    except KeyError:
+        print('Missing letter for value %s. Returning [?].' % bin(int(b)))
+    return '?'
+
+
+letters = ''
+
+card = [[' ' for x in range(rows_count)] for x in range(cols_count)]
+for col_num, b in enumerate(int(b, 16) for b in input.split(' ')):
+    rows = card[col_num]
+    b = (b & 0b111111) | ((b >> 2) & 0b111111000000)  # Converting 8 bit bytes to 6 bits
+    for i in range(0, rows_count):
+        bit_offset = i  # if i < rows_count // 2 else i + 2
+        rows[i] = 'O' if b & (1 << bit_offset) else ' '
+    letters += get_letter(b)
+
+print('       ________________________________________________________________')
+print('      /%s' % letters)
+print('12/Y | %s' % get_row(11))
+print('11/X | %s' % get_row(10))
+print(' 0   | %s' % get_row(9))
+print(' 1   | %s' % get_row(8))
+print(' 2   | %s' % get_row(7))
+print(' 3   | %s' % get_row(6))
+print(' 4   | %s' % get_row(5))
+print(' 5   | %s' % get_row(4))
+print(' 6   | %s' % get_row(3))
+print(' 7   | %s' % get_row(2))
+print(' 8   | %s' % get_row(1))
+print(' 9   | %s' % get_row(0))
+print('     |_________________________________________________________________')
+</pre>
+There's one character that seems off in the challenge, so the output from the script is this:
+<pre class="prettyprint">       ________________________________________________________________
+      /MD5(IBM 029+IBM/?60)
+12/Y |  O OOO     OOO                                                                  
+11/X | O     O       O    O                                                            
+ 0   |         O      O  O                                                             
+ 1   |                O                                                                
+ 2   |      O   O   O  O                                                               
+ 3   |                 O                                                               
+ 4   | OO    O       O                                                                 
+ 5   |   OO               O                                                            
+ 6   |            O     O                                                              
+ 7   |                                                                                 
+ 8   |    O       O       O                                                            
+ 9   |     O     O O                                                                   
+     |_________________________________________________________________</pre>
+But I must admit that it looks a bit cooler by using the image generated by <a href="https://www.masswerk.at/keypunch/?b=bWQ1KElCTSAwMjkraWJtLzM2MCk=">https://www.masswerk.at/keypunch/?b=bWQ1KElCTSAwMjkraWJtLzM2MCk=</a>:
+<img class="materialboxed responsive-img" title="" data-caption="" alt="" src="/images/pst303-punched_card.png"/>
+With the MD5 hash of the output the flag we need for this challenge is <code>PST{2d0330aeddd7a66612b328b06324e3b9}</code>.
+</span></div></li><li><div class="collapsible-header">December 21st - New cryptosystem - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>SPST has got a new <a href="https://en.wikipedia.org/wiki/Cryptosystem">cryptosystem</a> and NPST has intercepted a ciphertext that needs to be decoded.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Nytt kryptosystem">Challenge</a>
+ - <a href="https://kalender.npst.no/21/">Daily brief</a>
+ - <a href="https://kalender.npst.no/melding.json">Message</a>
+
+<h6>Solution</h6>The challenge text hints about an encryption key that doesn't seem to work. They intercepted key is named <code>recovered_key</code> and there's a field called <code>uncertain_bits_count</code> with the value of <code>2</code>.
+
+To decrypt the ciphertext we need to tweak two of the bits in the recovered key. Personally this was my first idea, but because of a bad <a href="https://en.wikipedia.org/wiki/%3F:#Python">shorthand if</a> I spent too much time looking for bit changes in other parts of the intercepted data. The Python package <a href="https://pycryptodome.readthedocs.io/en/latest/src/cipher/aes.html">PyCryptodome</a> offers support for the <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>-256-<a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode">GCM</a> used in this challenge. With a few lines of code we can get the solution:<pre class="prettyprint lang-py">#!/usr/bin/python3
+from Crypto.Cipher import AES
+from time import time
+
+ciphertext = bytearray.fromhex('69cf99390e143fbab3ea8326c05b2fde58c964555bd673de10ff4cf2bf49586454b0466afd01c36b0e4dc1e3361d8ffec8998d88c13b6ff83798a4607b86f3d14f20f63486d256e65d2164ac90a931d7c36fed071321298ce6eb4206bbc31dbdbd08d72dca0f5ce486e68979f083e0e4f46d1f0eee0fec2aa48de030cb2f2069eb719563443c324b052a913e5007f114de4ed7ae44044c03278e2392b46e7815626424d735196f93adc446c4a4a30373e936fa7164112d0867e63e63a4d809d10e90e805130eb7114422ae17fddd3a272cee6100087fb37eb0268ab187721fc7e8dc8b2b79e91a1d9e276a16bcb79c36a7c91b127ea3b08fe57a33ba7d0767e35508b4ab2127aa0a2948cd2a1aace305a49cf63d03a41ca110e9d04636a85956aa1b9eac89bc4091ab59bd1ea9d9cd1c225422a7a40ef56d4b65d1e56f138df24dcf74557a72ba055160f82bf39470f785b12633584ae9639a4352ef08fe5c7f788b0f83021ccf13d7a99a0c088abf72ccc36a30e2447ce10157113a56461bfafd68be40f6f79dbdf2c901028cfe06a96e5ab9a1121c7e2d8b91e495c9722b2cd97d378844328bfba9870b814df60282fec98f70d1639d35205d399d0a858a5cf7210cd9110faecc55c79ae7fe963d908aaa8a34d68b4c0556aeaa4db1ec74cd321b249602c24dabc961b30ae456199fb1deca09f36cdf8a5d9b0b492e42f7f841cb4627880f9fdd4b2e2d94a553c61c5c9a0a253a4616af93310eb7a55a74316d595c017cd2953e505d893f85f324a50fecd459e6bce60294aef9e34b7d57c98f4e9dc5e09a9a6fe620865308d807d767e4c9fec6041b58d003b152d18473e8ce5a9bfe5203b748945a8f4c4683177b09c6b97603d37451a6220c7cf94fa4cb2f8c26331e08f8b8035acebdeaba4cec24bbdacad448b332ba67d355a91363d13a4030a7f4e5b3e0d12a5cca08d6431e356a1bf5050c9bb6373a375a58909cb59d851c0da4905a62389aef2809e354fb2d6b672071ded673f50a3ca475b229999d5a8566e3d7742a271c91f97d8182cb6dcbd3811276cea2386e66b10f047f5cfd0628e3a55ed420412a4fd1b568ef4a62384694dc6b966defe4226afcc545ff10cd61c181d5df9ce6011995df72a219f45ac44eccc63450989df746edbc7165ae008caa158c9298e6c8f8907be02c89313ec55be8eef3521a251518e394071b9deb5af8d2273cf7fe2ed9ddc96609a8057ca50e5a5c1b0a9b9e4dfa04e58be60feee17632dd713257916416471560c82da72e49962d1bfcda8db174948765bfc51159e98d38cad9a7ba51a7c8658af998534a6b223d25ba4805c4a12bf0807e043abc0b47e4562a800b6f79fca703bbd93b1c617d3a8b9244ebfcaffd7f8e44440a20ce1ed7ab8039d5cf182c7c16e7be51856ac8a516ca25acf79001af3612d7b4d304c2a5b9671620b80db4fedca8df2ec6b57ddbcf4fe9ece3da44bf47e0f3b21b61f0699e6c38a3169b2890f57636757a894caf22879b1515d1aa00ee8131d3cf7b61ab9c747690bd6ef3d93ed002c1f3a8e9b7a6b056f76cad42d67ae3f01c1d8d4d8576b950efe65b6312b700f2000f8c3821a70ba1e4800b5bdb4223f9db27c509495eb638025c4dc898c13ae9f86c944e5428209a111701bc4e2db44a7c890774b0063e20158fd0d9cebf4f05d40c74afd168d0e8968b14a56c95b0a3b657cbe0ad270170e4154d596c112156c2a9a9fc30898be1f362ca2ce1fe4e4399ab8ea3735b8f091ada9d613411b54760b7c39c956f225bb9724bd4fd8174a4703151d1b5acf2c979f446d8a33036ec652add04478a44f34bab617f15ed40451cf7603ead7f8f58f8e2fc02ca7c75c7d37cbcd9f09811abd881ef16a15e6bb4e1fe37ff96fe03421286fe37f19120fc66a105fb2b1ee0cbd19feb4e9f20b02fc5d06f6b0d8bbf393da408e2f7e7cae536852b5f81690596e78b66ca1ec10af873a8acd62cb716bdb40107019e7f3acb4d11d3e50590c2ca485c0b4a47f0c28847ee0afaa617284e5ef1fcf9fc5ec00c6cc2404016a565e4154538f93d0adee6cdb72665efb4a319a98dd58dd81e52263516a006c037a27ad249ce0efd69e4f6a685a1b6404e95938325bb1b2db35984bc37c4e9751825aaa592089511344328c84e18a470b718e3a3fa7cd6f06cf2c2352d5e6895c734bf1c8d22eb9c2037378f0609211298f71fa633ed923f31c934b05ece2375bbf700f4fd30525a20a510b7f0102f24ff2b7eb76ac77d98bc')
+key = bytearray.fromhex('800816b1629bcfa519f57a502a6a841298a9f5c20203d8818fdd18271a3b1682')
+key_int = int(key.hex(), 16)
+nonce = bytearray.fromhex('d97c2e3410f37ac7b5dcd8df')
+tag = bytearray.fromhex('76fe172806c0b41816887630ca74f2f8')
+
+count = 0
+time_start = time()
+for i in range(len(key) * 8):
+    for j in range(len(key) * 8):
+        try:
+            new_key_int = key_int
+            new_key_int = new_key_int ^ (1 << i)
+            count += 1
+            if i != j:  # Only switching second bit if not the same position as the first
+                count += 1
+                new_key_int = new_key_int ^ (1 << j)
+            new_key = bytearray.fromhex(hex(new_key_int)[2:])
+
+            cipher = AES.new(new_key, AES.MODE_GCM, nonce=nonce)
+            plaintext = cipher.decrypt_and_verify(ciphertext, tag)  # Throws ValueError ''MAC check failed' on wrong key
+            print('Plaintext:\\n', plaintext.decode('utf-8'))  # [...] PST{7e7343c9cbe6114f8fd312490816387d}
+            print('Key:', new_key.hex())  # 800816b1629bcfa519f57a502a6a841298a9e5c20243d8818fdd18271a3b1682
+            print('Bits flipped: %d & %d' % (i, j))  # 86 & 108
+            time_spent = round(time() - time_start)
+            # Prints something like 'Found key, decrypted ciphertext and verified plaintext in 12 seconds after flipping 44163 bits.':
+            print('Found key, decrypted ciphertext and verified plaintext in %d seconds after flipping %d bits.' % (time_spent, count))
+            exit(0)
+        except ValueError as e:
+            # Printing out something from time to time so we feel that something's happening:
+            if count % 500 == 0:
+                print(e, count, i, j)
+</pre>
+The plaintext was as follows:
+<code style="font-size:60%;"> ﻿SPST
+21.12.19
+
+Kantinesituasjonen
+Kantinen har nå landet avtale med ny råvareleverandør, og første leveranse blir idag. 
+Det blir altså vintersolverv-torsk som planlagt.
+
+Lekkasje fra SPSTs interne nettverk
+I forbindelse med angrepet mot stordatamaskinen som startet 12.12.19, ble det eksfiltrert en mindre mengde dokumenter gradert TEMMELIG HEMMELIG. Som en konsekvens av dette har vi fra idag tatt i bruk en ny krypteringsalgoritme for data i bevegelse. Vi har opplevd litt problemer med de dedikerte linjene for overføring av nøkkelmateriell, men leverandøren vår jobber på spreng for å fikse dette.
+
+
+Ytterligere operasjoner mot NPST
+- Lørdag 14.12.19 fikk en av våre dyktige kildeføringspingviner informasjon om NPSTs planlagte julebord. Vi har ikke lykkes i å bekrefte informasjonen, men kilden forteller at det skal konkurreres i hammerdistanse
+- Tirsdag 17.12.19 ble det gjennomført en vellykket sabotasjeaksjon mot NPSTs matlager. Her ble passordet skiftet til rudolf2, og hashing-algoritme byttet ut med MD5. Det vurderes som MULIG at dette vil påvirke julen.
+- Onsdag 18.12.19 ble det som en HOAX/avledningsoperasjon plassert en helt vanlig ponni i reinsdyrstallen til Jule NISSEN. Dette vil trolig kunne påvirke julen ytterligere.
+
+
+Ukens ansatt
+Denne ukens ansatt ønsker ikke å opptre med navn, men vi kan avsløre at pingvinen jobber ved SPSTs PINGINT-seksjon, og har gjort en utmerket jobb med kildene sine den siste tiden.
+
+
+Takk til alle for utmerket arbeid uka som har vært.
+Sjef SPST, Keiserpingvinen
+
+FLAGG: PST{7e7343c9cbe6114f8fd312490816387d}
+</code>
+As seen above, the flag is <code>PST{7e7343c9cbe6114f8fd312490816387d}</code>.
+</span></div></li><li><div class="collapsible-header">December 22nd - Fake news - 10 points</div><div class="collapsible-body"><span><h6>Challenge</h6>SPST has got an ongoing news campaign called "Cancel Chrimstas". The challenge is to check out the campaign page and look for a flag.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#22. desember">Challenge</a>
+ - <a href="https://kalender.npst.no/22/">Daily brief</a>
+ - <a href="https://spst.no">Campaign site</a>
+
+<h6>Solution</h6>Just as in real life you can find a lot of interesting stuff in <code><a href="https://blog.roysolberg.com/2018/06/robots-txt-linkifier">robots.txt</a></code>. It's always worth checking out. And in <a href="https://spst.no/robots.txt">https://spst.no/robots.txt</a> it's said that <a href="https://spst.no/temmelig-hemmelig/">https://spst.no/temmelig-hemmelig/</a> shouldn't be visited by crawlers. That is where we get the flag for this challenge: <code>PST{fc35fdc70d5fc69d269883a822c7a53e}</code> (MD5 hash of <code>html</code>).
+</span></div></li><li><div class="collapsible-header">December 22nd - Source code - 15 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to find the source code of the application to gain access to it.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#22. desember">Challenge</a>
+ - <a href="https://kalender.npst.no/22/">Daily brief</a>
+ - <a href="https://spst.no/temmelig-hemmelig/">Secret part of campaign site</a>
+
+<h6>Solution</h6>The secret part of the campaign site that we found in the previous challenge has some kind of access key field that allows for input in the regex pattern <code>[ -\.]+</code> It is seemingly used to retrieve some kind of message. Lucky for us the source code also hides a link to the Github repository for the site: <a href="https://github.com/SydpolarSikkerhetstjeneste/spst.no">https://github.com/SydpolarSikkerhetstjeneste/spst.no</a>
+
+Again we are pretty aligned with the real world as the developers at some point in time has made it easier to get access to this secret stuff and there's a password to be found in the commit history. The shortcut has been since been removed and it's stated that the regex we saw is morse code. The commit at <a href="https://github.com/SydpolarSikkerhetstjeneste/spst.no/commit/0fd327317a7fd9321ee4fab0a439bb040d67c581">commit 0fd327317a7fd9321ee4fab0a439bb040d67c581</a> reveals that the password could be <code>pingvinerbestingenprotest</code> in morse code.
+
+The password can be <a href="http://icyberchef.com/#recipe=To_Morse_Code('-/.','Space','Line feed')&input=cGluZ3ZpbmVyYmVzdGluZ2VucHJvdGVzdA">converted via CyberChef</a> and entered. Sucess. We're given back a message to Pen Gwyn that includes an image. In the <a href="https://en.wikipedia.org/wiki/Alt_attribute">alt attribute</a> there's a flag: <code>PST{f2e0e89f59722af1f388529720b9db03}</code>.
+</span></div></li><li><div class="collapsible-header">December 22nd - &amp;nbsp; - 20 points</div><div class="collapsible-body"><span><h6>Challenge</h6>We're only told that SPST may have hidden information for hackers like us.
+
+<h6>Solution</h6>I did not like this one. It starts out pretty simple with a QR code hidden as text in the image. I found it using the tool at <a href="https://stylesuxx.github.io/steganography/">https://stylesuxx.github.io/steganography/</a>. The QR code is given as this: 
+<code style="font-size:10%;display:inline-block;line-height: 1;">SSSSSSSSSSSSSSSSSSSSSSSSSSSS        SSSS                SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS        SSSS                SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS        SSSS                SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS        SSSS                SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+SSSS                    SSSS    SSSSSSSS    SSSSSSSS    SSSSSSSS                SSSS    SSSS                    SSSS                
+SSSS                    SSSS    SSSSSSSS    SSSSSSSS    SSSSSSSS                SSSS    SSSS                    SSSS                
+SSSS                    SSSS    SSSSSSSS    SSSSSSSS    SSSSSSSS                SSSS    SSSS                    SSSS                
+SSSS                    SSSS    SSSSSSSS    SSSSSSSS    SSSSSSSS                SSSS    SSSS                    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS        SSSSSSSSSSSS            SSSS        SSSS    SSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS        SSSSSSSSSSSS            SSSS        SSSS    SSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS        SSSSSSSSSSSS            SSSS        SSSS    SSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS        SSSSSSSSSSSS            SSSS        SSSS    SSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSS                SSSSSSSSSSSS            SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSS                SSSSSSSSSSSS            SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSS                SSSSSSSSSSSS            SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSS                SSSSSSSSSSSS            SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS            SSSS    SSSSSSSS        SSSS        SSSSSSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS            SSSS    SSSSSSSS        SSSS        SSSSSSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS            SSSS    SSSSSSSS        SSSS        SSSSSSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS    SSSSSSSSSSSS    SSSS            SSSS    SSSSSSSS        SSSS        SSSSSSSS    SSSS    SSSSSSSSSSSS    SSSS                
+SSSS                    SSSS    SSSS    SSSS        SSSSSSSSSSSS    SSSSSSSS            SSSS                    SSSS                
+SSSS                    SSSS    SSSS    SSSS        SSSSSSSSSSSS    SSSSSSSS            SSSS                    SSSS                
+SSSS                    SSSS    SSSS    SSSS        SSSSSSSSSSSS    SSSSSSSS            SSSS                    SSSS                
+SSSS                    SSSS    SSSS    SSSS        SSSSSSSSSSSS    SSSSSSSS            SSSS                    SSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                
+                                                SSSSSSSS    SSSSSSSS                                                                
+                                                SSSSSSSS    SSSSSSSS                                                                
+                                                SSSSSSSS    SSSSSSSS                                                                
+                                                SSSSSSSS    SSSSSSSS                                                                
+SSSSSSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS    SSSS    SSSS                    
+SSSSSSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS    SSSS    SSSS                    
+SSSSSSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS    SSSS    SSSS                    
+SSSSSSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS    SSSS    SSSS                    
+    SSSSSSSSSSSS    SSSS            SSSS                        SSSS        SSSS        SSSS    SSSS            SSSS                
+    SSSSSSSSSSSS    SSSS            SSSS                        SSSS        SSSS        SSSS    SSSS            SSSS                
+    SSSSSSSSSSSS    SSSS            SSSS                        SSSS        SSSS        SSSS    SSSS            SSSS                
+    SSSSSSSSSSSS    SSSS            SSSS                        SSSS        SSSS        SSSS    SSSS            SSSS                
+    SSSSSSSS    SSSSSSSSSSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSSSSSS        SSSSSSSSSSSS        SSSSSSSS                    
+    SSSSSSSS    SSSSSSSSSSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSSSSSS        SSSSSSSSSSSS        SSSSSSSS                    
+    SSSSSSSS    SSSSSSSSSSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSSSSSS        SSSSSSSSSSSS        SSSSSSSS                    
+    SSSSSSSS    SSSSSSSSSSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSSSSSS        SSSSSSSSSSSS        SSSSSSSS                    
+    SSSS    SSSS    SSSS            SSSSSSSSSSSS        SSSS    SSSS        SSSSSSSS        SSSSSSSSSSSS                            
+    SSSS    SSSS    SSSS            SSSSSSSSSSSS        SSSS    SSSS        SSSSSSSS        SSSSSSSSSSSS                            
+    SSSS    SSSS    SSSS            SSSSSSSSSSSS        SSSS    SSSS        SSSSSSSS        SSSSSSSSSSSS                            
+    SSSS    SSSS    SSSS            SSSSSSSSSSSS        SSSS    SSSS        SSSSSSSS        SSSSSSSSSSSS                            
+                    SSSSSSSSSSSS    SSSS    SSSS                    SSSS            SSSS    SSSS        SSSSSSSS                    
+                    SSSSSSSSSSSS    SSSS    SSSS                    SSSS            SSSS    SSSS        SSSSSSSS                    
+                    SSSSSSSSSSSS    SSSS    SSSS                    SSSS            SSSS    SSSS        SSSSSSSS                    
+                    SSSSSSSSSSSS    SSSS    SSSS                    SSSS            SSSS    SSSS        SSSSSSSS                    
+SSSSSSSSSSSSSSSSSSSSSSSS    SSSS        SSSS    SSSSSSSSSSSS            SSSSSSSSSSSS    SSSS    SSSS        SSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSS    SSSS        SSSS    SSSSSSSSSSSS            SSSSSSSSSSSS    SSSS    SSSS        SSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSS    SSSS        SSSS    SSSSSSSSSSSS            SSSSSSSSSSSS    SSSS    SSSS        SSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSS    SSSS        SSSS    SSSSSSSSSSSS            SSSSSSSSSSSS    SSSS    SSSS        SSSSSSSS                
+    SSSS    SSSS        SSSS        SSSSSSSS        SSSSSSSSSSSSSSSS                        SSSSSSSSSSSS                            
+    SSSS    SSSS        SSSS        SSSSSSSS        SSSSSSSSSSSSSSSS                        SSSSSSSSSSSS                            
+    SSSS    SSSS        SSSS        SSSSSSSS        SSSSSSSSSSSSSSSS                        SSSSSSSSSSSS                            
+    SSSS    SSSS        SSSS        SSSSSSSS        SSSSSSSSSSSSSSSS                        SSSSSSSSSSSS                            
+SSSSSSSSSSSS    SSSS            SSSSSSSS        SSSSSSSS    SSSSSSSS        SSSS        SSSS    SSSS        SSSS                    
+SSSSSSSSSSSS    SSSS            SSSSSSSS        SSSSSSSS    SSSSSSSS        SSSS        SSSS    SSSS        SSSS                    
+SSSSSSSSSSSS    SSSS            SSSSSSSS        SSSSSSSS    SSSSSSSS        SSSS        SSSS    SSSS        SSSS                    
+SSSSSSSSSSSS    SSSS            SSSSSSSS        SSSSSSSS    SSSSSSSS        SSSS        SSSS    SSSS        SSSS                    
+SSSSSSSSSSSS    SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSS    SSSSSSSSSSSSSSSS                
+SSSSSSSSSSSS    SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSS    SSSSSSSSSSSSSSSS                
+SSSSSSSSSSSS    SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSS    SSSSSSSSSSSSSSSS                
+SSSSSSSSSSSS    SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSS    SSSS    SSSSSSSSSSSSSSSS                
+SSSSSSSS    SSSSSSSSSSSS    SSSS        SSSS                    SSSS        SSSSSSSS    SSSS    SSSS    SSSS    SSSS                
+SSSSSSSS    SSSSSSSSSSSS    SSSS        SSSS                    SSSS        SSSSSSSS    SSSS    SSSS    SSSS    SSSS                
+SSSSSSSS    SSSSSSSSSSSS    SSSS        SSSS                    SSSS        SSSSSSSS    SSSS    SSSS    SSSS    SSSS                
+SSSSSSSS    SSSSSSSSSSSS    SSSS        SSSS                    SSSS        SSSSSSSS    SSSS    SSSS    SSSS    SSSS                
+SSSS        SSSS        SSSS                SSSSSSSS        SSSS    SSSSSSSS                    SSSS        SSSS                    
+SSSS        SSSS        SSSS                SSSSSSSS        SSSS    SSSSSSSS                    SSSS        SSSS                    
+SSSS        SSSS        SSSS                SSSSSSSS        SSSS    SSSSSSSS                    SSSS        SSSS                    
+SSSS        SSSS        SSSS                SSSSSSSS        SSSS    SSSSSSSS                    SSSS        SSSS                    
+SSSS    SSSSSSSS    SSSS        SSSS        SSSS        SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS        SSSS                
+SSSS    SSSSSSSS    SSSS        SSSS        SSSS        SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS        SSSS                
+SSSS    SSSSSSSS    SSSS        SSSS        SSSS        SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS        SSSS                
+SSSS    SSSSSSSS    SSSS        SSSS        SSSS        SSSSSSSSSSSS    SSSS    SSSS    SSSS    SSSSSSSS        SSSS                
+SSSS    SSSS        SSSSSSSSSSSS    SSSS    SSSS            SSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSS                
+SSSS    SSSS        SSSSSSSSSSSS    SSSS    SSSS            SSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSS                
+SSSS    SSSS        SSSSSSSSSSSS    SSSS    SSSS            SSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSS                
+SSSS    SSSS        SSSSSSSSSSSS    SSSS    SSSS            SSSSSSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSS    SSSS    SSSS                
+                                SSSS    SSSS    SSSSSSSSSSSS                    SSSS            SSSSSSSS    SSSSSSSS                
+                                SSSS    SSSS    SSSSSSSSSSSS                    SSSS            SSSSSSSS    SSSSSSSS                
+                                SSSS    SSSS    SSSSSSSSSSSS                    SSSS            SSSSSSSS    SSSSSSSS                
+                                SSSS    SSSS    SSSSSSSSSSSS                    SSSS            SSSSSSSS    SSSSSSSS                
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS            SSSSSSSSSSSSSSSS        SSSSSSSS    SSSS    SSSSSSSS    SSSS                    
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS            SSSSSSSSSSSSSSSS        SSSSSSSS    SSSS    SSSSSSSS    SSSS                    
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS            SSSSSSSSSSSSSSSS        SSSSSSSS    SSSS    SSSSSSSS    SSSS                    
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS            SSSSSSSSSSSSSSSS        SSSSSSSS    SSSS    SSSSSSSS    SSSS                    
+SSSS                    SSSS                    SSSSSSSS    SSSS            SSSSSSSS            SSSS                                
+SSSS                    SSSS                    SSSSSSSS    SSSS            SSSSSSSS            SSSS                                
+SSSS                    SSSS                    SSSSSSSS    SSSS            SSSSSSSS            SSSS                                
+SSSS                    SSSS                    SSSSSSSS    SSSS            SSSSSSSS            SSSS                                
+SSSS    SSSSSSSSSSSS    SSSS    SSSS            SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                        
+SSSS    SSSSSSSSSSSS    SSSS    SSSS            SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                        
+SSSS    SSSSSSSSSSSS    SSSS    SSSS            SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                        
+SSSS    SSSSSSSSSSSS    SSSS    SSSS            SSSS    SSSS    SSSSSSSSSSSS    SSSSSSSSSSSSSSSSSSSSSSSSSSSS                        
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSSSSSS                                SSSS            SSSS            SSSSSSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSSSSSS                                SSSS            SSSS            SSSSSSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSSSSSS                                SSSS            SSSS            SSSSSSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSSSSSS                                SSSS            SSSS            SSSSSSSS                
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSSSSSS            SSSSSSSSSSSS    SSSSSSSS    SSSS                    
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSSSSSS            SSSSSSSSSSSS    SSSSSSSS    SSSS                    
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSSSSSS            SSSSSSSSSSSS    SSSSSSSS    SSSS                    
+SSSS    SSSSSSSSSSSS    SSSS    SSSSSSSS    SSSSSSSS        SSSSSSSS            SSSSSSSSSSSS    SSSSSSSS    SSSS                    
+SSSS                    SSSS    SSSS        SSSS        SSSSSSSSSSSS    SSSSSSSSSSSS                        SSSS                    
+SSSS                    SSSS    SSSS        SSSS        SSSSSSSSSSSS    SSSSSSSSSSSS                        SSSS                    
+SSSS                    SSSS    SSSS        SSSS        SSSSSSSSSSSS    SSSSSSSSSSSS                        SSSS                    
+SSSS                    SSSS    SSSS        SSSS        SSSSSSSSSSSS    SSSSSSSSSSSS                        SSSS                    
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS            SSSS    SSSS            SSSS        SSSSSSSSSSSS                        
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS            SSSS    SSSS            SSSS        SSSSSSSSSSSS                        
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS            SSSS    SSSS            SSSS        SSSSSSSSSSSS                        
+SSSSSSSSSSSSSSSSSSSSSSSSSSSS    SSSSSSSS    SSSS            SSSS    SSSS            SSSS        SSSSSSSSSSSS                        
+</code>
+
+It wasn't possible to have any of the QR code scanners I tried to read the QR code as it was. Maybe there are better ways to do it, but I changed the S characters with a square one (like e.g. ▢), scaled a screenshot of it a bit and inverted the colours. The text encoded is <code>/8a2a8e12017977d9dbf0ed33e254e94e.txt</code>.
+
+At first sight <a href="https://spst.no/8a2a8e12017977d9dbf0ed33e254e94e.txt">https://spst.no/8a2a8e12017977d9dbf0ed33e254e94e.txt</a> returns the same data as any other 404 pages at spst.no. But that isn't the case. It return status code 200 and many of the spaces are different <a href="https://en.wikipedia.org/wiki/Control_character">control character</a> variants of space.
+
+I needed a hint figuring out what this was. Turns out you are supposed to throw away printable characters, split the remaining 888 bytes into triplets and use <a href="https://en.wikipedia.org/wiki/Quaternary_numeral_system">base-4-numeral system</a> and traslate to ASCII.
+
+Note that my code doesn't figure out any of this, but has this info as a base. The code converts the bytes to base-4 and tries out the different combinations of converting the different byte combinations to the numbers 0-3.<pre class="prettyprint lang-py">#!/usr/bin/python3
+import string
+import itertools
+
+with open('8a2a8e12017977d9dbf0ed33e254e94e.txt') as file:
+    contents = file.read()
+print(contents)
+b = bytes(contents, 'utf-8')
+print('Length with printable chars:', len(b), 'bytes')  # 1337 bytes
+
+# First we remove all printable chars
+for l in string.printable:
+    contents = contents.replace(l, '')
+
+b = bytes(contents, 'utf-8')
+print('Length without printable chars:', len(b), 'bytes')  # 888 bytes
+
+b_set = set()
+
+for i in range(0, len(b), 3):  # Runs through 3 and 3 bytes
+    b2 = b[i:i+3]
+    if not b2 in b_set:
+        b_set.add(b2)
+
+print('Found', len(b_set), 'different 3-bytes variants:', b_set)
+
+
+def count_chars(s, chars):
+    return sum(s.count(c) for c in chars)
+
+
+alphabet = string.ascii_letters + 'æøåÆØÅ .,{}' + string.whitespace + string.digits  # Assuming these should be most of the chars in the text
+digits = string.digits[:len(b_set)]
+best_score_text = None
+best_score = 0
+
+for permutation in itertools.permutations(digits):
+    output = ''
+    b_dict = {}
+    char_counter = 0
+    for i in range(0, len(b), 3):
+        b2 = b[i:i+3]
+        if not b2 in b_dict:
+            b_dict[b2] = permutation[char_counter]
+            char_counter += 1
+        output += b_dict[b2]
+    plaintext = ''
+    for i in range(0, len(output), 8):
+        plaintext += chr(int(output[i:i+8], 4))
+    score = count_chars(plaintext, alphabet)
+    if score >= best_score:
+        best_score = score
+        best_score_text = plaintext
+        # Prints stuff like 'Found new best alphabet [('0', '1', '3', '2')] giving the plaintext [PST{67b8601a11e47a9ee3bf08ddfd0b79ba}] (score: 37).'
+        print('Found new best alphabet [%s] giving the plaintext [%s] (score: %d).' % (permutation, best_score_text, best_score))
+</pre>
+The flag printed is <code>PST{67b8601a11e47a9ee3bf08ddfd0b79ba}</code> (MD5 hash of <code>whitespace</code>).
+</span></div></li><li><div class="collapsible-header">December 23rd - Mysterious Christmas card - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>Santa got a very special Christmas card in his electronic mailbox. The card has no flip side and therefore no text on it. The challenge is to decode it to find out who sent it or similar.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Mystisk julekort">Challenge</a>
+ - <a href="https://kalender.npst.no/23/">Daily brief</a>
+ - <a href="https://kalender.npst.no/30.png">Christmas card</a>
+
+<h6>Hint #1</h6><i>The snail knows which pixels contain data.</i>
+
+<h6>Hint #2</h6><i>When the challenge was made two decisions were made; the contents of the file and the filename. The filename is mostly relevant deep inside a rabbit hole, or should we say snail hole?</i>
+
+<h6>Hint #3</h6><i>Everything happens in bitplan 0. The snail makes plan drawings for three separate snail shells, R, G, B, with the base in the neighbourhood in first line plus the rule of the snail.
+
+You have to traverse the snail's plan drawings. Start on row 1 pixel 0 and go through plain drawings R, G, B, then row 1 pixel 1, R-G-B. Every time you find a 1-bit in the snail's plan drawings you pick a bit from the same place in the picture so that there are room for the snail shells.</i>
+
+<h6>Solution</h6>During December it became clear that if no one had submitted a flag within 1 hour it was a tricky challenge. No one solved this one until all three hints were published.
+
+I never got around to solving this. Even though the hints are getting more and more clear I think I would have needed one or two more to solve this without spending a lot of time.
+
+I'd recommend checking out the solution at <a href="https://github.com/nordbo/writeups/blob/master/npst/23/solve.py">https://github.com/nordbo/writeups/blob/master/npst/23/solve.py</a>. The few lines of Python almost makes it look easy to solve it. 🙂 The filename <code>30.png</code> hints to <a href="https://en.wikipedia.org/wiki/Rule_30">Rule 30</a>.
+</span></div></li><li><div class="collapsible-header">December 23rd - Fragmented conversation - 5 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The work done in the challenge day 21 made is possible to intercept a conversation between two senior SPST agents. Seemingly there's a code being transmitted - a code that may be used to find some kind of article. The name of the article is of interest. The challenge is to decode the data, get the code and get the title of the article in question.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#Fragmentert samtale">Challenge</a>
+ - <a href="https://kalender.npst.no/23/">Daily brief</a>
+ - <a href="https://kalender.npst.no/finn_koden.zip">PCAP file</a>
+
+<h6>Solution</h6>For the first time in this calendar it was possible to do challenge 2 before 1 was solved. After reading challenge 1. I took the opportunity to focus on this while everyone else was doing the first.
+
+When I opened the PCAP file and only saw UDP packages (audio data I suppose) I turned to the daily brief again and re-read the text. Everything was full of hints of a <a href="https://www.finn.no/">finn.no</a> code. PST likes to hint about their job ads, so relativly quickly I realized that we were looking for the title of a job ad at finn.no.
+
+Looking at PST's open jobs at finn.no there was in particular one that was kind of related to this: <a href="http://finn.no/165890971">finn.no/165890971</a>
+
+The title of the job opening was <i>Nettverksspesialist</i>. In the specified flag format that was <code>PST{0844d949169d24679a1f0438f89c69e3}</code>.
+
+This was the only challenge I was the first one to solve. <em>I haven't had the time to look at the PCAP data yet. I will try to do that soon, and if not I'll publish someone else's solution. :)</em>
+</span></div></li><li><div class="collapsible-header">December 24th - Operation "Cancel Christmas" - 24 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge is to stop SPST's operation <i>"Cancel Christmas"</i>. Sources say that it's run at their online operations centre available from all over the world.
+
+<h6>Links</h6> - <a href="https://intranett.npst.no/challenges#24. desember">Challenge</a>
+ - <a href="https://kalender.npst.no/24/">Daily brief</a>
+
+<h6>Solution</h6><b>Step 1 - locating the operation centre</b>
+The only clue we've got is that we are looking for someting online. Maybe a quick subdomain scanner will do. I downloaded a <a href="https://github.com/rbsec/dnscan/blob/master/subdomains.txt">random list of subdomains</a> and created a simple script for scanning:<pre class="prettyprint lang-py">#!/usr/bin/python3
+import requests
+
+file = open("subdomains.txt")
+content = file.read()
+subdomains = content.splitlines()
+domain = 'spst.no'
+
+for subdomain in subdomains:
+    url = f"http://{subdomain}.{domain}"
+    try:
+        requests.get(url)
+    except requests.ConnectionError:
+        pass
+    else:
+        print("[+] Discovered subdomain:", url)
+
+"""
+[+] Discovered subdomain: http://api.spst.no
+[+] Discovered subdomain: http://ops.spst.no
+[+] Discovered subdomain: http://www.spst.no
+"""
+</pre>
+Voilà, we've found the operation centre at <a href="http://ops.spst.no">ops.spst.no</a>.
+
+<b>Step 2 - Deciphering Enigma ciphertext</b>
+The moment the cancel button for the operation is clicked the server spits out this: <code style="font-size:60%;">SAXVC OIWPT GQOJZ OXEHI ZVCWU NCCOW FIKVP NOENT CETAU IKPCM ZLOYP BJHEC KPEXG RJWDO DJBBI HQDTG FFBQV LJAZC ZOFIC ZAIWJ QEVCL FXAVC PDUWT GBIGM SSWAO OXJHP PLKXH TGQAY COIQL ZSWIL HKMYR YMPZZ PTIEL PSRIP YVRKC DINBR WJZJP HHNXM HGYWN XXIGB UTTOX AEPKZ TUCMC MGFHC WHSAY KFVVS PDBFE KABAB PNBVR IZGTX PERJZ GDHQJ JDUYV FAOYV JWZOU WXXPR HVDLL BQTJI HULQP ACIXG NUPUS PCKHT LOKLN ZCLZO QVWSL HPBWD ATZES JEITM AJIFU SIVVF PHPEN UYHZK AWIZY MNQLH ZVKJJ EEYSZ LLUEM NZAFA OZXYL WBRPX JUKQG KIEXX CDYAT IHVJK HOMGI UVAOQ PBXRN HAAWG XOBAZ UILJB KYSBP IOBKH GYZBD IPQNG VSUTS YXOGY KEIKK TIKKQ RFVWQ NBCEK TIJLC CXRDB TUNXT SBKWR YDBR</code>
+
+Finally there's a chance to use the clues that have been collected throughout the calendar: <code>notater.png</code> (Dec 1st), Pen Gwen's Strava profile picture (Dec 8th), <code>huskelapp.png</code> (Dec 15th) and <code>95728ce2159815f2e2a253c664b2493f.png</code> (Dec 22nd)
+
+Not surprisingly these are all pieces for an <a href="https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma">Enigma cipher</a>. If we just <a href="https://gchq.github.io/CyberChef/#recipe=Enigma('3-rotor','LEYJVCNIXWPBQMDRTAKZGFUHOS','A','A','ESOVPZJAYQUIRHXLNFTGKDCMWB<K','P','S','NZJHGRCXMYSWBOUFAIVLPEKQDT<AN','T','F','NZJHGRCXMYSWBOUFAIVLPEKQDT<AN','T','W','AY BR CU DH EQ FS GL IP JX KN MO TZ VW','CO NG RA TS',true)&input=U0FYVkMgT0lXUFQgR1FPSlogT1hFSEkgWlZDV1UgTkNDT1cgRklLVlAgTk9FTlQgQ0VUQVUgSUtQQ00gWkxPWVAgQkpIRUMgS1BFWEcgUkpXRE8gREpCQkkgSFFEVEcgRkZCUVYgTEpBWkMgWk9GSUMgWkFJV0ogUUVWQ0wgRlhBVkMgUERVV1QgR0JJR00gU1NXQU8gT1hKSFAgUExLWEggVEdRQVkgQ09JUUwgWlNXSUwgSEtNWVIgWU1QWlogUFRJRUwgUFNSSVAgWVZSS0MgRElOQlIgV0paSlAgSEhOWE0gSEdZV04gWFhJR0IgVVRUT1ggQUVQS1ogVFVDTUMgTUdGSEMgV0hTQVkgS0ZWVlMgUERCRkUgS0FCQUIgUE5CVlIgSVpHVFggUEVSSlogR0RIUUogSkRVWVYgRkFPWVYgSldaT1UgV1hYUFIgSFZETEwgQlFUSkkgSFVMUVAgQUNJWEcgTlVQVVMgUENLSFQgTE9LTE4gWkNMWk8gUVZXU0wgSFBCV0QgQVRaRVMgSkVJVE0gQUpJRlUgU0lWVkYgUEhQRU4gVVlIWksgQVdJWlkgTU5RTEggWlZLSkogRUVZU1ogTExVRU0gTlpBRkEgT1pYWUwgV0JSUFggSlVLUUcgS0lFWFggQ0RZQVQgSUhWSksgSE9NR0kgVVZBT1EgUEJYUk4gSEFBV0cgWE9CQVogVUlMSkIgS1lTQlAgSU9CS0ggR1laQkQgSVBRTkcgVlNVVFMgWVhPR1kgS0VJS0sgVElLS1EgUkZWV1EgTkJDRUsgVElKTEMgQ1hSREIgVFVOWFQgU0JLV1IgWURCUg">input everything into CyberChef</a> we get the following plaintext: <code style="font-size:60%;">FIVEZ EROSI XNINE SIXSE VENSI XSEVE NTWOZ EROSI XONES EVENS IXTWO ONEZE ROAFO URNIN ESIXE SIXSE VENSI XFIVE SIXET WOZER OSIXT WOSIX FSIXB SEVEN THREE SEVEN FOURS IXONE SEVEN SIXSI XBSIX ASIXF IVESI XBSEV ENTHR EETWO EZERO AFOUR CSIXF IVESE VENFO URTWO ZEROS IXNIN ETWOZ EROSI XEIGH TSIXF IVESE VENEI GHTTW OZERO SEVEN ZEROC THREE AFIVE TWOZE ROSIX SIXCT HREEB EIGHT SIXCS IXSEV ENSIX FIVES IXESI XFOUR SIXFI VETWO ZEROS EVENT WOSIX FIVES IXSEV ENSIX FIVES EVENE IGHTT HREEA TWOZE ROFIV EBFIV ECSIX FOURS IXONE TWODS IXSIX FIVED SEVEN BTHRE ETWOS EVEND FIVEC TWOES EVENT HREES EVENZ EROSE VENTH REESE VENFO URFIV ECTWO ESIXE SIXF</code>
+
+<b>Step 3 - Decoding Enigma plaintext</b>
+The output from Enigma deciphering is partly readable with English numbers. If we replace them we'll get a long hexadecimal string. Let's check out what that is in UTF-8:<pre class="prettyprint lang-py">#!/usr/bin/python3
+plaintext = 'FIVEZ EROSI XNINE SIXSE VENSI XSEVE NTWOZ EROSI XONES EVENS IXTWO ONEZE ROAFO URNIN ESIXE SIXSE VENSI XFIVE SIXET WOZER OSIXT WOSIX FSIXB SEVEN THREE SEVEN FOURS IXONE SEVEN SIXSI XBSIX ASIXF IVESI XBSEV ENTHR EETWO EZERO AFOUR CSIXF IVESE VENFO URTWO ZEROS IXNIN ETWOZ EROSI XEIGH TSIXF IVESE VENEI GHTTW OZERO SEVEN ZEROC THREE AFIVE TWOZE ROSIX SIXCT HREEB EIGHT SIXCS IXSEV ENSIX FIVES IXESI XFOUR SIXFI VETWO ZEROS EVENT WOSIX FIVES IXSEV ENSIX FIVES EVENE IGHTT HREEA TWOZE ROFIV EBFIV ECSIX FOURS IXONE TWODS IXSIX FIVED SEVEN BTHRE ETWOS EVEND FIVEC TWOES EVENT HREES EVENZ EROSE VENTH REESE VENFO URFIV ECTWO ESIXE SIXF'
+plaintext = plaintext.replace(' ', '')
+plaintext = plaintext.replace('ZERO', '0')
+plaintext = plaintext.replace('ONE', '1')
+plaintext = plaintext.replace('TWO', '2')
+plaintext = plaintext.replace('THREE', '3')
+plaintext = plaintext.replace('FOUR', '4')
+plaintext = plaintext.replace('FIVE', '5')
+plaintext = plaintext.replace('SIX', '6')
+plaintext = plaintext.replace('SEVEN', '7')
+plaintext = plaintext.replace('EIGHT', '8')
+plaintext = plaintext.replace('NINE', '9')
+print(plaintext)
+
+plaintext = bytes.fromhex(plaintext).decode('utf-8')
+print('Plaintext:\\n%s' % plaintext)
+
+"""
+Plaintext:
+Pigg av!
+Ingen bokstavkjeks.
+Let i hex på følgende regex: [\\da-f]{2}\\.spst\\.no
+"""
+</pre>
+
+No luck cancelling the operation. We're missing a "letter cookie" and they want us to look   in <code>[\da-f]{2}\.spst\.no</code>.
+
+<b>Step 4 - DNS records</b>
+I spent so much time looking for servers in the range <code>[\\da-f]{2}\\.spst\\.no</code> and all other variants I could think of. That was time wasted. Even though I earlier looked at the DNS records of spst.no I didn't think of looking for DNS records for these non-existing servers. At this step we want to look at the <code><a href="https://en.wikipedia.org/wiki/TXT_record">TXT</a></code> and <code><a href="https://en.wikipedia.org/wiki/CNAME_record">CNAME</a></code> DNS records.
+
+I tried using a Python library for scripting the DNS queries, but I got inconsistent answers every single time for the TXT records. <a href="https://digwebinterface.com/">https://digwebinterface.com</a> proved å much better source for getting out the data.
+
+What's interesting about the TXT records is that each domain had one record with one character. The CNAME mapped every domain to one of the other 255 domain names - except one that pointed to <code>slutt.spst.no</code> (slutt=end). The CNAME records determined the order of the characters in the TXT records. A simple script can be used to get the string we want:<pre class="prettyprint lang-py">#!/usr/bin/python3
+pointers = {'00.spst.no': 'cf.spst.no', '01.spst.no': '91.spst.no', '02.spst.no': '42.spst.no', '03.spst.no': '45.spst.no', '04.spst.no': '48.spst.no', '05.spst.no': '17.spst.no', '06.spst.no': '11.spst.no', '07.spst.no': '93.spst.no', '08.spst.no': '20.spst.no', '09.spst.no': '75.spst.no', '0a.spst.no': 'a4.spst.no', '0b.spst.no': 'fe.spst.no', '0c.spst.no': '41.spst.no', '0d.spst.no': '13.spst.no', '0e.spst.no': 'c9.spst.no', '0f.spst.no': '53.spst.no', '10.spst.no': '47.spst.no', '11.spst.no': 'b7.spst.no', '12.spst.no': '63.spst.no', '13.spst.no': 'c2.spst.no', '14.spst.no': '27.spst.no', '15.spst.no': 'a1.spst.no', '16.spst.no': '38.spst.no', '17.spst.no': 'e3.spst.no', '18.spst.no': 'bd.spst.no', '19.spst.no': '5d.spst.no', '1a.spst.no': '2f.spst.no', '1b.spst.no': '05.spst.no', '1c.spst.no': '0d.spst.no', '1d.spst.no': '83.spst.no', '1e.spst.no': '78.spst.no', '1f.spst.no': '74.spst.no', '20.spst.no': '4b.spst.no', '21.spst.no': 'c4.spst.no', '22.spst.no': '10.spst.no', '23.spst.no': '16.spst.no', '24.spst.no': '33.spst.no', '25.spst.no': 'e2.spst.no', '26.spst.no': 'eb.spst.no', '27.spst.no': 'e5.spst.no', '28.spst.no': '6f.spst.no', '29.spst.no': '79.spst.no', '2a.spst.no': 'c6.spst.no', '2b.spst.no': 'd7.spst.no', '2c.spst.no': 'e6.spst.no', '2d.spst.no': 'b1.spst.no', '2e.spst.no': 'ea.spst.no', '2f.spst.no': 'df.spst.no', '30.spst.no': 'e1.spst.no', '31.spst.no': 'fc.spst.no', '32.spst.no': 'f0.spst.no', '33.spst.no': '52.spst.no', '34.spst.no': 'f9.spst.no', '35.spst.no': 'd4.spst.no', '36.spst.no': '1e.spst.no', '37.spst.no': 'd0.spst.no', '38.spst.no': 'f2.spst.no', '39.spst.no': '61.spst.no', '3a.spst.no': '09.spst.no', '3b.spst.no': '88.spst.no', '3c.spst.no': '71.spst.no', '3d.spst.no': 'bf.spst.no', '3e.spst.no': '43.spst.no', '3f.spst.no': '9c.spst.no', '40.spst.no': '28.spst.no', '41.spst.no': '24.spst.no', '42.spst.no': '3a.spst.no', '43.spst.no': 'ce.spst.no', '44.spst.no': '23.spst.no', '45.spst.no': '81.spst.no', '46.spst.no': 'aa.spst.no', '47.spst.no': 'cb.spst.no', '48.spst.no': '19.spst.no', '49.spst.no': 'c7.spst.no', '4a.spst.no': '04.spst.no', '4b.spst.no': 'dd.spst.no', '4c.spst.no': '12.spst.no', '4d.spst.no': '0a.spst.no', '4e.spst.no': '7e.spst.no', '4f.spst.no': '0b.spst.no', '50.spst.no': '9e.spst.no', '51.spst.no': '22.spst.no', '52.spst.no': '57.spst.no', '53.spst.no': 'a6.spst.no', '54.spst.no': 'ab.spst.no', '55.spst.no': '2a.spst.no', '56.spst.no': 'bc.spst.no', '57.spst.no': '5b.spst.no', '58.spst.no': '0f.spst.no', '59.spst.no': 'ba.spst.no', '5a.spst.no': 'ed.spst.no', '5b.spst.no': 'b3.spst.no', '5c.spst.no': '8c.spst.no', '5d.spst.no': '34.spst.no', '5e.spst.no': '4d.spst.no', '5f.spst.no': 'a0.spst.no', '60.spst.no': '76.spst.no', '61.spst.no': 'c5.spst.no', '62.spst.no': '01.spst.no', '63.spst.no': '0c.spst.no', '64.spst.no': '06.spst.no', '65.spst.no': 'd3.spst.no', '66.spst.no': '25.spst.no', '67.spst.no': '69.spst.no', '68.spst.no': '49.spst.no', '69.spst.no': '3b.spst.no', '6a.spst.no': 'ec.spst.no', '6b.spst.no': 'ef.spst.no', '6c.spst.no': 'c3.spst.no', '6d.spst.no': '32.spst.no', '6e.spst.no': 'f3.spst.no', '6f.spst.no': 'd5.spst.no', '70.spst.no': '37.spst.no', '71.spst.no': 'f7.spst.no', '72.spst.no': '62.spst.no', '73.spst.no': '31.spst.no', '74.spst.no': '4a.spst.no', '75.spst.no': '60.spst.no', '76.spst.no': '07.spst.no', '77.spst.no': 'd9.spst.no', '78.spst.no': 'e4.spst.no', '79.spst.no': '1d.spst.no', '7a.spst.no': 'f6.spst.no', '7b.spst.no': 'b6.spst.no', '7c.spst.no': 'e0.spst.no', '7d.spst.no': '65.spst.no', '7e.spst.no': '6b.spst.no', '7f.spst.no': '3e.spst.no',
+            '80.spst.no': 'b4.spst.no', '81.spst.no': '9b.spst.no', '82.spst.no': 'ae.spst.no', '83.spst.no': '5e.spst.no', '84.spst.no': '73.spst.no', '85.spst.no': '99.spst.no', '86.spst.no': 'de.spst.no', '87.spst.no': 'c1.spst.no', '88.spst.no': 'e7.spst.no', '89.spst.no': '6d.spst.no', '8a.spst.no': '2e.spst.no', '8b.spst.no': '44.spst.no', '8c.spst.no': '7a.spst.no', '8d.spst.no': '15.spst.no', '8e.spst.no': '55.spst.no', '8f.spst.no': '21.spst.no', '90.spst.no': '6e.spst.no', '91.spst.no': '1a.spst.no', '92.spst.no': 'e9.spst.no', '93.spst.no': '3f.spst.no', '94.spst.no': 'db.spst.no', '95.spst.no': '5f.spst.no', '96.spst.no': 'ee.spst.no', '97.spst.no': '96.spst.no', '98.spst.no': '7c.spst.no', '99.spst.no': '39.spst.no', '9a.spst.no': '95.spst.no', '9b.spst.no': '1c.spst.no', '9c.spst.no': '4f.spst.no', '9d.spst.no': 'fa.spst.no', '9e.spst.no': '8e.spst.no', '9f.spst.no': '87.spst.no', 'a0.spst.no': '26.spst.no', 'a1.spst.no': 'cd.spst.no', 'a2.spst.no': '35.spst.no', 'a3.spst.no': '0e.spst.no', 'a4.spst.no': '5c.spst.no', 'a5.spst.no': 'd8.spst.no', 'a6.spst.no': 'b2.spst.no', 'a7.spst.no': 'bb.spst.no', 'a8.spst.no': '3c.spst.no', 'a9.spst.no': 'b5.spst.no', 'aa.spst.no': '67.spst.no', 'ab.spst.no': 'a9.spst.no', 'ac.spst.no': '70.spst.no', 'ad.spst.no': '8f.spst.no', 'ae.spst.no': '85.spst.no', 'af.spst.no': 'ca.spst.no', 'b0.spst.no': '8a.spst.no', 'b1.spst.no': '6a.spst.no', 'b2.spst.no': 'd2.spst.no', 'b3.spst.no': '50.spst.no', 'b4.spst.no': '2b.spst.no', 'b5.spst.no': '51.spst.no', 'b6.spst.no': '6c.spst.no', 'b7.spst.no': '59.spst.no', 'b8.spst.no': '98.spst.no', 'b9.spst.no': '02.spst.no', 'ba.spst.no': '40.spst.no', 'bb.spst.no': 'c0.spst.no', 'bc.spst.no': 'b8.spst.no', 'bd.spst.no': '2c.spst.no', 'be.spst.no': '8d.spst.no', 'bf.spst.no': '8b.spst.no', 'c0.spst.no': '86.spst.no', 'c1.spst.no': '46.spst.no', 'c2.spst.no': '90.spst.no', 'c3.spst.no': 'a3.spst.no', 'c4.spst.no': '14.spst.no', 'c5.spst.no': '94.spst.no', 'c6.spst.no': 'a8.spst.no', 'c7.spst.no': 'fd.spst.no', 'c8.spst.no': '64.spst.no', 'c9.spst.no': 'ac.spst.no', 'ca.spst.no': 'b0.spst.no', 'cb.spst.no': '30.spst.no', 'cc.spst.no': 'd1.spst.no', 'cd.spst.no': 'a5.spst.no', 'ce.spst.no': '68.spst.no', 'cf.spst.no': '3d.spst.no', 'd0.spst.no': 'f8.spst.no', 'd1.spst.no': 'da.spst.no', 'd2.spst.no': '2d.spst.no', 'd3.spst.no': '1b.spst.no', 'd4.spst.no': '56.spst.no', 'd5.spst.no': '58.spst.no', 'd6.spst.no': 'dc.spst.no', 'd7.spst.no': '72.spst.no', 'd8.spst.no': '08.spst.no', 'd9.spst.no': '36.spst.no', 'da.spst.no': '54.spst.no', 'db.spst.no': '80.spst.no', 'dc.spst.no': '7b.spst.no', 'dd.spst.no': '18.spst.no', 'de.spst.no': '00.spst.no', 'df.spst.no': '29.spst.no', 'e0.spst.no': 'fb.spst.no', 'e1.spst.no': '97.spst.no', 'e2.spst.no': 'b9.spst.no', 'e3.spst.no': '9a.spst.no', 'e4.spst.no': '03.spst.no', 'e5.spst.no': '4e.spst.no', 'e6.spst.no': '4c.spst.no', 'e7.spst.no': 'a7.spst.no', 'e8.spst.no': '92.spst.no', 'e9.spst.no': '77.spst.no', 'ea.spst.no': '82.spst.no', 'eb.spst.no': '66.spst.no', 'ec.spst.no': '7d.spst.no', 'ed.spst.no': 'slutt.spst.no', 'ee.spst.no': 'c8.spst.no', 'ef.spst.no': 'af.spst.no', 'f0.spst.no': '5a.spst.no', 'f1.spst.no': '7f.spst.no', 'f2.spst.no': 'cc.spst.no', 'f3.spst.no': '89.spst.no', 'f4.spst.no': 'd6.spst.no', 'f5.spst.no': 'ad.spst.no', 'f6.spst.no': '84.spst.no', 'f7.spst.no': '9d.spst.no', 'f8.spst.no': 'ff.spst.no', 'f9.spst.no': 'be.spst.no', 'fa.spst.no': 'f4.spst.no', 'fb.spst.no': '9f.spst.no', 'fc.spst.no': '1f.spst.no', 'fd.spst.no': 'a2.spst.no', 'fe.spst.no': 'e8.spst.no', 'ff.spst.no': 'f1.spst.no'}
+letters = {'00.spst.no': 'c', '01.spst.no': 'e', '02.spst.no': 'W', '03.spst.no': '3', '04.spst.no': '0', '05.spst.no': 'l', '06.spst.no': '4', '07.spst.no': 'k', '08.spst.no': 'J', '09.spst.no': '1', '0a.spst.no': 'w', '0b.spst.no': 'G', '0c.spst.no': '6', '0d.spst.no': 'L', '0e.spst.no': 'H', '0f.spst.no': 'A', '10.spst.no': 'Z', '11.spst.no': 'T', '12.spst.no': 'w', '13.spst.no': 'k', '14.spst.no': 'a', '15.spst.no': '0', '16.spst.no': 'b', '17.spst.no': 'R', '18.spst.no': 'z', '19.spst.no': 'x', '1a.spst.no': 'X', '1b.spst.no': 'B', '1c.spst.no': 'X', '1d.spst.no': '2', '1e.spst.no': '7', '1f.spst.no': 'L', '20.spst.no': '7', '21.spst.no': 's', '22.spst.no': 'M', '23.spst.no': 'H', '24.spst.no': 'p', '25.spst.no': 'I', '26.spst.no': 'r', '27.spst.no': 'v', '28.spst.no': 'o', '29.spst.no': 'Y', '2a.spst.no': 'V', '2b.spst.no': '4', '2c.spst.no': 'e', '2d.spst.no': '2', '2e.spst.no': '9', '2f.spst.no': 'R', '30.spst.no': 'P', '31.spst.no': 'W', '32.spst.no': 'B', '33.spst.no': 'b', '34.spst.no': 'F', '35.spst.no': 'T', '36.spst.no': 'P', '37.spst.no': 'Y', '38.spst.no': 'R', '39.spst.no': 'b', '3a.spst.no': 'P', '3b.spst.no': 'W', '3c.spst.no': 'y', '3d.spst.no': 'z', '3e.spst.no': 'T', '3f.spst.no': 'r', '40.spst.no': 't', '41.spst.no': '0', '42.spst.no': '5', '43.spst.no': 'A', '44.spst.no': 'B', '45.spst.no': 'p', '46.spst.no': 'V', '47.spst.no': 'L', '48.spst.no': 'n', '49.spst.no': '3', '4a.spst.no': 'F', '4b.spst.no': 'Z', '4c.spst.no': 'n', '4d.spst.no': '7', '4e.spst.no': 'e', '4f.spst.no': 'g', '50.spst.no': 'c', '51.spst.no': 'p', '52.spst.no': 'S', '53.spst.no': '0', '54.spst.no': 'C', '55.spst.no': 'b', '56.spst.no': 'E', '57.spst.no': 'K', '58.spst.no': 'u', '59.spst.no': '9', '5a.spst.no': 'h', '5b.spst.no': 'L', '5c.spst.no': '6', '5d.spst.no': 'e', '5e.spst.no': 'U', '5f.spst.no': 'Z', '60.spst.no': '1', '61.spst.no': '0', '62.spst.no': 'W', '63.spst.no': 'e', '64.spst.no': 'u', '65.spst.no': 'q', '66.spst.no': 'j', '67.spst.no': 'G', '68.spst.no': 'p', '69.spst.no': 'c', '6a.spst.no': 'L', '6b.spst.no': 'G', '6c.spst.no': 'V', '6d.spst.no': 'B', '6e.spst.no': 'm', '6f.spst.no': '4', '70.spst.no': 'f', '71.spst.no': 'F', '72.spst.no': 'c', '73.spst.no': 'k', '74.spst.no': 'R', '75.spst.no': 'K', '76.spst.no': 'H', '77.spst.no': '7', '78.spst.no': 'S', '79.spst.no': '2', '7a.spst.no': 'F', '7b.spst.no': 'X', '7c.spst.no': 'O', '7d.spst.no': '0', '7e.spst.no': 'd', '7f.spst.no': 'D',
+           '80.spst.no': 'N', '81.spst.no': 'S', '82.spst.no': 'a', '83.spst.no': 'J', '84.spst.no': 'q', '85.spst.no': '2', '86.spst.no': 's', '87.spst.no': 'd', '88.spst.no': 'y', '89.spst.no': 'L', '8a.spst.no': 'q', '8b.spst.no': 'n', '8c.spst.no': 'q', '8d.spst.no': 'r', '8e.spst.no': 'v', '8f.spst.no': 'k', '90.spst.no': 'G', '91.spst.no': 'N', '92.spst.no': '4', '93.spst.no': 'K', '94.spst.no': 'Q', '95.spst.no': 'x', '96.spst.no': 'l', '97.spst.no': 'E', '98.spst.no': 'F', '99.spst.no': 'h', '9a.spst.no': 'd', '9b.spst.no': 'N', '9c.spst.no': 'j', '9d.spst.no': 'd', '9e.spst.no': 'w', '9f.spst.no': 'K', 'a0.spst.no': 'K', 'a1.spst.no': '2', 'a2.spst.no': 'v', 'a3.spst.no': 'G', 'a4.spst.no': 'a', 'a5.spst.no': 'x', 'a6.spst.no': 'i', 'a7.spst.no': 'L', 'a8.spst.no': '3', 'a9.spst.no': '4', 'aa.spst.no': 'W', 'ab.spst.no': 'P', 'ac.spst.no': '4', 'ad.spst.no': 'o', 'ae.spst.no': 'm', 'af.spst.no': 'y', 'b0.spst.no': 'D', 'b1.spst.no': 'e', 'b2.spst.no': 'j', 'b3.spst.no': 'X', 'b4.spst.no': 'T', 'b5.spst.no': 'z', 'b6.spst.no': 'C', 'b7.spst.no': 'p', 'b8.spst.no': 'J', 'b9.spst.no': 'i', 'ba.spst.no': 'L', 'bb.spst.no': 'D', 'bc.spst.no': 'D', 'bd.spst.no': 'V', 'be.spst.no': 'N', 'bf.spst.no': '8', 'c0.spst.no': 'c', 'c1.spst.no': 'B', 'c2.spst.no': 'l', 'c3.spst.no': '6', 'c4.spst.no': 't', 'c5.spst.no': 'm', 'c6.spst.no': '2', 'c7.spst.no': 'O', 'c8.spst.no': 'e', 'c9.spst.no': 'N', 'ca.spst.no': '9', 'cb.spst.no': 'Q', 'cc.spst.no': 'U', 'cd.spst.no': 'j', 'ce.spst.no': 'o', 'cf.spst.no': 'w', 'd0.spst.no': 'n', 'd1.spst.no': 'G', 'd2.spst.no': 'U', 'd3.spst.no': 'Q', 'd4.spst.no': 'E', 'd5.spst.no': 'z', 'd6.spst.no': 'a', 'd7.spst.no': 'w', 'd8.spst.no': 'p', 'd9.spst.no': 'x', 'da.spst.no': '9', 'db.spst.no': 'Y', 'dc.spst.no': 'P', 'dd.spst.no': 'I', 'de.spst.no': 'u', 'df.spst.no': 'k', 'e0.spst.no': 'e', 'e1.spst.no': 'v', 'e2.spst.no': 'q', 'e3.spst.no': 'Q', 'e4.spst.no': 'g', 'e5.spst.no': '=', 'e6.spst.no': 'W', 'e7.spst.no': '7', 'e8.spst.no': 'j', 'e9.spst.no': 'M', 'ea.spst.no': 'r', 'eb.spst.no': 'a', 'ec.spst.no': 'k', 'ed.spst.no': 'G', 'ee.spst.no': '1', 'ef.spst.no': '1', 'f0.spst.no': 'b', 'f1.spst.no': 'w', 'f2.spst.no': '9', 'f3.spst.no': '4', 'f4.spst.no': '4', 'f5.spst.no': 'b', 'f6.spst.no': 'J', 'f7.spst.no': 'O', 'f8.spst.no': 'z', 'f9.spst.no': 'Z', 'fa.spst.no': 'N', 'fb.spst.no': 'u', 'fc.spst.no': 'M', 'fd.spst.no': '8', 'fe.spst.no': 'I', 'ff.spst.no': 's'}
+last_pointer = None
+for key, value in pointers.items():
+    if not value in pointers:
+        print('Last pointer is', key) # 'Last pointer is ed.spst.no'
+        last_pointer = key
+        break
+ordered = ''
+domains = last_pointer
+while True:
+    ordered = letters[last_pointer] + ordered
+    found = False
+    for key, value in pointers.items():
+        if last_pointer == value:
+            found = True
+            last_pointer = key
+            break
+    print(ordered)
+    if not found:
+        break
+
+""""
+bokstav=edG1y9Dq9ram2hb0mQYNT4wcWeNXRkY22JU7wa6qFJqkWMLRF0nxeFZNr02jxpJ7ZIzVeWnwe60pbSKLXcwvbV23yFOdN4aPXCV6GHN4fYnzswDTAop3O8vTEEDJFOeuKdBVWGcWy7LDcsucwz8nBHbR9UG9CP4zpMZLQPvEl1eu4Tp9Lto4zuA0ijU2eLk0qQBlRQdxZKrajIqiW5P1K1HkKrjgGIj4M7xP7Sg3pSNXLklGm4LBBbhG
+"""
+</pre>
+
+<code>bokstav</code> (=letter) equals something is printed. We were told we were missing a <i>bokstavkjeks</i> (=letter cookie). This is the cookie name and value we need.
+<pre class="prettyprint lang-bsh">curl 'https://ops.spst.no/api/abort' -H 'cookie: bokstav=edG1y9Dq9ram2hb0mQYNT4wcWeNXRkY22JU7wa6qFJqkWMLRF0nxeFZNr02jxpJ7ZIzVeWnwe60pbSKLXcwvbV23yFOdN4aPXCV6GHN4fYnzswDTAop3O8vTEEDJFOeuKdBVWGcWy7LDcsucwz8nBHbR9UG9CP4zpMZLQPvEl1eu4Tp9Lto4zuA0ijU2eLk0qQBlRQdxZKrajIqiW5P1K1HkKrjgGIj4M7xP7Sg3pSNXLklGm4LBBbhG'
+
+Arrgh! Vi gir opp for denne gang.
+https://npst.no/_6331fff126233c324c9f5fc49c49a8b6.html%
+</pre>
+
+We're given a URL to <a href="https://npst.no/_6331fff126233c324c9f5fc49c49a8b6.html">https://npst.no/_6331fff126233c324c9f5fc49c49a8b6.html</a>. And there it is; a proper Star Wars intro as an outro and our final flag. Take a moment to enjoy the victory. 🚩 Christmas is saved.
+
+The flag is <code>PST{82a1f79e6ce39ef16d0ef4ef1c1d2fcc}</code>.
+</span></div></li></ul><script>
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+});
+</script>
+<h4>Credits</h4>While I worked on all the challenges alone there were a few times I was stuck long enough to discuss or ask for hints from Frank Karlstrøm (<a href="https://twitter.com/fjankk">Twitter</a>, <a href="https://fjank.no/">blog</a>). I'm pretty sure I wouldn't have nailed all challenges otherwise.
+
+<h4>Scores</h4>The CTF closed by the end of New Year's Eve. Looking at <a href="https://intranett.npst.no/scoreboard">the scoreboard</a> there were 19 users who managed to get all 274 points. 39 users managed to solve challenge 24 (18 by the end of Christmas Eve). The "problem" that stopped many from full score was challenge 23 which neeed 3 hints from PST before it was solved. There were 1048 users that successfully submitted at least 1 correct flag, though I suppose there's quite a few non-real users among them. Still, there have been several hundred persons trying out the challenges. I think that's pretty good.
+
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1 white-text">Enjoy reading about IT security? <span style="text-decoration:underline;"><a class="white-text" href="/category/security">Check out more of my posts.</a></span></div></div><h4>Some final thoughts</h4>This was actually my very first CTF. I don't think the intention was to have a very beginner friendly CTF, but at the same time the challenges generally weren't very hard. I think it's really cool that PST did this. This and previous job ads is a great way of showing off some of the expertise they are looking for. They sure get a lot of both media attention and awareness in the IT industry. I'm pretty sure this can - at least in the long run - help them hire the right people.
+
+I wish that the challenges weren't published at midnight. I mean, it's fine if it was PST's way to map out who's got no commitments, no family, no job, no school. Otherwise it was a bit harsh with 19 out of 24 days like this. I'm happy that I was able to stay away most midnights, but it was hard not to check out the new challenge on the mobile when waking up in the middle of the night. Personally I'd like the challenges to be published like 6 p.m. I'm not sure if I'd give away that many hours of next December.
+
+I saw some minor critisim of the hints being suddenly published instead without having the release time published up front. I think that is a valid point for those really competing in staying and ending on the top of the scoreboard.
+
+It feels good that it's over now. You know your brain is working overtime when you immediately start looking for clues when you see toy penguins at the store, or you have dreams where you are trying to figure out the charset of some binary data.. 😅
+
+<em>All in all, I think it was a great and very fun CTF. I think it was entertaining with the theme and storyline. I'm impressed by PST and I hope they continue with this and similar things in the future. It's good for them and it's good for all of us if we can increase the expertise in our industry.</em>
+
+<h4>Request for comments</h4>If you have thoughts about my solutions, the CTF, or if I have missed something cool; don't hesitate to comment here or <a href="/about">contact me in some other way</a>. 🙂
+`,
+                "images": ["/images/pst304.jpg", "/images/pst301-autopsy.png", "/images/pst302-autopsy.png", "/images/pst303-punched_card.png"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Behind the news",
+                        "url": "/behind-the-news"
+                    },
+                    {
+                        "title": "Challenge",
+                        "url": "/challenge"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
                 "publishDate": "2019-01-01T04:30:00.000Z",
