@@ -388,7 +388,7 @@ window.SpaBlog = window.SpaBlog || {}; // Our namespace
             });
         }
         function storeScrollPosition() {
-            console.log('storeScrollPosition()');
+            //console.log('storeScrollPosition()');
             sessionStorage['scrollPos-' + window.location.href] = window.scrollY;
         }
         function restoreScrollPosition() {

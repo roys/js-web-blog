@@ -248,7 +248,7 @@ When I provided more details with an example Curl command for them to try I got 
 
 Tryg <a href="#comment-3472389318">commented on this post</a> here themselves.
 
-<b>I think Tryg has - when the information finally reached them - has handled the case very well. They reacted promptly, fixed the problem, and has been very open and honest about everything. I'm really happy with that.</b>
+<b>I think Tryg - when the information finally reached them - has handled the case very well. They reacted promptly, fixed the problem, and has been very open and honest about everything. I'm really happy with that.</b>
 </div>
 
 <h4>Some fun facts</h4><h5>Fun fact #1: The previous King of Norway had his cars registered on him personally</h5><a href="https://no.wikipedia.org/wiki/Kongelige_biler_i_Norge">His Majesty The King has got a few cars</a>. Looking up e.g. the one with licence plate <i>A-1</i> you'll see that now the car is registered with <i>The Royal Court</i>, but it used to be registered directly on our previous King - <a href="https://en.wikipedia.org/wiki/Olav_V_of_Norway">Olav V</a>. They have also trusted the insurance company <a href="https://if.no">If</a> since 1995.
@@ -2821,12 +2821,13 @@ And with the mentioned other kindergarten system with vulnerabilities, and <a hr
                 ]
             },
             {
-                "title": "Hack my hackable website",
+                "title": "Hack my hackable website [no longer available]",
                 "published": true,
                 "publishDate": "2017-12-19T22:10:00.000Z",
+                "updateDate": "2020-04-13T09:00:00.000Z",
                 "summary": "I created a \"hackable\" web app for a presentation I gave about web app security. Now you can try it out yourself.",
                 "niceUrl": "/2017/12/hack-my-site",
-                "text": `<h4>tl;dr</h4>Try to "hack" <a href="https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site">https://ra.gl/</a> . You can see the rules and goal on that site.
+                "text": `<div style="background-color:#ffecb3;padding:10px 10px 15px 10px;" class=""><h5 id="update">Site no longer available</h5><b>April 2020:</b> It was a fun experiment, but I have for now removed the site hosting the hacking challenge. 🙂</div><h4>tl;dr</h4>Try to "hack" <a>https://ra.gl/ [link broken]</a> . You can see the rules and goal on that site.
 
 <h4>Hack my site</h4>I give a few talks every year. The last years I've mostly talked about different mobile development topics, but because of this blog I have recently had the opportunity to talk about web application security.
 
@@ -2834,7 +2835,7 @@ Last week I gave a talk at <a href="http://gdgbergen.no">Google Developer Group 
 
 After the talk itself we had a session with some hands-on "hacking" of a web app. For this I had created a web site that had intentional "security vulnerabilities".
 
-<h4>The goal</h4><b>The goal of the assignment is simple: Just log in on the administrator page at <a href="https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site">ra.gl</a> and get hold of your unique keyword that proves your accomplishment.</b>
+<h4>The goal</h4><b>The goal of the assignment is simple: Just log in on the administrator page at <a>ra.gl [link broken]</a> and get hold of your unique keyword that proves your accomplishment.</b>
 
 <h4>The rules</h4>I have some rules so that the site isn't ruined completely. It is after all hosted in a shared hosting environment and I don't want anyone else harmed.
 
@@ -2856,7 +2857,9 @@ It's isn't a very hard task to break in. But that is actually part of the point.
 
 <h4>Happy hacking!</h4>I hope you enjoy this small assignment! Don't hesitate to give me feedback or if you have any ideas for improvements or other cool stuff that should be included. :-)
 
-<a href="https://ra.gl/?utm_source=blog&utm_medium=article&utm_campaign=hack-my-site">Start hacking!</a>
+<a>Start hacking! [link broken]</a>
+
+<div style="background-color:#ffecb3;padding:10px 10px 15px 10px;" class=""><h5 id="update">Site no longer available</h5><b>April 2020:</b> It was a fun experiment, but I have for now removed the site hosting the hacking challenge. 🙂</div>
 `,
                 "images": ["/images/ra.gl.png"],
                 "category":
@@ -7944,12 +7947,145 @@ It feels good that it's over now. You know your brain is working overtime when y
                 ]
             },
             {
+                "title": "Capture the flag with the Norwegian Police Security Service - Easter edition",
+                "published": true,
+                "publishDate": "2020-04-15T14:00:00.000Z",
+                "summary": `Here's a write-up showing how to solve the challenges of the Norwegian Police Security Service's Easter CTF.`,
+                "niceUrl": "/2020/04/pst-challenge-4",
+                "text": `
+<h4>Background 👮</h4>The <a href="https://en.wikipedia.org/wiki/Norwegian_Police_Security_Service">Norwegian Police Security Service</a> (with the Norwegian abbreviation <a href="https://www.pst.no/">PST</a> which I'll use for this write-up) is the police <a href="https://en.wikipedia.org/wiki/Security_agency">security agency</a> of Norway. Following up on <a href="/2020/01/pst-challenge-3">their big Christmas CTF advent calendar</a> they now did a smaller CTF for Easter.
+
+<h4>The theme 🐰</h4>This time PST added an H in their name and created the imaginary <i>Easter Bunny's Security Service</i> (Påskeharens sikkerhetstjeneste = PHST). PHST's role is supposedly to protect the Easter Bunny's egg basket and core values. Everything happened on <a href="https://phst.no/">phst.no</a> from April 9th to April 13th 2020.
+
+<h4>Challenges and solutions</h4>Let's jump straight in. Click on a challenge to expand it.
+<a class="skip-link" href="#" aria-hidden="true" onclick="var c=$('.collapsible');var shouldOpen=c.children('.active').length === 0;for(var i=0;i<c.children().length;i++){c.collapsible(shouldOpen ? 'open' : 'close', i);}return false;"><u>Expand/collapse all</u></a><ul class="collapsible expandable" data-collapsible="expandable"><li><div class="collapsible-header">Maundy Thursday - 10 points</div><div class="collapsible-body"><span><h6>Challenge</h6><img class="materialboxed responsive-img" title="Who has taken this picture?" data-caption="Who has taken this picture?" alt="Clue" src="/images/pst401-skjaertorsdag.png">
+We are told that the Easter Bunny's eggs were stolen and that someone had sent the picture above and that it might contain a clue.
+
+<h6>Solution</h6>For this you could use some local or online tool for extracting the image meta data. <a href="https://en.wikipedia.org/wiki/Strings_(Unix)">strings</a></code> would also be a nice candiate for this. The PNG image description field contains the text <code>CUFG{Qrer_snatre_zrt_nyqev!!}</code>.
+
+That looks a lot like the output of a <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar cipher</a>. <a href="https://gchq.github.io/CyberChef/#recipe=ROT13(true,true,13)&input=Q1VGR3tRcmVyX3NuYXRyZV96cnRfbnlxZXYhIX0">Using an online tool</a> you can quickly see that the flag is <code>PHST{Dere_fanger_meg_aldri!!}</code> (=<i>"You'll never catch me!!"</i>).
+
+We are given a piece of a rebus: <code>bravo = "19de0b5a1eeef635c2b4fec6e7c7"</code></span>
+</div></li><li><div class="collapsible-header">Good Friday - 20 points</div><div class="collapsible-body"><span><h6>Challenge</h6><img class="materialboxed responsive-img" title="Are these the stolen eggs?" data-caption="Are these the stolen eggs?" alt="Clue" src="/images/pst402-paskeegg_langfredag.png">
+PHST received the above picture. It might show the eggs that disappeared. The challenge is to find something of interesting in the picture.
+
+<h6>Solution</h6>This time the information we are looking for isn't hidden in the meta data. The eggs are all coloured, and we see a sheet specifying a number for each colour. The sheet also has a reference to <a href="https://en.wikipedia.org/wiki/Electronic_color_code#Resistors"><i>resistor colour code</i></a>. You have to decode each egg as a 3 colour band resistor. Starting from the top of the top left egg you would first get brown, brown, red. That translates to 1, 1, 2.
+
+Following that logic for all the eggs give these numbers: <code>112 052 052 115 107 051 104 052 114 051 110 033</code>
+
+The numbers can be <a href="https://gchq.github.io/CyberChef/#recipe=From_Decimal('Space',false)&input=MTEyIDA1MiAwNTIgMTE1IDEwNyAwNTEgMTA0IDA1MiAxMTQgMDUxIDExMCAwMzM">converted as an integer array to ASCII</a>: <code>p44sk3h4r3n!</code> (=leet for <i>The Easter Bunny!</i>). The flag is <code>PHST{p44sk3h4r3n!}</code>.
+
+We are also given another piece of the rebus: <code>{delta: "03074978df7930e256789cb87ea67358"}</code></span>
+</div></li><li><div class="collapsible-header">Holy Saturday - 20 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The bad guys have been accessing the servers of the Easter Bunny. Tracing them back leads to the address <code>1F423.com</code>. We are asked to find out something in regards of the <i>address</i>.
+
+<h6>Solution</h6>I was stuck on this for a long time. <code>U+1F423</code> happens to be the unicode for <a href="https://www.fileformat.info/info/unicode/char/1f423/index.htm">🐣 (hatching chick)</a>. I was so sure the flag was related to this.
+
+However, looking at the DNS records there is an interesting <a href="https://en.wikipedia.org/wiki/LOC_record">LOC record</a>. Using the command <code>dig loc 1F423.com</code> or <a href="https://digwebinterface.com/?hostnames=1f423.com&type=LOC&ns=resolver&useresolver=8.8.4.4">an online tool</a> the following coordinates are returned: <code>60 47 34.900 N 11 6 3.600 E 0.00m 0.00m 0.00m 0.00m</code>
+
+<a href="https://www.google.com/maps/place/60°47'34.9%22N+11°06'03.6%22E/@60.7930278,11.0988113,460m/data=!3m2!1e3!4b1!4m5!3m4!1s0x0:0x0!8m2!3d60.7930278!4d11.101">Pasting the coordinates into Google Maps</a> shows the <a href="https://en.wikipedia.org/wiki/Vikingskipet">Hamar Olympic Hall - Vikingskipet</a>. That is no coincident as it every Easter hosts the world's second largest computer party: <a href="https://en.wikipedia.org/wiki/The_Gathering_(LAN_party)">The Gathering</a>. PST has also used this LAN party for recruitment purposes. The flag is <code>PHST{Vikingskipet}</code>.
+
+We are given a piece of a rebus: <code>echo: "a3f6ce4eb662e4797a39b"</code></span>
+</div></li><li><div class="collapsible-header">Easter Day - 20 points</div><div class="collapsible-body"><span><h6>Challenge</h6>We are told that the threat actor has had access to the network, and we are given a <a href="https://en.wikipedia.org/wiki/pcap">pcap</a> <a href="/stuff/mistenkelig.pcap"><code>mistenkelig.pcap</code></a> showing some of the network traffic. The challenge is to figure out what information the threat actor has gotten hold of.
+
+<h6>Solution</h6>Most of the traffic in the pcap is encrypted. Considering how the other challenges could be solved with just using online tools I spent a lot of time trying to find something interesting in the network traffic not looking at the encrypted traffic. That was a mistake.
+
+The encrypted traffic is using <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a>. For some reason all parameters for the TLS handshakes for one of the computers are sent to another one (is this the intruder doing this or some crazy network logging?). <a href="https://en.wikipedia.org/wiki/Wireshark">Wireshark</a> is an absolutely magical packet analyzer that can take these keys and secrets and display the decrypted data sent over the wire. It can also extract all the files transmitted.
+<img class="materialboxed responsive-img" title="Wait, what? Are those TLS secrets?" data-caption="Wait, what? Are those TLS secrets?" alt="Wireshark screenshot" src="/images/pst403-pcap.png">
+It turns out that the document the intruder gets a hold of isn't very exciting, but a PDF with the weather forecast for the mentioned <i>Vikingskipet</i>. The flag is <code>PHST{Weather forecast for Vikingskipet}</code>.</span>
+
+We are also given a piece of a rebus: <code>$charlie = "664150457e1f2ccc3399"</code></span>
+</div></li><li><div class="collapsible-header">Second Easter Day - 30 points</div><div class="collapsible-body"><span><h6>Challenge</h6>We are given a Python program that controls the physical access to the place of the egg thieves. The challenge is to gain access to the system.
+
+<h6>Links</h6> - <a href="/stuff/merkelig.py.txt">Python script: <code>merkelig.py</code></a>
+ - <a href="/stuff/underfundig.txt">Emojis: <code>underfundig</code></a>
+ - <a href="/images/pst404-paskekyllingbetjenter.png">Picture of Easter chicken officers</a>
+
+<h6>Solution</h6>This one was right up my alley. Though tricky at first it's always fun with a programming challenge like this. The script is pretty neat. It uses emoji input and has a set of operations that these emojis can trigger. Those operations can read input from the keyboard and write output to the screen. In practice we are given a set of input that makes the program ask for a password and tells whether or not it was correct.
+
+It didn't take too long to shortcut the program to make it believe it got the correct input and tell that the password was correct. The problem was that the flag was the password you had to type in, and the flag wasn't directly stored in either the program or the input. So you would need to figure out what input triggered the message telling that the password was correct.
+
+The program uses a few pointers and a stack to store the user input and the output. Playing with the stack I saw that the password had to be 34 characters long. Then the password could be brute forced.
+
+Though it didn't look this pretty when I tried hacking it together to be among the first ones to solve it, here's a cleaned up solution. It requires change in only one line in the initial script as mentioned below. The change makes the program throw an exception the moment it receives either incorrect password length or an incorrect character in the password (starting from the end of the password). This variant of the solution also figures out the password length on it's own too.<pre class="prettyprint lang-py">"""
+NOTE: Add 'raise Exception(sp)' on line 45 in merkelig.py
+"""
+import sys
+from time import time
+from string import printable
+
+sys.argv.append('underfundig')  # We'll just append the input file here ourselves
+
+password = '#' * 40
+
+def readline():
+    return password.encode()
+
+sys.stdin.buffer.readline = readline  # Quick and dirty replacement of readline()
+
+char_to_change = len(password) - 1
+t = time()
+while True:
+    for l in printable:
+        password = password[0:char_to_change] + l + password[char_to_change + 1:]
+        found_password = True
+        try:
+            import merkelig
+        except Exception as e:
+            if e.args[0] != char_to_change:
+                password = password.strip()
+                print(password)
+            char_to_change = e.args[0] - 1  # raise Exception(sp)
+            found_password = False
+        finally:
+            if found_password:
+                # Prints 'Found password in 1143 ms: PHST{Mitt navn er Gwyn. Pen Gwyn.}':
+                print('Found password in', round((time() - t) * 1000), 'ms:', password)
+
+</pre>
+<img src="/images/pst405-cracking.gif" alt="Cracking in progress" title="Slowmo of cracking process. Click to see again." onclick="this.src='/images/pst405-cracking.gif'"/>
+The flag was <code>PHST{Mitt navn er Gwyn. Pen Gwyn.}</code> (="<i>My name is Gwyn. Pen Gwyn.</i>"). So just like <a href="/2020/01/pst-challenge-3">Pen Gwyn gave NPST a hard time last Christmas</a>, he now has been after PHST.
+
+The final piece for the rebus was this: <code>String alfa = "0c405bdf5899c3db8ba0d1909f9"</code></span>
+</span>
+</div></li><li><div class="collapsible-header">Rebus - 10 points</div><div class="collapsible-body"><span><h6>Challenge</h6>The challenge was to solve the rebus <code>print("https://www.phst.no/" + alfa + bravo + charlie + delta + echo + ".html")</code>
+
+<h6>Solution</h6></span>We have found all the different pieces of the rebus and we can add them together to get <code style="font-size:60%;overflow-wrap: break-word;"><a href="https://www.phst.no/0c405bdf5899c3db8ba0d1909f919de0b5a1eeef635c2b4fec6e7c7664150457e1f2ccc339903074978df7930e256789cb87ea67358a3f6ce4eb662e4797a39b.html">https://www.phst.no/0c405bdf5899c3db8ba0d1909f919de0b5a1eeef635c2b4fec6e7c7664150457e1f2ccc339903074978df7930e256789cb87ea67358a3f6ce4eb662e4797a39b.html</a></code>:
+<pre class="prettyprint lang-py">alfa = "0c405bdf5899c3db8ba0d1909f9"
+bravo = "19de0b5a1eeef635c2b4fec6e7c7"
+charlie = "664150457e1f2ccc3399"
+delta = "03074978df7930e256789cb87ea67358"
+echo = "a3f6ce4eb662e4797a39b"
+print("https://www.phst.no/" + alfa + bravo + charlie + delta + echo + ".html")</pre>
+The final flag - found on that page - was <code>PHST{Du klarte SHAbussen, veldig bra jobba!}</code> (=<i>"You did the SHAbus, very nicely done!"</i>).
+</div></li></ul><script>
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+});
+</script>
+<h4>Scores</h4>By the end of the day of second Easter day 19 people had full score and a total of 24 had solved all the challenges. I was pretty happy being the fourth person to solve the last challenge and therefore placing me on fourth place in total.
+
+<div style="padding-top:80px;" class="col s12 m5 l5 xl4 right"><div class="card-panel light-blue darken-1 white-text">Enjoy reading about IT security? <span style="text-decoration:underline;"><a class="white-text" href="/category/security">Check out more of my posts.</a></span></div></div><h4>Some final thoughts</h4>I really enjoyed these Easter puzzles. They were entertaining, varied and they didn't need that big of a time investment. Maybe the best part was that the challenges were opened daily at 12 p.m. instead of 12 a.m., so there was no need to lose any sleep or check the mobile in the middle of the night.
+`,
+                "images": ["/images/pst406-congrats.jpg"],
+                "category":
+                {
+                    "title": "Security",
+                    "url": "/security"
+                },
+                "tags": [
+                    {
+                        "title": "Challenge",
+                        "url": "/challenge"
+                    }
+                ]
+            },
+            {
                 "title": "Case #XX: ",
                 "published": false,
-                "publishDate": "2019-01-01T04:30:00.000Z",
-                "updateDate": "2019-01-01T05:30:00.000Z",
+                "publishDate": "2020-01-01T04:30:00.000Z",
+                "updateDate": "2020-01-01T05:30:00.000Z",
                 "summary": ``,
-                "niceUrl": "/2019/XX/title",
+                "niceUrl": "/2020/XX/title",
                 "text": ``,
                 "hot": false,
                 "author": "Roy Solberg",
